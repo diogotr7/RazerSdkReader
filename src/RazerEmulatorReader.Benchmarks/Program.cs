@@ -12,8 +12,8 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        //BenchmarkRunner.Run<Benchmarks>();
-        //return;
+        BenchmarkRunner.Run<Benchmarks>();
+        return;
         using var reader2 = new MemoryMappedStructReader<CChromaKeyboard>(Constants.CChromaKeyboardFileMapping, Constants.CChromaKeyboardSize);
         using var reader3 = new MemoryMappedStructReader<CChromaMouse>(Constants.CChromaMouseFileMapping, Constants.CChromaMouseSize);
         using var reader4 = new MemoryMappedStructReader<CChromaHeadset>(Constants.CChromaHeadsetFileMapping, Constants.CChromaHeadsetSize);

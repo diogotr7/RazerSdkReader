@@ -12,9 +12,9 @@ public readonly struct CAppData
     //I'm not sure what the padding here or in AppInfo is.
     
     public readonly uint AppCount;
-    private readonly Wchar260 Padding4;
+    public readonly Wchar260 PaddingChars;
     public readonly uint CurrentAppId;
-    private readonly uint Padding;
+    public readonly uint Padding;
     
     public readonly AppInfo50 AppInfo;
 }
@@ -28,4 +28,7 @@ public readonly struct AppInfo
 }
 
 [UnmanagedArray(typeof(AppInfo), 50)]
-public readonly partial struct AppInfo50 { }
+public readonly partial struct AppInfo50
+{
+    
+}
