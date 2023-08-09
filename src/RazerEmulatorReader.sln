@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazerEmulatorReader", "RazerEmulatorReader\RazerEmulatorReader.csproj", "{CFEE5E2B-65A7-4D47-BC38-D0D55562091C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Benchmarks", "RazerEmulatorReader.Benchmarks\RazerEmulatorReader.Benchmarks.csproj", "{28100698-C370-452A-A481-26FA070FE985}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Generators", "RazerEmulatorReader.Generators\RazerEmulatorReader.Generators.csproj", "{5A5450B9-FC53-4C98-B2ED-C2D128531671}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Attributes", "RazerEmulatorReader.Attributes\RazerEmulatorReader.Attributes.csproj", "{A699DB33-79B3-4B0F-B580-CAA37B179002}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Tests", "RazerEmulatorReader.Tests\RazerEmulatorReader.Tests.csproj", "{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CFEE5E2B-65A7-4D47-BC38-D0D55562091C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CFEE5E2B-65A7-4D47-BC38-D0D55562091C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CFEE5E2B-65A7-4D47-BC38-D0D55562091C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CFEE5E2B-65A7-4D47-BC38-D0D55562091C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28100698-C370-452A-A481-26FA070FE985}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28100698-C370-452A-A481-26FA070FE985}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28100698-C370-452A-A481-26FA070FE985}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28100698-C370-452A-A481-26FA070FE985}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A5450B9-FC53-4C98-B2ED-C2D128531671}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A5450B9-FC53-4C98-B2ED-C2D128531671}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A5450B9-FC53-4C98-B2ED-C2D128531671}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A5450B9-FC53-4C98-B2ED-C2D128531671}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A699DB33-79B3-4B0F-B580-CAA37B179002}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A699DB33-79B3-4B0F-B580-CAA37B179002}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A699DB33-79B3-4B0F-B580-CAA37B179002}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A699DB33-79B3-4B0F-B580-CAA37B179002}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F2ED3EC7-FF09-43B8-8FF8-8F00201B7D88}
+	EndGlobalSection
+EndGlobal

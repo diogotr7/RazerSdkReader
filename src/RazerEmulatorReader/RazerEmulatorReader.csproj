@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\RazerEmulatorReader.Attributes\RazerEmulatorReader.Attributes.csproj" />
+    <ProjectReference Include="..\RazerEmulatorReader.Generators\RazerEmulatorReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+
+
+</Project>

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Generator": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\RazerEmulatorReader.Benchmarks\\RazerEmulatorReader.Benchmarks.csproj"
+    }
+  }
+}
