@@ -2,7 +2,6 @@
 using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace RazerEmulatorReader;
 
@@ -12,15 +11,12 @@ public sealed class MemoryMappedStructReader<T> : IDisposable where T : unmanage
     private readonly MemoryMappedViewAccessor _view;
 
     public string Name { get; }
-    public uint Size { get; }
+    public int Size { get; }
 
-    public MemoryMappedStructReader(string name, uint size)
+    public MemoryMappedStructReader(string name)
     {
-        if (Unsafe.SizeOf<T>() != size)
-            throw new ArgumentException("Mismatched size and struct", nameof(size));
-            
         Name = name;
-        Size = size;
+        Size = Unsafe.SizeOf<T>();
 
         _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
         _view = _file.CreateViewAccessor(0, Size, MemoryMappedFileAccess.Read);

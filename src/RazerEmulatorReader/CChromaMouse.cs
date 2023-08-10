@@ -34,13 +34,13 @@ public readonly struct MouseEffect
     public readonly Wave Wave;
 }
 
-[UnmanagedArray(typeof(Color), 30)]
+[UnmanagedArray(typeof(CChromaColor), 30)]
 public readonly partial struct MouseCustom
 {
     
 }
 
-[UnmanagedArray(typeof(Color), 63)]
+[UnmanagedArray(typeof(CChromaColor), 63)]
 public readonly partial struct MouseCustom2
 {
     

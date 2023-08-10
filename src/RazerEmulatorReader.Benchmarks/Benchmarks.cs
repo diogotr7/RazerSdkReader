@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 
 namespace RazerEmulatorReader.Benchmarks;
 
@@ -8,8 +6,8 @@ namespace RazerEmulatorReader.Benchmarks;
 [ShortRunJob]
 public class Benchmarks
 {
-    private readonly MemoryMappedStructReader<CChromaKeyboard> _mmf = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
-    private readonly MemoryMappedFileProxy _mmf2 = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
+    private readonly MemoryMappedStructReader<CChromaKeyboard> _mmf = new(Constants.CChromaKeyboardFileMapping);
+    private readonly MemoryMappedFileProxyOld _mmf2 = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
 
     [Benchmark]
     public void ReadKeyboardDataNew()

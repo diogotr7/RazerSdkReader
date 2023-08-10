@@ -30,7 +30,7 @@ public readonly struct CChromaHeadset
     public readonly CChromaDevice10 Device;
 }
 
-[UnmanagedArray(typeof(Color), 5)]
+[UnmanagedArray(typeof(CChromaColor), 5)]
 public readonly partial struct HeadsetCustom
 {
     

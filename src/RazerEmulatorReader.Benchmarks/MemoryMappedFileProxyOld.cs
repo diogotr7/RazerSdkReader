@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace RazerEmulatorReader.Benchmarks;
 
-public sealed class MemoryMappedFileProxy : IDisposable
+public sealed class MemoryMappedFileProxyOld : IDisposable
 {
     private MemoryMappedFile _file;
     private MemoryMappedViewStream _view;
@@ -14,7 +14,7 @@ public sealed class MemoryMappedFileProxy : IDisposable
     public string Name { get; }
     public int Size { get; }
 
-    public MemoryMappedFileProxy(string name, int size)
+    public MemoryMappedFileProxyOld(string name, int size)
     {
         Name = name;
         Size = size;

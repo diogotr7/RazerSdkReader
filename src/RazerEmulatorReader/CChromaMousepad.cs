@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using RazerEmulatorReader.Attributes;
 
 namespace RazerEmulatorReader;
@@ -31,13 +34,13 @@ public readonly struct MousepadEffect
     public readonly MousepadCustom2 Custom2;
 }
 
-[UnmanagedArray(typeof(Color), 15)]
+[UnmanagedArray(typeof(CChromaColor), 15)]
 public readonly partial struct MousepadCustom
 {
 
 }
 
-[UnmanagedArray(typeof(Color), 20)]
+[UnmanagedArray(typeof(CChromaColor), 20)]
 public readonly partial struct MousepadCustom2
 {
     

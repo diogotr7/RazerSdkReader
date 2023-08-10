@@ -29,7 +29,7 @@ public readonly struct LinkEffect
     public readonly Static Static;
 }
 
-[UnmanagedArray(typeof(Color), 50)]
+[UnmanagedArray(typeof(CChromaColor), 50)]
 public readonly partial struct LinkCustom
 {
 

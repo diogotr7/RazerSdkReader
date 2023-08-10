@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Attribu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Tests", "RazerEmulatorReader.Tests\RazerEmulatorReader.Tests.csproj", "{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerEmulatorReader.Sandbox", "RazerEmulatorReader.Sandbox\RazerEmulatorReader.Sandbox.csproj", "{5750DD07-09A0-4043-93FA-65B80C9578E8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5750DD07-09A0-4043-93FA-65B80C9578E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5750DD07-09A0-4043-93FA-65B80C9578E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5750DD07-09A0-4043-93FA-65B80C9578E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5750DD07-09A0-4043-93FA-65B80C9578E8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -31,7 +31,7 @@ public readonly struct KeypadEffect
     public readonly Wave Wave;
 }
 
-[UnmanagedArray(typeof(Color), 20)]
+[UnmanagedArray(typeof(CChromaColor), 20)]
 public readonly partial struct KeypadCustom
 {
 

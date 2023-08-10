@@ -16,7 +16,7 @@ public readonly struct CChromaKeyboard
 public readonly struct CChromaKeyboardData
 {
     public readonly uint Flag;
-    public readonly int EffectType;
+    public readonly EffectType EffectType;
     public readonly KeyboardEffect Effect;
     public readonly uint Padding;
     public readonly ulong Timestamp;
@@ -45,29 +45,23 @@ public readonly struct KeyboardCustom
 public readonly struct KeyboardCustom2
 {
     public readonly Color6X22 Color;
-    public readonly Key6X22 Key;
+    public readonly Color6X22 Key;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly struct KeyboardCustom3
 {
     public readonly Color8X24 Color;
-    public readonly Key6X22 Key;
+    public readonly Color6X22 Key;
 }
 
-[UnmanagedArray(typeof(uint), 132)]
-public readonly partial struct Key6X22
-{
-    
-}
-
-[UnmanagedArray(typeof(Color), 192)]
+[UnmanagedArray(typeof(CChromaColor), 192)]
 public readonly partial struct Color8X24
 {
     
 }
 
-[UnmanagedArray(typeof(Color), 132)]
+[UnmanagedArray(typeof(CChromaColor), 132)]
 public readonly partial struct Color6X22
 {
     
