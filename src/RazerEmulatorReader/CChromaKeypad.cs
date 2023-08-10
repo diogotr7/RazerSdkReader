@@ -4,7 +4,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaKeypad
+public readonly record struct CChromaKeypad
 { 
     public readonly uint WriteIndex;
     public readonly uint Padding;
@@ -13,7 +13,7 @@ public readonly struct CChromaKeypad
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaKeypadData
+public readonly record struct CChromaKeypadData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -22,7 +22,7 @@ public readonly struct CChromaKeypadData
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct KeypadEffect
+public readonly record struct KeypadEffect
 {
     public readonly Breathing Breathing;
     public readonly KeypadCustom Custom;
@@ -32,13 +32,13 @@ public readonly struct KeypadEffect
 }
 
 [UnmanagedArray(typeof(CChromaColor), 20)]
-public readonly partial struct KeypadCustom
+public readonly partial record struct KeypadCustom
 {
 
 }
 
 [UnmanagedArray(typeof(CChromaKeypadData), 10)]
-public readonly partial struct CChromaKeypadData10
+public readonly partial record struct CChromaKeypadData10
 {
 
 }

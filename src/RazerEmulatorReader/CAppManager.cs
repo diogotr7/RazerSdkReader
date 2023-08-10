@@ -4,7 +4,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly  struct CAppManagerData
+public readonly record struct CAppManagerData
 {
     public readonly uint ProcessId;
     public readonly int Register;
@@ -12,7 +12,7 @@ public readonly  struct CAppManagerData
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CAppManager
+public readonly record struct CAppManager
 {
     public readonly uint WriteIndex;
     public readonly uint Padding;
@@ -20,7 +20,6 @@ public readonly struct CAppManager
 }
 
 [UnmanagedArray(typeof(CAppManagerData), 10)]
-public readonly partial struct CAppManager10
+public readonly partial record struct CAppManager10
 {
-    
 }

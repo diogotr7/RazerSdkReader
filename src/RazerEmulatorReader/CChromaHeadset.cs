@@ -4,7 +4,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct HeadsetEffect
+public readonly record struct HeadsetEffect
 {
    public readonly Breathing Breathing;
    public readonly HeadsetCustom Custom;
@@ -12,7 +12,7 @@ public readonly struct HeadsetEffect
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaHeadsetData
+public readonly record struct CChromaHeadsetData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -22,7 +22,7 @@ public readonly struct CChromaHeadsetData
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaHeadset
+public readonly record struct CChromaHeadset
 {
     public readonly int WriteIndex;
     public readonly int Padding;
@@ -31,13 +31,13 @@ public readonly struct CChromaHeadset
 }
 
 [UnmanagedArray(typeof(CChromaColor), 5)]
-public readonly partial struct HeadsetCustom
+public readonly partial record struct HeadsetCustom
 {
     
 }
 
 [UnmanagedArray(typeof(CChromaHeadsetData), 10)]
-public readonly partial struct CChromaHeadsetData10
+public readonly partial record struct CChromaHeadsetData10
 {
     
 }

@@ -4,7 +4,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CAppData
+public readonly record struct CAppData
 {
     //Note: This can be interpreted as 51 AppData structs,
     // but the first one seems to only contain the PID of the current app, with the name being empty.
@@ -20,7 +20,7 @@ public readonly struct CAppData
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct AppInfo
+public readonly record struct AppInfo
 {
     public readonly Wchar260 AppName;
     public readonly uint AppId;
@@ -28,7 +28,7 @@ public readonly struct AppInfo
 }
 
 [UnmanagedArray(typeof(AppInfo), 50)]
-public readonly partial struct AppInfo50
+public readonly partial record struct AppInfo50
 {
     
 }

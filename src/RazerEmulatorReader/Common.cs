@@ -5,7 +5,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct Breathing
+public readonly record struct Breathing
 {
     public readonly uint dwParam;
     public readonly BreathingEffectType BreathingType;
@@ -14,27 +14,27 @@ public readonly struct Breathing
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct Static
+public readonly record struct Static
 {
     public readonly uint dwParam;
     public readonly CChromaColor Color;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct Blinking
+public readonly record struct Blinking
 {
     public readonly uint dwParam;
     public readonly CChromaColor Color;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct None
+public readonly record struct None
 {
     public readonly uint dwParam;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct Reactive
+public readonly record struct Reactive
 {
     public readonly uint dwParam;
     public readonly CChromaColor Color;
@@ -42,13 +42,13 @@ public readonly struct Reactive
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct SpectrumCycling
+public readonly record struct SpectrumCycling
 {
     public readonly uint dwParam;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct Starlight
+public readonly record struct Starlight
 {
     public readonly uint dwParam;
     public readonly BreathingEffectType Type;
@@ -58,7 +58,7 @@ public readonly struct Starlight
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct Wave
+public readonly record struct Wave
 {
     public readonly uint dwParam;
     public readonly EffectDirection Direction;
@@ -66,33 +66,33 @@ public readonly struct Wave
 }
 
 [UnmanagedArray(typeof(char), 260)]
-public readonly partial struct Wchar260
+public readonly partial record struct Wchar260
 {
     public override string ToString()
     {
         var sb = new StringBuilder();
-
+    
         for (var i = 0; i < Count; i++)
         {
             if (this[i] == 0)
                 break;
-
+    
             sb.Append(this[i]);
         }
-
+    
         return sb.ToString();
     }
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaDevice
+public readonly record struct CChromaDevice
 {
     public readonly Wchar260 Instance;
     public readonly Wchar260 InstanceName;
 }
 
 [UnmanagedArray(typeof(CChromaDevice), 10)]
-public readonly partial struct CChromaDevice10
+public readonly partial record struct CChromaDevice10
 {
     
 }
@@ -149,7 +149,7 @@ public enum MouseLedType
     SideStrip14 = 1048576,
     SideStrip15 = 2097152,
     All = 4132863
-};
+}
 
 public enum EffectDuration
 {
@@ -164,4 +164,4 @@ public enum EffectDirection
     RightToLeft = 2,
     FrontToBack = 3,
     BackToFront = 4
-};
+}

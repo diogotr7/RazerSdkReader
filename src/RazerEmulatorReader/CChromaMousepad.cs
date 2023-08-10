@@ -7,7 +7,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaMousepad
+public readonly record struct CChromaMousepad
 { 
     public readonly uint WriteIndex;
     public readonly uint Padding;
@@ -16,7 +16,7 @@ public readonly struct CChromaMousepad
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaMousepadData
+public readonly record struct CChromaMousepadData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -25,7 +25,7 @@ public readonly struct CChromaMousepadData
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct MousepadEffect
+public readonly record struct MousepadEffect
 {
     public readonly Breathing Breathing;
     public readonly Wave Wave;
@@ -35,19 +35,19 @@ public readonly struct MousepadEffect
 }
 
 [UnmanagedArray(typeof(CChromaColor), 15)]
-public readonly partial struct MousepadCustom
+public readonly partial record struct MousepadCustom
 {
 
 }
 
 [UnmanagedArray(typeof(CChromaColor), 20)]
-public readonly partial struct MousepadCustom2
+public readonly partial record struct MousepadCustom2
 {
     
 }
 
 [UnmanagedArray(typeof(CChromaMousepadData), 10)]
-public readonly partial struct CChromaMousepadData10
+public readonly partial record struct CChromaMousepadData10
 {
 
 }

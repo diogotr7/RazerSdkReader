@@ -4,7 +4,7 @@ using RazerEmulatorReader.Attributes;
 namespace RazerEmulatorReader;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaMouse
+public readonly record struct CChromaMouse
 {
     public readonly uint WriteIndex;
     public readonly uint Padding;
@@ -13,7 +13,7 @@ public readonly struct CChromaMouse
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct CChromaMouseData
+public readonly record struct CChromaMouseData
 {
     public readonly uint Flag;
     public readonly uint Led;
@@ -23,7 +23,7 @@ public readonly struct CChromaMouseData
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly struct MouseEffect
+public readonly record struct MouseEffect
 {
     public readonly Breathing Breathing;
     public readonly Blinking Blinking;
@@ -35,19 +35,19 @@ public readonly struct MouseEffect
 }
 
 [UnmanagedArray(typeof(CChromaColor), 30)]
-public readonly partial struct MouseCustom
+public readonly partial record struct MouseCustom
 {
     
 }
 
 [UnmanagedArray(typeof(CChromaColor), 63)]
-public readonly partial struct MouseCustom2
+public readonly partial record struct MouseCustom2
 {
     
 }
 
 [UnmanagedArray(typeof(CChromaMouseData), 10)]
-public readonly partial struct CChromaMouseData10
+public readonly partial record struct CChromaMouseData10
 {
     
 }
