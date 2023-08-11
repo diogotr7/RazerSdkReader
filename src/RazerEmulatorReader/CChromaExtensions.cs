@@ -29,7 +29,7 @@ public static class CChromaExtensions
                 var g = clr.R ^ s.R;
                 var b = clr.G ^ s.G;
                 var a = clr.B ^ s.B;
-                var xor = new CChromaColor((byte)a, (byte)r, (byte)g, (byte)b);
+                var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
                 return xor;
                 break;
             }

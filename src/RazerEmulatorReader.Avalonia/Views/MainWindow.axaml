@@ -1,0 +1,51 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:RazerEmulatorReader.Avalonia.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="using:RazerEmulatorReader.Avalonia.Converters"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="RazerEmulatorReader.Avalonia.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Width="1188"
+        Height="324"
+        CanResize="False"
+        Topmost="True"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="RazerEmulatorReader.Avalonia">
+    
+    <Window.Resources>
+        <!-- Needed to convert a given color into a brush -->
+        <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />
+    </Window.Resources>
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    
+    <ItemsControl ItemsSource="{Binding KeyColors}"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center">
+        <!-- Set the DataTemplate -->
+        <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="Color">
+                <Rectangle Fill="{Binding  Converter={StaticResource ColorToSolidColorBrushConverter}}" 
+                           Margin="2"
+                           Width="50"
+                           Height="50"/>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <UniformGrid
+                    Columns="{CompiledBinding Width}" 
+                    Rows="{CompiledBinding Height}" />
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </ItemsControl>
+
+
+</Window>
