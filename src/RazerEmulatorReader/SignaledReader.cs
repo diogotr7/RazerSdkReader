@@ -14,8 +14,7 @@ public sealed class SignaledReader<T> : IDisposable where T : unmanaged
     private CancellationTokenSource? _cts;
     private Task? _task;
 
-    public event EventHandler? OnUpdated;
-    public T Value { get; set; }
+    public event EventHandler<T>? Updated;
 
     public SignaledReader(string mmf, string eventWaitHandle)
     {
@@ -33,13 +32,19 @@ public sealed class SignaledReader<T> : IDisposable where T : unmanaged
     {
         _eventWaitHandle.Reset();
 
-        while (!_cts!.IsCancellationRequested)
+        try
         {
-            // sdk runs at 30fps, let's wait for 40ms per frame.
-            // If it takes longer than that, we will asynchrounously wait for the next frame.
-            await _eventWaitHandle.WaitOneAsync(40);
-            Value = _reader.Read();
-            OnUpdated?.Invoke(this, EventArgs.Empty);
+            while (!_cts!.IsCancellationRequested)
+            {
+                // sdk runs at 30fps, let's wait for 40ms per frame.
+                // If it takes longer than that, we will asynchrounously wait for the next frame.
+                await _eventWaitHandle.WaitOneAsync(40, -1, _cts.Token);
+                Updated?.Invoke(this, _reader.Read());
+            }
+        }
+        catch
+        {
+
         }
     }
     

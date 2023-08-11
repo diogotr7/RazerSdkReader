@@ -28,9 +28,12 @@ public sealed class MemoryMappedStructReader<T> : IDisposable where T : unmanage
         _file.Dispose();
     }
 
-    public T Read()
+    public unsafe T Read()
     {
-        return _view.SafeMemoryMappedViewHandle.Read<T>(0);
+        if (_view.SafeMemoryMappedViewHandle.IsClosed)
+            throw new ObjectDisposedException(nameof(MemoryMappedStructReader<T>));
+        
+        return Unsafe.AsRef<T>(_view.SafeMemoryMappedViewHandle.DangerousGetHandle().ToPointer());
     }
 
     public byte[] GetBytes()

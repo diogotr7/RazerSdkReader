@@ -11,7 +11,7 @@ public static class EventWaitHandleExtensions
         e.Reset();
     }
 
-    public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, int waitMs, long timeout = -1)
+    public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, int waitMs, long timeout = -1, CancellationToken cancellationToken = default)
     {
         // Handle synchronous cases.
         var alreadySignalled = handle.WaitOne(waitMs);
@@ -28,6 +28,7 @@ public static class EventWaitHandleExtensions
             tcs,
             timeout,
             true);
+        cancellationToken.Register(() => tcs.TrySetCanceled(), useSynchronizationContext: false);
         tcs.Task.ContinueWith(_ => threadPoolRegistration.Unregister(null), TaskScheduler.Default);
         return new ValueTask<bool>(tcs.Task);
     }

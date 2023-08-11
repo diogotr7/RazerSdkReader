@@ -110,7 +110,7 @@ public class UnmanagedArrayGenerator : ISourceGenerator
         var format = "D" + digits;
         for (int i = 0; i < structInfo.Count; i++)
         {
-            sb.AppendLine($"    private readonly {structInfo.ChildStruct} Child{i.ToString(format)};");
+            sb.AppendLine($"    public readonly {structInfo.ChildStruct} Child{i.ToString(format)};");
         }
 
         sb.AppendLine();

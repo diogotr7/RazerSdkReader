@@ -13,84 +13,34 @@ public static class Program
     public static void Main(string[] args)
     {
         var reader = new RazerEmulatorReader();
-        reader.Start();
-        Task.Run(() =>
+        reader.KeyboardUpdated += (sender, keyboard) =>
         {
-            Thread.Sleep(3000);
-            reader.Dispose();
-        });
-
-        Console.ReadLine();
-        return;
-        
-        var mutexes = InitSequence();
-
-        Run();
-
-        foreach (var mutex in mutexes)
-            mutex.ReleaseMutex();
-    }
-    
-     private static void Run()
-    {
-        var kbReader = new SignaledReader<CChromaKeyboard>(Constants.CChromaKeyboardFileMapping, Constants.CChromaKeyboardEvent);
-        kbReader.OnUpdated += (sender, args) =>
-        {
-            var keyboard = kbReader.Value;
-            int zoneId = 0;
-            var snapshot = keyboard.Data[keyboard.WriteIndex];
-
-            switch (snapshot.EffectType)
-            {
-                case EffectType.CustomKey:
-                {
-                    var s = snapshot.Effect.Static.Color;
-                    var clr = snapshot.Effect.Custom3.Key[zoneId];
-            
-                    if (clr.A == s.A && clr.R == s.R && clr.G == s.G && clr.B == s.B)
-                        clr = snapshot.Effect.Custom3.Color[zoneId];
-            
-                    //Note: yes, this works. No, I don't know why.
-                    //Somehow Razer's 'encryption' is just XORing the colors.
-                    var r = clr.A ^ s.A;
-                    var g = clr.R ^ s.R;
-                    var b = clr.G ^ s.G;
-                    var a = clr.B ^ s.B;
-                    var xor = new CChromaColor((byte)a, (byte)r, (byte)g, (byte)b);
-                    Console.WriteLine($"Custom key: {xor} = {clr} ^ {s}");
-                    break;
-                }
-                case EffectType.Custom:
-                case EffectType.Static:
-                {
-                    var clr = snapshot.Effect.Custom.Color[zoneId];
-                    Console.WriteLine($"Custom: {clr}");
-                    break;
-                }
-                default:
-                {
-                    Console.WriteLine($"Effect type: {snapshot.EffectType}, skipping...");
-                    break;
-                }
-            }
+            var clr = keyboard.GetColor(0);
+            Console.WriteLine($"Keyboard Color: {clr}");
         };
-        kbReader.Start();
-        Console.WriteLine("Press any key to exit...");
-        Console.ReadKey();
+        reader.MouseUpdated += (sender, mouse) =>
+        {
+            var clr = mouse.Data[(int)mouse.WriteIndex].Effect.Custom2[0];
+            Console.WriteLine($"Mouse Color: {clr}");
+        };
+        reader.MousepadUpdated += (sender, mousepad) =>
+        {
+            var clr = mousepad.Data[(int)mousepad.WriteIndex].Effect.Custom2[0];
+            Console.WriteLine($"Mousepad Color: {clr}");
+        };
+        reader.KeypadUpdated += (sender, keypad) =>
+        {
+            var clr = keypad.Data[(int)keypad.WriteIndex].Effect.Custom[0];
+            Console.WriteLine($"Keypad Color: {clr}");
+        };
+        reader.HeadsetUpdated += (sender, headset) =>
+        {
+            var clr = headset.Data[(int)headset.WriteIndex].Effect.Custom[0];
+            Console.WriteLine($"Headset Color: {clr}");
+        };
         
-        kbReader.Dispose();
-    }
-
-    public static IEnumerable<Mutex> InitSequence()
-    {
-        var mutexes = new Mutex[4];
-        mutexes[0] = new Mutex(true, Constants.SynapseOnlineMutex);
-        EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        mutexes[1] = new Mutex(true, Constants.OldSynapseOnlineMutex);
-        EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        mutexes[2] = new Mutex(true, Constants.OldSynapseVersionMutex);
-        EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        mutexes[3] = new Mutex(true, Constants.ChromaEmulatorMutex);
-        return mutexes;
+        reader.Start();
+        Console.ReadLine();
+        reader.Dispose();
     }
 }
