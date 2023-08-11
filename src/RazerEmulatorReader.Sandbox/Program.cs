@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
+using RazerEmulatorReader.Enums;
+using RazerEmulatorReader.Extensions;
+using RazerEmulatorReader.Structures;
 
 namespace RazerEmulatorReader.Sandbox;
 
@@ -8,6 +12,17 @@ public static class Program
 {
     public static void Main(string[] args)
     {
+        var reader = new RazerEmulatorReader();
+        reader.Start();
+        Task.Run(() =>
+        {
+            Thread.Sleep(3000);
+            reader.Dispose();
+        });
+
+        Console.ReadLine();
+        return;
+        
         var mutexes = InitSequence();
 
         Run();

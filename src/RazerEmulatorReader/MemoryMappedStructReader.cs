@@ -1,17 +1,15 @@
 ﻿using System;
-using System.IO;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 
 namespace RazerEmulatorReader;
 
+[SupportedOSPlatform("windows")]
 public sealed class MemoryMappedStructReader<T> : IDisposable where T : unmanaged
 {
     private readonly MemoryMappedFile _file;
     private readonly MemoryMappedViewAccessor _view;
-
-    public string Name { get; }
-    public int Size { get; }
 
     public MemoryMappedStructReader(string name)
     {
@@ -22,22 +20,28 @@ public sealed class MemoryMappedStructReader<T> : IDisposable where T : unmanage
         _view = _file.CreateViewAccessor(0, Size, MemoryMappedFileAccess.Read);
     }
 
-    public T Read()
-    {
-        return _view.SafeMemoryMappedViewHandle.Read<T>(0);
-    }
-    
-    public void Dump(string path)
-    {
-        var array = new byte[Size];
-        _view.ReadArray(0, array, 0, array.Length);
-        File.WriteAllBytes(path, array);
-    }
-
-    public override string ToString() => $"[{Name}, {Size}]";
+    public string Name { get; }
+    public int Size { get; }
 
     public void Dispose()
     {
         _file.Dispose();
+    }
+
+    public T Read()
+    {
+        return _view.SafeMemoryMappedViewHandle.Read<T>(0);
+    }
+
+    public byte[] GetBytes()
+    {
+        var array = new byte[Size];
+        _view.ReadArray(0, array, 0, array.Length);
+        return array;
+    }
+
+    public override string ToString()
+    {
+        return $"[{Name}, {Size}]";
     }
 }

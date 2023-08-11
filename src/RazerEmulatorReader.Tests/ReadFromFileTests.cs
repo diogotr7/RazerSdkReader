@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using NUnit.Framework;
+using RazerEmulatorReader.Structures;
 
 namespace RazerEmulatorReader.Tests;
 

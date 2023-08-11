@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace RazerEmulatorReader.Attributes;
+namespace RazerEmulatorReader;
 
 [AttributeUsage(AttributeTargets.Struct)]
 public class UnmanagedArrayAttribute : Attribute

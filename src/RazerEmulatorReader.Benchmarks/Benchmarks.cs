@@ -1,4 +1,5 @@
 ﻿using BenchmarkDotNet.Attributes;
+using RazerEmulatorReader.Structures;
 
 namespace RazerEmulatorReader.Benchmarks;
 

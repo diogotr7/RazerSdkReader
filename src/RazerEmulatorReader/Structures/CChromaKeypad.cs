@@ -1,23 +1,25 @@
 ﻿using System.Runtime.InteropServices;
-using RazerEmulatorReader.Attributes;
 
-namespace RazerEmulatorReader;
+namespace RazerEmulatorReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaKeypad
-{ 
-    public readonly uint WriteIndex;
-    public readonly uint Padding;
+{
     public readonly CChromaKeypadData10 Data;
     public readonly CChromaDevice10 Device;
+    public readonly uint Padding;
+    public readonly uint WriteIndex;
 }
+
+[UnmanagedArray(typeof(CChromaKeypadData), 10)]
+public readonly partial record struct CChromaKeypadData10;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaKeypadData
 {
-    public readonly uint Flag;
-    public readonly int EffectType;
     public readonly KeypadEffect Effect;
+    public readonly int EffectType;
+    public readonly uint Flag;
     public readonly ulong Timestamp;
 }
 
@@ -32,13 +34,4 @@ public readonly record struct KeypadEffect
 }
 
 [UnmanagedArray(typeof(CChromaColor), 20)]
-public readonly partial record struct KeypadCustom
-{
-
-}
-
-[UnmanagedArray(typeof(CChromaKeypadData), 10)]
-public readonly partial record struct CChromaKeypadData10
-{
-
-}
+public readonly partial record struct KeypadCustom;

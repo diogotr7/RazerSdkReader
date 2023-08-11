@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using RazerEmulatorReader.Attributes;
 
-namespace RazerEmulatorReader;
+namespace RazerEmulatorReader.Structures;
 
+/// <summary>
+///     Unused. Kept for completeness.
+/// </summary>
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaDeviceData
 {
@@ -14,16 +16,13 @@ public readonly record struct CChromaDeviceData
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaDeviceDataInfo
 {
-    public readonly Wchar260 Instance;
-    public readonly Wchar260 EventName;
-    public readonly Wchar260 FileName;
-    public readonly Wchar260 ModuleName;
-    public readonly Wchar260 DevicePath;
     public readonly Guid DeviceId;
+    public readonly CChromaString DevicePath;
+    public readonly CChromaString EventName;
+    public readonly CChromaString FileName;
+    public readonly CChromaString Instance;
+    public readonly CChromaString ModuleName;
 }
 
 [UnmanagedArray(typeof(CChromaDeviceDataInfo), 50)]
-public readonly partial record struct CChromaDeviceDataInfo50
-{
-    
-}
+public readonly partial record struct CChromaDeviceDataInfo50;
