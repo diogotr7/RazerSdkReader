@@ -2,13 +2,6 @@
 
 namespace RazerEmulatorReader.Structures;
 
-[StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CAppManager
-{
-    public readonly CAppManagerData10 Data;
-    public readonly uint Padding;
-    public readonly uint WriteIndex;
-}
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CAppManagerData
@@ -18,5 +11,13 @@ public readonly record struct CAppManagerData
     public readonly ulong Timestamp;
 }
 
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public readonly record struct CAppManager
+{
+    public readonly uint WriteIndex;
+    public readonly uint Padding;
+    public readonly CAppManager10 Data;
+}
+
 [UnmanagedArray(typeof(CAppManagerData), 10)]
-public readonly partial record struct CAppManagerData10;
+public readonly partial record struct CAppManager10;

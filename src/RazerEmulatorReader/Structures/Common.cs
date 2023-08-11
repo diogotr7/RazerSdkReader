@@ -6,24 +6,24 @@ namespace RazerEmulatorReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Breathing
 {
+    public readonly uint dwParam;
     public readonly BreathingEffectType BreathingType;
     public readonly CChromaColor Color1;
     public readonly CChromaColor Color2;
-    public readonly uint dwParam;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Static
 {
-    public readonly CChromaColor Color;
     public readonly uint dwParam;
+    public readonly CChromaColor Color;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Blinking
 {
-    public readonly CChromaColor Color;
     public readonly uint dwParam;
+    public readonly CChromaColor Color;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -35,9 +35,9 @@ public readonly record struct None
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Reactive
 {
+    public readonly uint dwParam;
     public readonly CChromaColor Color;
     public readonly EffectDuration Duration;
-    public readonly uint dwParam;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -49,18 +49,18 @@ public readonly record struct SpectrumCycling
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Starlight
 {
-    public readonly CChromaColor Color1;
-    public readonly CChromaColor Color2;
-    public readonly EffectDuration Duration;
     public readonly uint dwParam;
     public readonly BreathingEffectType Type;
+    public readonly EffectDuration Duration;
+    public readonly CChromaColor Color1;
+    public readonly CChromaColor Color2;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Wave
 {
-    public readonly EffectDirection Direction;
     public readonly uint dwParam;
+    public readonly EffectDirection Direction;
     public readonly int Speed;
 }
 

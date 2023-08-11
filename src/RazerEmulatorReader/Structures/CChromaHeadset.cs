@@ -5,18 +5,18 @@ namespace RazerEmulatorReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaHeadset
 {
+    public readonly int WriteIndex;
+    public readonly int Padding;
     public readonly CChromaHeadsetData10 Data;
     public readonly CChromaDevice10 Device;
-    public readonly int Padding;
-    public readonly int WriteIndex;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaHeadsetData
 {
-    public readonly HeadsetEffect Effect;
-    public readonly int EffectType;
     public readonly uint Flag;
+    public readonly int EffectType;
+    public readonly HeadsetEffect Effect;
     public readonly uint Padding;
     public readonly ulong Timestamp;
 }

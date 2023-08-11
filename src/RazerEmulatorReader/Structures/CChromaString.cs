@@ -14,7 +14,7 @@ public readonly partial record struct CChromaString
             if (this[i] == 0)
                 break;
 
-            sb.Append((char)this[i]);
+            sb.Append(this[i]);
         }
 
         return sb.ToString();

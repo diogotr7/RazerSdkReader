@@ -16,12 +16,12 @@ public readonly record struct CChromaDeviceData
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaDeviceDataInfo
 {
-    public readonly Guid DeviceId;
-    public readonly CChromaString DevicePath;
+    public readonly CChromaString Instance;
     public readonly CChromaString EventName;
     public readonly CChromaString FileName;
-    public readonly CChromaString Instance;
     public readonly CChromaString ModuleName;
+    public readonly CChromaString DevicePath;
+    public readonly Guid DeviceId;
 }
 
 [UnmanagedArray(typeof(CChromaDeviceDataInfo), 50)]
