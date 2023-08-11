@@ -14,23 +14,14 @@ public sealed class SignaledReader<T> : IDisposable where T : unmanaged
     private CancellationTokenSource? _cts;
     private Task? _task;
 
+    public event EventHandler? OnUpdated;
+    public T Value { get; set; }
+
     public SignaledReader(string mmf, string eventWaitHandle)
     {
         _reader = new MemoryMappedStructReader<T>(mmf);
         _eventWaitHandle = EventWaitHandleHelper.Create(eventWaitHandle);
     }
-
-    public void Dispose()
-    {
-        _cts?.Cancel();
-        _task?.Wait();
-        _cts?.Dispose();
-        _task?.Dispose();
-        _reader.Dispose();
-        _eventWaitHandle.Dispose();
-    }
-
-    public event EventHandler<T>? OnRead;
 
     public void Start()
     {
@@ -47,7 +38,18 @@ public sealed class SignaledReader<T> : IDisposable where T : unmanaged
             // sdk runs at 30fps, let's wait for 40ms per frame.
             // If it takes longer than that, we will asynchrounously wait for the next frame.
             await _eventWaitHandle.WaitOneAsync(40);
-            OnRead?.Invoke(this, _reader.Read());
+            Value = _reader.Read();
+            OnUpdated?.Invoke(this, EventArgs.Empty);
         }
+    }
+    
+    public void Dispose()
+    {
+        _cts?.Cancel();
+        _task?.Wait();
+        _cts?.Dispose();
+        _task?.Dispose();
+        _reader.Dispose();
+        _eventWaitHandle.Dispose();
     }
 }

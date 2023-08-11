@@ -34,8 +34,9 @@ public static class Program
      private static void Run()
     {
         var kbReader = new SignaledReader<CChromaKeyboard>(Constants.CChromaKeyboardFileMapping, Constants.CChromaKeyboardEvent);
-        kbReader.OnRead += (sender, keyboard) =>
+        kbReader.OnUpdated += (sender, args) =>
         {
+            var keyboard = kbReader.Value;
             int zoneId = 0;
             var snapshot = keyboard.Data[keyboard.WriteIndex];
 
@@ -85,9 +86,9 @@ public static class Program
         var mutexes = new Mutex[4];
         mutexes[0] = new Mutex(true, Constants.SynapseOnlineMutex);
         EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        mutexes[1] = new Mutex(true, Constants.SynapseOnlineHoldMutex);
+        mutexes[1] = new Mutex(true, Constants.OldSynapseOnlineMutex);
         EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        mutexes[2] = new Mutex(true, Constants.HoldMutexSynapseVersion);
+        mutexes[2] = new Mutex(true, Constants.OldSynapseVersionMutex);
         EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
         mutexes[3] = new Mutex(true, Constants.ChromaEmulatorMutex);
         return mutexes;

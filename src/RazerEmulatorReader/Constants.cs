@@ -36,8 +36,8 @@ public static class Constants
 
     public const string SynapseOnlineMutex = @"Global\{08B4F43A-DA51-4120-B388-CE0F8CE6F61A}";
     public const string SynapseEvent = @"Global\{89811F96-91C2-4C19-8E0A-54469F491550}";
-    public const string SynapseOnlineHoldMutex = @"Global\{B1570C3F-8B14-45B0-BCEB-C57ED1F5C589}";
-    public const string HoldMutexSynapseVersion = @"Global\{D7B0F094-74E7-4055-BE84-F447B722DEB7}";
+    public const string OldSynapseOnlineMutex = @"Global\{B1570C3F-8B14-45B0-BCEB-C57ED1F5C589}";
+    public const string OldSynapseVersionMutex = @"Global\{D7B0F094-74E7-4055-BE84-F447B722DEB7}";
     public const string ChromaEmulatorMutex = @"Global\{5606D98C-C0DC-43E1-9A14-D992B52750F7}";
 
     //KeypadChromalink mutex???
