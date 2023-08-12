@@ -7,8 +7,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="RazerSdkReader.Avalonia.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Width="1188"
-        Height="324"
+        Width="{Binding WidthPx}"
+        Height="{Binding HeightPx}"
         Icon="/Assets/avalonia-logo.ico"
         Title="RazerSdkReader.Avalonia">
     

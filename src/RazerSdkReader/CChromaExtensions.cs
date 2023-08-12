@@ -50,4 +50,33 @@ public static class CChromaExtensions
         var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
         return xor;
     }
+    
+    public static CChromaColor GetColor(this CChromaMouse mouse, int index)
+    {
+        if (index is < 0 or >= MouseCustom2.Count)
+            throw new ArgumentOutOfRangeException(nameof(index));
+
+        var targetIndex = mouse.WriteIndex switch
+        {
+            0 => 9,
+            _ => mouse.WriteIndex - 1
+        };
+        
+        var snapshot = mouse.Data[targetIndex];
+        
+        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
+            return default;
+        
+        var staticColor = snapshot.Effect.Static.Color;
+        var clr = snapshot.Effect.Custom2[index];
+
+        //Note: yes, this works. No, I don't know why.
+        //Somehow Razer's 'encryption' is just XORing the colors.
+        var r = clr.A ^ staticColor.A;
+        var g = clr.R ^ staticColor.R;
+        var b = clr.G ^ staticColor.G;
+        var a = clr.B ^ staticColor.B;
+        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
+        return xor;
+    }
 }

@@ -5,7 +5,7 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaKeypad
 { 
-    public readonly uint WriteIndex;
+    public readonly int WriteIndex;
     public readonly uint Padding;
     public readonly CChromaKeypadData10 Data;
     public readonly CChromaDevice10 Device;

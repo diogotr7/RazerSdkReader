@@ -1,11 +1,12 @@
 ﻿using System.Runtime.InteropServices;
+using RazerSdkReader.Enums;
 
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CChromaMouse
 {
-    public readonly uint WriteIndex;
+    public readonly int WriteIndex;
     public readonly uint Padding;
     public readonly CChromaMouseData10 Data;
     public readonly CChromaDevice10 Device;
@@ -16,7 +17,7 @@ public readonly record struct CChromaMouseData
 {
     public readonly uint Flag;
     public readonly uint Led;
-    public readonly int EffectType;
+    public readonly EffectType EffectType;
     public readonly MouseEffect Effect;
     public readonly ulong Timestamp;
 }

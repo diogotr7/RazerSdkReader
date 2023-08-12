@@ -14,7 +14,7 @@ public readonly record struct CAppManagerData
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct CAppManager
 {
-    public readonly uint WriteIndex;
+    public readonly int WriteIndex;
     public readonly uint Padding;
     public readonly CAppManager10 Data;
 }

@@ -10,7 +10,7 @@ public class MainWindowViewModel : ReactiveObject
 {
     public MainWindowViewModel()
     {
-        App.Reader.KeyboardUpdated += ReaderOnKeyboardUpdated;
+        App.Reader.MouseUpdated += ReaderOnKeyboardUpdated;
         App.Reader.Start();
         
         KeyColors = new();
@@ -22,7 +22,7 @@ public class MainWindowViewModel : ReactiveObject
     
     private DateTime _lastFrame = DateTime.Now;
     
-    private void ReaderOnKeyboardUpdated(object? sender, CChromaKeyboard e)
+    private void ReaderOnKeyboardUpdated(object? sender, CChromaMouse e)
     {
         var now = DateTime.Now;
         if ((now - _lastFrame).TotalMilliseconds < 15)
@@ -42,11 +42,13 @@ public class MainWindowViewModel : ReactiveObject
     }
 
     public AvaloniaList<Color> KeyColors { get; }
-    public int Width { get; set; } = 22;
-    public int Height { get; set; } = 6;
+    public int Width { get; set; } = 7;
+    public int Height { get; set; } = 9;
+    public int WidthPx => Width * 50 + 1 + 1;
+    public int HeightPx => Height * 50 + 1 + 1;
 
     public void Dispose()
     {
-        App.Reader.KeyboardUpdated -= ReaderOnKeyboardUpdated;
+        App.Reader.MouseUpdated -= ReaderOnKeyboardUpdated;
     }
 }
