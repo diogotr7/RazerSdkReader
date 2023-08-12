@@ -14,7 +14,8 @@ namespace RazerSdkReader;
 public sealed class RazerSdkReader : IDisposable
 {
     private readonly Queue<Mutex> _mutexes = new();
-    private AutoResetEvent? _initializationEvent;
+    private TaskCompletionSource? _initCompletionSource;
+    private AutoResetEvent? _disposeEvent;
     private Thread? _mutexThread;
     
     private SignaledReader<CChromaKeyboard>? _keyboardReader;
@@ -22,12 +23,18 @@ public sealed class RazerSdkReader : IDisposable
     private SignaledReader<CChromaMousepad>? _mousepadReader;
     private SignaledReader<CChromaKeypad>? _keypadReader;
     private SignaledReader<CChromaHeadset>? _headsetReader;
+    private SignaledReader<CChromaLink>? _chromaLinkReader;
+    private SignaledReader<CAppData>? _appDataReader;
+    private SignaledReader<CAppManager>? _appManagerReader;
     
-    public event EventHandler<CChromaKeyboard> KeyboardUpdated;
-    public event EventHandler<CChromaMouse> MouseUpdated;
-    public event EventHandler<CChromaMousepad> MousepadUpdated;
-    public event EventHandler<CChromaKeypad> KeypadUpdated;
-    public event EventHandler<CChromaHeadset> HeadsetUpdated;
+    public event EventHandler<CChromaKeyboard>? KeyboardUpdated;
+    public event EventHandler<CChromaMouse>? MouseUpdated;
+    public event EventHandler<CChromaMousepad>? MousepadUpdated;
+    public event EventHandler<CChromaKeypad>? KeypadUpdated;
+    public event EventHandler<CChromaHeadset>? HeadsetUpdated;
+    public event EventHandler<CChromaLink>? ChromaLinkUpdated;
+    public event EventHandler<CAppData>? AppDataUpdated;
+    public event EventHandler<CAppManager>? AppManagerUpdated;
     
     public void Start()
     {
@@ -36,23 +43,40 @@ public sealed class RazerSdkReader : IDisposable
         if (!isServiceRunning)
             throw new InvalidOperationException("RzSdkService is not running.");
         
-        _initializationEvent = new(false);
+        _disposeEvent = new(false);
+        _initCompletionSource = new();
         _mutexThread = new Thread(Thread);
         _mutexThread.Start();
-        SpinWait.SpinUntil(() => _mutexThread.IsAlive);
+        
+        _initCompletionSource.Task.Wait();
     }
 
     private void Thread()
     {
-        InitMutexes();
-
-        InitReaders();
-
-        _initializationEvent?.WaitOne();
+        try
+        {
+            InitMutexes();
+            InitReaders();
+        }
+        catch (Exception ex)
+        {
+            _initCompletionSource?.TrySetException(new InvalidOperationException("Failed to initialize RazerSdkReader.", ex));
+            return;
+        }
         
-        DisposeReaders();
+        _initCompletionSource?.TrySetResult();
 
-        DisposeMutexes();
+        _disposeEvent?.WaitOne();
+
+        try
+        {
+            DisposeReaders();
+            DisposeMutexes();
+        }
+        catch
+        {
+            //dispose errors are not important
+        }
     }
 
     private void InitMutexes()
@@ -96,6 +120,18 @@ public sealed class RazerSdkReader : IDisposable
         _headsetReader = new SignaledReader<CChromaHeadset>(Constants.CChromaHeadsetFileMapping, Constants.CChromaHeadsetEvent);
         _headsetReader.Updated += OnHeadsetReaderOnUpdated;
         _headsetReader.Start();
+        
+        _chromaLinkReader = new SignaledReader<CChromaLink>(Constants.CChromaLinkFileMapping, Constants.CChromaLinkEvent);
+        _chromaLinkReader.Updated += OnChromaLinkReaderOnUpdated;
+        _chromaLinkReader.Start();
+        
+        _appDataReader = new SignaledReader<CAppData>(Constants.CAppDataFileMapping, Constants.CAppDataEvent);
+        _appDataReader.Updated += OnAppDataReaderOnUpdated;
+        _appDataReader.Start();
+        
+        _appManagerReader = new SignaledReader<CAppManager>(Constants.CAppManagerFileMapping, Constants.CAppManagerEvent);
+        _appManagerReader.Updated += OnAppManagerReaderOnUpdated;
+        _appManagerReader.Start();
     }
 
     private void DisposeReaders()
@@ -110,6 +146,12 @@ public sealed class RazerSdkReader : IDisposable
         _keypadReader.Dispose();
         _headsetReader!.Updated -= OnHeadsetReaderOnUpdated;
         _headsetReader.Dispose();
+        _chromaLinkReader!.Updated -= OnChromaLinkReaderOnUpdated;
+        _chromaLinkReader.Dispose();
+        _appDataReader!.Updated -= OnAppDataReaderOnUpdated;
+        _appDataReader.Dispose();
+        _appManagerReader!.Updated -= OnAppManagerReaderOnUpdated;
+        _appManagerReader.Dispose();
     }
 
     private void OnKeyboardReaderOnUpdated(object? sender, CChromaKeyboard keyboard)
@@ -136,11 +178,26 @@ public sealed class RazerSdkReader : IDisposable
     {
         HeadsetUpdated?.Invoke(this, headset);
     }
+    
+    private void OnChromaLinkReaderOnUpdated(object? sender, CChromaLink chromaLink)
+    {
+        ChromaLinkUpdated?.Invoke(this, chromaLink);
+    }
+
+    private void OnAppDataReaderOnUpdated(object? sender, CAppData appData)
+    {
+        AppDataUpdated?.Invoke(this, appData);
+    }
+
+    private void OnAppManagerReaderOnUpdated(object? sender, CAppManager appManager)
+    {
+        AppManagerUpdated?.Invoke(this, appManager);
+    }
 
     public void Dispose()
     {
-        _initializationEvent?.Set();
+        _disposeEvent?.Set();
         _mutexThread?.Join();
-        _initializationEvent?.Dispose();
+        _disposeEvent?.Dispose();
     }
 }

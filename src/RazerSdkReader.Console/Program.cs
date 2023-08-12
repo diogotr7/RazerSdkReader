@@ -38,9 +38,32 @@ public static class Program
             var clr = headset.Data[(int)headset.WriteIndex].Effect.Custom[0];
             Console.WriteLine($"Headset Color: {clr}");
         };
+        reader.ChromaLinkUpdated += (sender, chromaLink) =>
+        {
+            var clr = chromaLink.Data[(int)chromaLink.WriteIndex].Effect.Custom[0];
+            Console.WriteLine($"ChromaLink Color: {clr}");
+        };
+        reader.AppDataUpdated += (sender, appData) =>
+        {
+            var currentAppName = "";
+            for (int i = 0; i < appData.AppCount; i++)
+            {
+                if (appData.CurrentAppId != appData.AppInfo[i].AppId) continue;
+                
+                currentAppName = appData.AppInfo[i].AppName;
+                break;
+            }
+            Console.WriteLine($"AppData active: {currentAppName}");
+        };
+        reader.AppManagerUpdated += (sender, appManager) =>
+        {
+            Console.WriteLine($"AppManager updated");
+        };
+        
         
         reader.Start();
         Console.ReadLine();
         reader.Dispose();
+        Console.WriteLine("Disposed reader successfully...");
     }
 }

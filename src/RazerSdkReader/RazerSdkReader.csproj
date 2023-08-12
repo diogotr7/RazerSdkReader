@@ -9,6 +9,4 @@
     <ItemGroup>
         <ProjectReference Include="..\RazerSdkReader.Generators\RazerSdkReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
-
-
 </Project>

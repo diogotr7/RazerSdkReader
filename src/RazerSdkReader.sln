@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Generators",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Tests", "RazerSdkReader.Tests\RazerSdkReader.Tests.csproj", "{0BA8DBD3-6231-4170-91AC-38F92DD32AE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Sandbox", "RazerSdkReader.Sandbox\RazerSdkReader.Sandbox.csproj", "{5750DD07-09A0-4043-93FA-65B80C9578E8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Console", "RazerSdkReader.Console\RazerSdkReader.Console.csproj", "{5750DD07-09A0-4043-93FA-65B80C9578E8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Avalonia", "RazerSdkReader.Avalonia\RazerSdkReader.Avalonia.csproj", "{6DFBD631-9175-47EA-993F-EA8BDEDCC212}"
 EndProject
