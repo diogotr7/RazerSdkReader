@@ -193,3 +193,5 @@ FakesAssemblies/
 *.opt
 *.opendb
 src/.idea/.idea.RazerEmulatorReader/.idea/
+
+src/.idea/
