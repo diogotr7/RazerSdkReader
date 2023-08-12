@@ -9,8 +9,6 @@
         x:DataType="vm:MainWindowViewModel"
         Width="1188"
         Height="324"
-        CanResize="False"
-        Topmost="True"
         Icon="/Assets/avalonia-logo.ico"
         Title="RazerSdkReader.Avalonia">
     
@@ -25,16 +23,14 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     
-    <ItemsControl ItemsSource="{Binding KeyColors}"
-                  HorizontalAlignment="Center"
-                  VerticalAlignment="Center">
+    <ItemsControl ItemsSource="{Binding KeyColors}">
         <!-- Set the DataTemplate -->
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="Color">
                 <Rectangle Fill="{Binding  Converter={StaticResource ColorToSolidColorBrushConverter}}" 
-                           Margin="2"
-                           Width="50"
-                           Height="50"/>
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           Margin="1"/>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
         

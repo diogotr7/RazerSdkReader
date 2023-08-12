@@ -38,6 +38,9 @@ public sealed class RazerSdkReader : IDisposable
     
     public void Start()
     {
+        if (_mutexThread is { IsAlive: true })
+            return;
+        
         var isServiceRunning = Process.GetProcessesByName("RzSDKService").Any();
         
         if (!isServiceRunning)

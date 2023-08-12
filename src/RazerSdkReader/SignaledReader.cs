@@ -36,9 +36,11 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
         {
             while (!_cts!.IsCancellationRequested)
             {
-                // sdk runs at 30fps, let's wait for 40ms per frame.
-                // If it takes longer than that, we will asynchrounously wait for the next frame.
-                await _eventWaitHandle.WaitOneAsync(40, -1, _cts.Token);
+                // try to wait synchronously for 5 seconds,
+                // if it times out, then wait asynchronously.
+                // hopefully this is a good compromise between
+                // performance and responsiveness.
+                await _eventWaitHandle.WaitOneAsync(TimeSpan.FromSeconds(5), _cts.Token);
                 Updated?.Invoke(this, _reader.Read());
             }
         }

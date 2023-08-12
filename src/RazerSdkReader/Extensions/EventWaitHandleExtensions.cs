@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,14 +12,12 @@ internal static class EventWaitHandleExtensions
         e.Reset();
     }
 
-    public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, int waitMs, long timeout = -1, CancellationToken cancellationToken = default)
+    public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, TimeSpan timeout, CancellationToken cancellationToken = default)
     {
         // Handle synchronous cases.
-        var alreadySignalled = handle.WaitOne(waitMs);
+        var alreadySignalled = handle.WaitOne((int)timeout.TotalMilliseconds);
         if (alreadySignalled)
             return ValueTask.FromResult(true);
-        if (timeout == 0)
-            return ValueTask.FromResult(false);
 
         // Register all asynchronous cases.
         var tcs = new TaskCompletionSource<bool>();

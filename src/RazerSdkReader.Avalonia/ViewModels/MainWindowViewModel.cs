@@ -1,25 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Reactive;
 using Avalonia.Collections;
 using Avalonia.Media;
 using RazerSdkReader.Structures;
-using RazerSdkReader.Extensions;
 using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
 public class MainWindowViewModel : ReactiveObject
 {
-    private RazerSdkReader reader;
-    
     public MainWindowViewModel()
     {
-        reader = new RazerSdkReader();
-        reader.KeyboardUpdated += ReaderOnKeyboardUpdated;
-        reader.Start();
+        App.Reader.KeyboardUpdated += ReaderOnKeyboardUpdated;
+        App.Reader.Start();
         
         KeyColors = new();
         for (var i = 0; i < Width * Height; i++)
@@ -33,10 +25,10 @@ public class MainWindowViewModel : ReactiveObject
     private void ReaderOnKeyboardUpdated(object? sender, CChromaKeyboard e)
     {
         var now = DateTime.Now;
-        if ((now - _lastFrame).TotalMilliseconds < 33)
+        if ((now - _lastFrame).TotalMilliseconds < 15)
             return;
         
-        for (int i = 0; i < Width * Height; i++)
+        for (var i = 0; i < Width * Height; i++)
         {
             var clr = e.GetColor(i);
             var oldClr = KeyColors[i];
@@ -50,12 +42,11 @@ public class MainWindowViewModel : ReactiveObject
     }
 
     public AvaloniaList<Color> KeyColors { get; }
-    
     public int Width { get; set; } = 22;
     public int Height { get; set; } = 6;
 
     public void Dispose()
     {
-        reader.Dispose();
+        App.Reader.KeyboardUpdated -= ReaderOnKeyboardUpdated;
     }
 }

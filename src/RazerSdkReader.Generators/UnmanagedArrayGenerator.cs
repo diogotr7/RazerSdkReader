@@ -105,6 +105,7 @@ public class UnmanagedArrayGenerator : ISourceGenerator
         sb.AppendLine($"public readonly partial record struct {structInfo.ParentStruct}");
         sb.AppendLine("{");
         sb.AppendLine("    public const int Count = " + structInfo.Count + ";");
+        sb.AppendLine("    public int Length => " + structInfo.Count + ";");
 
         var digits = structInfo.Count.ToString(CultureInfo.InvariantCulture).Length;
         var format = "D" + digits;
