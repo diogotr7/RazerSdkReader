@@ -18,10 +18,11 @@ public partial class App : Application
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
         
         Reader = new RazerSdkReader();
+        Reader.Start();
         
         desktop.Exit += OnExit;
         
-        desktop.MainWindow = new MainWindow
+        desktop.MainWindow = new MainWindow()
         {
             DataContext = new MainWindowViewModel(),
         };

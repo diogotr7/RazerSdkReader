@@ -1,47 +1,50 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:RazerSdkReader.Avalonia.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:converters="using:RazerSdkReader.Avalonia.Converters"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        xmlns:vms="clr-namespace:RazerSdkReader.Avalonia.ViewModels"
+        mc:Ignorable="d"
         x:Class="RazerSdkReader.Avalonia.Views.MainWindow"
-        x:DataType="vm:MainWindowViewModel"
-        Width="{Binding WidthPx}"
-        Height="{Binding HeightPx}"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="RazerSdkReader.Avalonia">
-    
-    <Window.Resources>
-        <!-- Needed to convert a given color into a brush -->
-        <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />
-    </Window.Resources>
+        x:DataType="vms:MainWindowViewModel"
+        CanResize="False"
+        Width="100"
+        Height="180"
+        Title="RazerSdkReader">
+    <StackPanel Orientation="Vertical">
+        <Button
+            Content="Keyboard"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding KeyboardCommand}" />
 
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <vm:MainWindowViewModel/>
-    </Design.DataContext>
-    
-    <ItemsControl ItemsSource="{Binding KeyColors}">
-        <!-- Set the DataTemplate -->
-        <ItemsControl.ItemTemplate>
-            <DataTemplate DataType="Color">
-                <Rectangle Fill="{Binding  Converter={StaticResource ColorToSolidColorBrushConverter}}" 
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch"
-                           Margin="1"/>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
+        <Button
+            Content="Mouse"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding MouseCommand}" />
         
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <UniformGrid
-                    Columns="{CompiledBinding Width}" 
-                    Rows="{CompiledBinding Height}" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+        <Button
+            Content="Mousepad"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding MousepadCommand}" />
 
+        <Button
+            Content="Headset"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding HeadsetCommand}" />
 
+        <Button
+            Content="Keypad"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding KeypadCommand}" />
+
+        <Button
+            Content="ChromaLink"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding ChromaLinkCommand}" />
+    </StackPanel>
 </Window>
