@@ -14,7 +14,7 @@ namespace RazerEmulatorReader;
 public sealed class RazerEmulatorReader : IDisposable
 {
     private readonly Queue<Mutex> _mutexes = new();
-    private ManualResetEventSlim? _initializationEvent;
+    private AutoResetEvent? _initializationEvent;
     private Thread? _mutexThread;
     
     private SignaledReader<CChromaKeyboard>? _keyboardReader;
@@ -36,7 +36,7 @@ public sealed class RazerEmulatorReader : IDisposable
         if (!isServiceRunning)
             throw new InvalidOperationException("RzSdkService is not running.");
         
-        _initializationEvent = new ManualResetEventSlim();
+        _initializationEvent = new(false);
         _mutexThread = new Thread(Thread);
         _mutexThread.Start();
         SpinWait.SpinUntil(() => _mutexThread.IsAlive);
@@ -48,7 +48,7 @@ public sealed class RazerEmulatorReader : IDisposable
 
         InitReaders();
 
-        _initializationEvent?.Wait();
+        _initializationEvent?.WaitOne();
         
         DisposeReaders();
 
