@@ -7,7 +7,7 @@ using RazerSdkReader.Extensions;
 namespace RazerSdkReader;
 
 [SupportedOSPlatform("windows")]
-public sealed class SignaledReader<T> : IDisposable where T : unmanaged
+internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
 {
     private readonly EventWaitHandle _eventWaitHandle;
     private readonly MemoryMappedStructReader<T> _reader;

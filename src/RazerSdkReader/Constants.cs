@@ -1,6 +1,6 @@
 ﻿namespace RazerSdkReader;
 
-public static class Constants
+internal static class Constants
 {
     public const string CChromaKeyboardFileMapping = @"Global\{74164FAD-E73C-4FA1-A9AA-70813315ED9C}";
     public const uint CChromaKeyboardSize = 40088u;

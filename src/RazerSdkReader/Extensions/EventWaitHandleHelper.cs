@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace RazerSdkReader.Extensions;
 
-public static class EventWaitHandleHelper
+internal static class EventWaitHandleHelper
 {
     public static EventWaitHandle Create(string name)
     {

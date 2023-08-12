@@ -3,7 +3,7 @@ using System;
 namespace RazerSdkReader;
 
 [AttributeUsage(AttributeTargets.Struct)]
-public class UnmanagedArrayAttribute : Attribute
+internal class UnmanagedArrayAttribute : Attribute
 {
     public Type Type { get; }
     public int Size { get; }

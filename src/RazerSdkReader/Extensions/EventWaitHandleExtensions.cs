@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace RazerSdkReader.Extensions;
 
-public static class EventWaitHandleExtensions
+internal static class EventWaitHandleExtensions
 {
     public static void Pulse(this EventWaitHandle e)
     {

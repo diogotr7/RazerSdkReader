@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using RazerSdkReader.Enums;
-using RazerSdkReader.Extensions;
-using RazerSdkReader.Structures;
 
-namespace RazerSdkReader.Sandbox;
+namespace RazerSdkReader.ConsoleApp;
 
 public static class Program
 {

@@ -8,5 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\RazerSdkReader.Generators\RazerSdkReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+        <InternalsVisibleTo Include="$(AssemblyName).Tests" />
+        <InternalsVisibleTo Include="$(AssemblyName).Benchmarks" />
     </ItemGroup>
 </Project>
