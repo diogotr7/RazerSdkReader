@@ -17,16 +17,16 @@ public sealed class RazerSdkReader : IDisposable
     private TaskCompletionSource? _initCompletionSource;
     private AutoResetEvent? _disposeEvent;
     private Thread? _mutexThread;
-    
-    private SignaledReader<CChromaKeyboard>? _keyboardReader;
-    private SignaledReader<CChromaMouse>? _mouseReader;
-    private SignaledReader<CChromaMousepad>? _mousepadReader;
-    private SignaledReader<CChromaKeypad>? _keypadReader;
-    private SignaledReader<CChromaHeadset>? _headsetReader;
-    private SignaledReader<CChromaLink>? _chromaLinkReader;
-    private SignaledReader<CAppData>? _appDataReader;
-    private SignaledReader<CAppManager>? _appManagerReader;
-    
+
+    private SignaledMemoryReader<CChromaKeyboard>? _keyboardReader;
+    private SignaledMemoryReader<CChromaMouse>? _mouseReader;
+    private SignaledMemoryReader<CChromaMousepad>? _mousepadReader;
+    private SignaledMemoryReader<CChromaKeypad>? _keypadReader;
+    private SignaledMemoryReader<CChromaHeadset>? _headsetReader;
+    private SignaledMemoryReader<CChromaLink>? _chromaLinkReader;
+    private SignaledMemoryReader<CAppData>? _appDataReader;
+    private SignaledMemoryReader<CAppManager>? _appManagerReader;
+
     public event EventHandler<CChromaKeyboard>? KeyboardUpdated;
     public event EventHandler<CChromaMouse>? MouseUpdated;
     public event EventHandler<CChromaMousepad>? MousepadUpdated;
@@ -35,7 +35,9 @@ public sealed class RazerSdkReader : IDisposable
     public event EventHandler<CChromaLink>? ChromaLinkUpdated;
     public event EventHandler<CAppData>? AppDataUpdated;
     public event EventHandler<CAppManager>? AppManagerUpdated;
-    
+
+    private CancellationTokenSource _cancellationToken = new();
+
     public void Start()
     {
         if (_mutexThread is { IsAlive: true })
@@ -56,18 +58,24 @@ public sealed class RazerSdkReader : IDisposable
 
     private void Thread()
     {
+        _cancellationToken = new();
         try
         {
             InitMutexes();
-            InitReaders();
+            InitAppReaders();
         }
         catch (Exception ex)
         {
             _initCompletionSource?.TrySetException(new InvalidOperationException("Failed to initialize RazerSdkReader.", ex));
             return;
         }
-        
+
         _initCompletionSource?.TrySetResult();
+        FirstThreadLoop();
+        if (!_cancellationToken.IsCancellationRequested)
+        {
+            ThreadLoop();
+        }
 
         _disposeEvent?.WaitOne();
 
@@ -79,6 +87,74 @@ public sealed class RazerSdkReader : IDisposable
         catch
         {
             //dispose errors are not important
+        }
+    }
+
+    private void FirstThreadLoop()
+    {
+        WaitHandle[] handles = { _cancellationToken.Token.WaitHandle, _appDataReader!.EventWaitHandle };
+
+        bool loop;
+        do
+        {
+            var providerIndex = WaitHandle.WaitAny(handles);
+
+            switch (providerIndex)
+            {
+                case 0: // cancelled
+                    return;
+                default:
+                    var provider = _appDataReader;
+                    provider.Update();
+                    var app = "app"; //TODO update with new app name
+
+                    if (string.IsNullOrEmpty(app))
+                    {
+                        loop = true;
+                        break;
+                    }
+
+                    InitReaders();
+                    return;
+            }
+        } while (loop);
+    }
+
+    private void ThreadLoop()
+    {
+        var readers = new[]
+        {
+            (SignaledReader)null!, _keyboardReader, _mouseReader, _mousepadReader, _keypadReader, _headsetReader, _chromaLinkReader,
+            _appDataReader, _appManagerReader
+        };
+        var readerHandles = readers
+            .Where(r => r != null)
+            .Select(r => r!.EventWaitHandle)
+            .ToArray();
+
+        SignaledReader[] theReaders = readers.Where(r => r != null).ToArray();
+        WaitHandle[] handles = new[] { _cancellationToken.Token.WaitHandle }.Concat(readerHandles).ToArray();
+
+        var loop = true;
+        while (loop)
+        {
+            var providerIndex = WaitHandle.WaitAny(handles);
+
+            switch (providerIndex)
+            {
+                case 0: // cancelled
+                    loop = false;
+                    break;
+                default:
+                    var provider = theReaders[providerIndex - 1];
+                    try
+                    {
+                        provider.Update();  //TODO full update shouldn't be done here, just mark dirty
+                    }
+                    catch
+                    { /* ignore */ }
+                    break;
+            }
         }
     }
 
@@ -102,39 +178,34 @@ public sealed class RazerSdkReader : IDisposable
         }
     }
 
+    private void InitAppReaders()
+    {
+        _appDataReader = new SignaledMemoryReader<CAppData>(Constants.CAppDataFileMapping, Constants.CAppDataEvent);
+        _appDataReader.Updated += OnAppDataReaderOnUpdated;
+        
+        _appManagerReader = new SignaledMemoryReader<CAppManager>(Constants.CAppManagerFileMapping, Constants.CAppManagerEvent);
+        _appManagerReader.Updated += OnAppManagerReaderOnUpdated;
+    }
+
     private void InitReaders()
     {
-        _keyboardReader = new SignaledReader<CChromaKeyboard>(Constants.CChromaKeyboardFileMapping, Constants.CChromaKeyboardEvent);
+        _keyboardReader = new SignaledMemoryReader<CChromaKeyboard>(Constants.CChromaKeyboardFileMapping, Constants.CChromaKeyboardEvent);
         _keyboardReader.Updated += OnKeyboardReaderOnUpdated;
-        _keyboardReader.Start();
 
-        _mouseReader = new SignaledReader<CChromaMouse>(Constants.CChromaMouseFileMapping, Constants.CChromaMouseEvent);
+        _mouseReader = new SignaledMemoryReader<CChromaMouse>(Constants.CChromaMouseFileMapping, Constants.CChromaMouseEvent);
         _mouseReader.Updated += OnMouseReaderOnUpdated;
-        _mouseReader.Start();
 
-        _mousepadReader = new SignaledReader<CChromaMousepad>(Constants.CChromaMousepadFileMapping, Constants.CChromaMousepadEvent);
+        _mousepadReader = new SignaledMemoryReader<CChromaMousepad>(Constants.CChromaMousepadFileMapping, Constants.CChromaMousepadEvent);
         _mousepadReader.Updated += OnMousepadReaderOnUpdated;
-        _mousepadReader.Start();
 
-        _keypadReader = new SignaledReader<CChromaKeypad>(Constants.CChromaKeypadFileMapping, Constants.CChromaKeypadEvent);
+        _keypadReader = new SignaledMemoryReader<CChromaKeypad>(Constants.CChromaKeypadFileMapping, Constants.CChromaKeypadEvent);
         _keypadReader.Updated += OnKeypadReaderOnUpdated;
-        _keypadReader.Start();
 
-        _headsetReader = new SignaledReader<CChromaHeadset>(Constants.CChromaHeadsetFileMapping, Constants.CChromaHeadsetEvent);
+        _headsetReader = new SignaledMemoryReader<CChromaHeadset>(Constants.CChromaHeadsetFileMapping, Constants.CChromaHeadsetEvent);
         _headsetReader.Updated += OnHeadsetReaderOnUpdated;
-        _headsetReader.Start();
         
-        _chromaLinkReader = new SignaledReader<CChromaLink>(Constants.CChromaLinkFileMapping, Constants.CChromaLinkEvent);
+        _chromaLinkReader = new SignaledMemoryReader<CChromaLink>(Constants.CChromaLinkFileMapping, Constants.CChromaLinkEvent);
         _chromaLinkReader.Updated += OnChromaLinkReaderOnUpdated;
-        _chromaLinkReader.Start();
-        
-        _appDataReader = new SignaledReader<CAppData>(Constants.CAppDataFileMapping, Constants.CAppDataEvent);
-        _appDataReader.Updated += OnAppDataReaderOnUpdated;
-        _appDataReader.Start();
-        
-        _appManagerReader = new SignaledReader<CAppManager>(Constants.CAppManagerFileMapping, Constants.CAppManagerEvent);
-        _appManagerReader.Updated += OnAppManagerReaderOnUpdated;
-        _appManagerReader.Start();
     }
 
     private void DisposeReaders()
