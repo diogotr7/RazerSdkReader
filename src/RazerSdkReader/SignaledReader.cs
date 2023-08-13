@@ -15,6 +15,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
     private Task? _task;
 
     public event EventHandler<T>? Updated;
+    public event EventHandler<Exception>? Exception; 
 
     public SignaledReader(string mmf, string eventWaitHandle)
     {
@@ -44,9 +45,13 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
                 Updated?.Invoke(this, _reader.Read());
             }
         }
-        catch
+        catch (TaskCanceledException)
         {
-
+            // ignore
+        }
+        catch (Exception e)
+        {
+            Exception?.Invoke(this, new Exception("ReadLoop Error", e));
         }
     }
     

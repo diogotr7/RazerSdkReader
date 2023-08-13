@@ -7,6 +7,10 @@ public static class Program
     public static void Main(string[] args)
     {
         var reader = new RazerSdkReader();
+        reader.Exception += (sender, exception) =>
+        {
+            Console.WriteLine($"Exception: {exception}");
+        };
         reader.KeyboardUpdated += (sender, keyboard) =>
         {
             var clr = keyboard.GetColor(0);
@@ -14,27 +18,27 @@ public static class Program
         };
         reader.MouseUpdated += (sender, mouse) =>
         {
-            var clr = mouse.Data[(int)mouse.WriteIndex].Effect.Custom2[0];
+            var clr = mouse.GetColor(0);
             Console.WriteLine($"Mouse Color: {clr}");
         };
         reader.MousepadUpdated += (sender, mousepad) =>
         {
-            var clr = mousepad.Data[(int)mousepad.WriteIndex].Effect.Custom2[0];
+            var clr = mousepad.GetColor(0);
             Console.WriteLine($"Mousepad Color: {clr}");
         };
         reader.KeypadUpdated += (sender, keypad) =>
         {
-            var clr = keypad.Data[(int)keypad.WriteIndex].Effect.Custom[0];
+            var clr = keypad.GetColor(0);
             Console.WriteLine($"Keypad Color: {clr}");
         };
         reader.HeadsetUpdated += (sender, headset) =>
         {
-            var clr = headset.Data[(int)headset.WriteIndex].Effect.Custom[0];
+            var clr = headset.GetColor(0);
             Console.WriteLine($"Headset Color: {clr}");
         };
         reader.ChromaLinkUpdated += (sender, chromaLink) =>
         {
-            var clr = chromaLink.Data[(int)chromaLink.WriteIndex].Effect.Custom[0];
+            var clr = chromaLink.GetColor(0);
             Console.WriteLine($"ChromaLink Color: {clr}");
         };
         reader.AppDataUpdated += (sender, appData) =>

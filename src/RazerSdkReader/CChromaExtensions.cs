@@ -42,15 +42,8 @@ public static class CChromaExtensions
         {
             clr = default;
         }
-
-        //Note: yes, this works. No, I don't know why.
-        //Somehow Razer's 'encryption' is just XORing the colors.
-        var r = clr.A ^ staticColor.A;
-        var g = clr.R ^ staticColor.R;
-        var b = clr.G ^ staticColor.G;
-        var a = clr.B ^ staticColor.B;
-        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-        return xor;
+        
+        return clr ^ staticColor;
     }
     
     public static CChromaColor GetColor(this CChromaMouse data, int index)
@@ -67,34 +60,21 @@ public static class CChromaExtensions
         
         var staticColor = snapshot.Effect.Static.Color;
         var clr = snapshot.Effect.Custom2[index];
-
-        //Note: yes, this works. No, I don't know why.
-        //Somehow Razer's 'encryption' is just XORing the colors.
-        var r = clr.A ^ staticColor.A;
-        var g = clr.R ^ staticColor.R;
-        var b = clr.G ^ staticColor.G;
-        var a = clr.B ^ staticColor.B;
-        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-        return xor;
+        return clr ^ staticColor;
     }
     
     public static CChromaColor GetColor(this CChromaMousepad data, int index)
     {
-        if (index is < 0 or >= MousepadCustom.Count)
+        if (index is < 0 or >= MousepadCustom2.Count)
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var targetIndex = GetWriteIndex(data.WriteIndex);
         var snapshot = data.Data[targetIndex];
         
-        var custom =  snapshot.Effect.Custom[index];
+        var clr =  snapshot.Effect.Custom2[index];
         var staticColor = snapshot.Effect.Static.Color;
         
-        var a = custom.A ^ staticColor.A;
-        var r = custom.R ^ staticColor.R;
-        var g = custom.G ^ staticColor.G;
-        var b = custom.B ^ staticColor.B;
-        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-        return xor;
+        return clr ^ staticColor;
     }
 
     public static CChromaColor GetColor(this CChromaHeadset data, int index)
@@ -105,15 +85,10 @@ public static class CChromaExtensions
         var targetIndex = GetWriteIndex(data.WriteIndex);
         var snapshot = data.Data[targetIndex];
         
-        var custom =  snapshot.Effect.Custom[index];
+        var clr =  snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
         
-        var a = custom.A ^ staticColor.A;
-        var r = custom.R ^ staticColor.R;
-        var g = custom.G ^ staticColor.G;
-        var b = custom.B ^ staticColor.B;
-        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-        return xor;
+        return clr ^ staticColor;
     }
     
     public static CChromaColor GetColor(this CChromaKeypad data, int index)
@@ -124,15 +99,10 @@ public static class CChromaExtensions
         var targetIndex = GetWriteIndex(data.WriteIndex);
         var snapshot = data.Data[targetIndex];
         
-        var custom =  snapshot.Effect.Custom[index];
+        var clr =  snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
         
-        var a = custom.A ^ staticColor.A;
-        var r = custom.R ^ staticColor.R;
-        var g = custom.G ^ staticColor.G;
-        var b = custom.B ^ staticColor.B;
-        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-        return xor;
+        return clr ^ staticColor;
     }
     
     public static CChromaColor GetColor(this CChromaLink data, int index)
@@ -143,14 +113,9 @@ public static class CChromaExtensions
         var targetIndex = GetWriteIndex(data.WriteIndex);
         var snapshot = data.Data[targetIndex];
         
-        var custom =  snapshot.Effect.Custom[index];
+        var clr =  snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
         
-        var a = custom.A ^ staticColor.A;
-        var r = custom.R ^ staticColor.R;
-        var g = custom.G ^ staticColor.G;
-        var b = custom.B ^ staticColor.B;
-        var xor = CChromaColor.FromArgb((byte)a, (byte)r, (byte)g, (byte)b);
-        return xor;
+        return clr ^ staticColor;
     }
 }

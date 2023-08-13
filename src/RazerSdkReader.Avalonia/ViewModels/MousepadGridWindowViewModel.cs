@@ -7,7 +7,7 @@ namespace RazerSdkReader.Avalonia.ViewModels;
 
 public class MousepadGridWindowViewModel : GridViewerWindowViewModel<CChromaMousepad>
 {
-    public MousepadGridWindowViewModel() : base(15, 1, "Mousepad")
+    public MousepadGridWindowViewModel() : base(20, 1, "Mousepad")
     {
         this.WhenActivated(d =>
         {
