@@ -3,16 +3,16 @@
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaKeypad
+public readonly record struct ChromaKeypad
 { 
     public readonly int WriteIndex;
     public readonly uint Padding;
-    public readonly CChromaKeypadData10 Data;
-    public readonly CChromaDevice10 Device;
+    public readonly ChromaKeypadData10 Data;
+    public readonly ChromaDevice10 Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaKeypadData
+public readonly record struct ChromaKeypadData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -30,8 +30,8 @@ public readonly record struct KeypadEffect
     public readonly Wave Wave;
 }
 
-[UnmanagedArray(typeof(CChromaColor), 20)]
+[UnmanagedArray(typeof(ChromaColor), 20)]
 public readonly partial record struct KeypadCustom;
 
-[UnmanagedArray(typeof(CChromaKeypadData), 10)]
-public readonly partial record struct CChromaKeypadData10;
+[UnmanagedArray(typeof(ChromaKeypadData), 10)]
+public readonly partial record struct ChromaKeypadData10;

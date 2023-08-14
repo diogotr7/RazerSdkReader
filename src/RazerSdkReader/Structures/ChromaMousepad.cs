@@ -3,16 +3,16 @@
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaMousepad
+public readonly record struct ChromaMousepad
 { 
     public readonly int WriteIndex;
     public readonly uint Padding;
-    public readonly CChromaMousepadData10 Data;
-    public readonly CChromaDevice10 Device;
+    public readonly ChromaMousepadData10 Data;
+    public readonly ChromaDevice10 Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaMousepadData
+public readonly record struct ChromaMousepadData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -30,11 +30,11 @@ public readonly record struct MousepadEffect
     public readonly MousepadCustom2 Custom2;
 }
 
-[UnmanagedArray(typeof(CChromaColor), 15)]
+[UnmanagedArray(typeof(ChromaColor), 15)]
 public readonly partial record struct MousepadCustom;
 
-[UnmanagedArray(typeof(CChromaColor), 20)]
+[UnmanagedArray(typeof(ChromaColor), 20)]
 public readonly partial record struct MousepadCustom2;
 
-[UnmanagedArray(typeof(CChromaMousepadData), 10)]
-public readonly partial record struct CChromaMousepadData10;
+[UnmanagedArray(typeof(ChromaMousepadData), 10)]
+public readonly partial record struct ChromaMousepadData10;

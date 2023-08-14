@@ -4,16 +4,16 @@ using RazerSdkReader.Enums;
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaKeyboard
+public readonly record struct ChromaKeyboard
 {
     public readonly int WriteIndex;
     public readonly int Padding;
-    public readonly CChromaKeyboardData10 Data;
-    public readonly CChromaDevice10 Device;
+    public readonly ChromaKeyboardData10 Data;
+    public readonly ChromaDevice10 Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaKeyboardData
+public readonly record struct ChromaKeyboardData
 {
     public readonly uint Flag;
     public readonly EffectType EffectType;
@@ -55,11 +55,11 @@ public readonly record struct KeyboardCustom3
     public readonly Color6X22 Key;
 }
 
-[UnmanagedArray(typeof(CChromaColor), 192)]
+[UnmanagedArray(typeof(ChromaColor), 192)]
 public readonly partial record struct Color8X24;
 
-[UnmanagedArray(typeof(CChromaColor), 132)]
+[UnmanagedArray(typeof(ChromaColor), 132)]
 public readonly partial record struct Color6X22;
 
-[UnmanagedArray(typeof(CChromaKeyboardData), 10)]
-public readonly partial record struct CChromaKeyboardData10;
+[UnmanagedArray(typeof(ChromaKeyboardData), 10)]
+public readonly partial record struct ChromaKeyboardData10;

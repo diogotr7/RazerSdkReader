@@ -4,7 +4,7 @@ using RazerSdkReader.Structures;
 
 namespace RazerSdkReader;
 
-public static class CChromaExtensions
+public static class ChromaExtensions
 {
     private static int GetWriteIndex(int writeIndex) => writeIndex switch
     {
@@ -12,7 +12,7 @@ public static class CChromaExtensions
         _ => writeIndex - 1
     };
     
-    public static CChromaColor GetColor(this CChromaKeyboard data, int index)
+    public static ChromaColor GetColor(this ChromaKeyboard data, int index)
     {
         if (index is < 0 or >= Color6X22.Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -24,7 +24,7 @@ public static class CChromaExtensions
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
         
-        CChromaColor clr;
+        ChromaColor clr;
         var staticColor = snapshot.Effect.Static.Color;
 
         if (snapshot.EffectType == EffectType.CustomKey)
@@ -46,7 +46,7 @@ public static class CChromaExtensions
         return clr ^ staticColor;
     }
     
-    public static CChromaColor GetColor(this CChromaMouse data, int index)
+    public static ChromaColor GetColor(this ChromaMouse data, int index)
     {
         if (index is < 0 or >= MouseCustom2.Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -63,7 +63,7 @@ public static class CChromaExtensions
         return clr ^ staticColor;
     }
     
-    public static CChromaColor GetColor(this CChromaMousepad data, int index)
+    public static ChromaColor GetColor(this ChromaMousepad data, int index)
     {
         if (index is < 0 or >= MousepadCustom2.Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -77,7 +77,7 @@ public static class CChromaExtensions
         return clr ^ staticColor;
     }
 
-    public static CChromaColor GetColor(this CChromaHeadset data, int index)
+    public static ChromaColor GetColor(this ChromaHeadset data, int index)
     {
         if (index is < 0 or >= HeadsetCustom.Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -91,7 +91,7 @@ public static class CChromaExtensions
         return clr ^ staticColor;
     }
     
-    public static CChromaColor GetColor(this CChromaKeypad data, int index)
+    public static ChromaColor GetColor(this ChromaKeypad data, int index)
     {
         if (index is < 0 or >= KeypadCustom.Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -105,7 +105,7 @@ public static class CChromaExtensions
         return clr ^ staticColor;
     }
     
-    public static CChromaColor GetColor(this CChromaLink data, int index)
+    public static ChromaColor GetColor(this ChromaLink data, int index)
     {
         if (index is < 0 or >= LinkCustom.Count)
             throw new ArgumentOutOfRangeException(nameof(index));

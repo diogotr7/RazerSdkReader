@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public class ChromaLinkGridWindowViewModel : GridViewerWindowViewModel<CChromaLink>
+public class ChromaLinkGridWindowViewModel : GridViewerWindowViewModel<ChromaLink>
 {
     public ChromaLinkGridWindowViewModel() : base(5, 1, "ChromaLink")
     {
@@ -16,12 +16,12 @@ public class ChromaLinkGridWindowViewModel : GridViewerWindowViewModel<CChromaLi
         });
     }
 
-    private void ReaderOnChromaLinkUpdated(object? sender, CChromaLink e)
+    private void ReaderOnChromaLinkUpdated(object? sender, ChromaLink e)
     {
         Update(e);
     }
 
-    protected override Color GetColor(in CChromaLink data, int index)
+    protected override Color GetColor(in ChromaLink data, int index)
     {
         var clr =  data.GetColor(index);
         return Color.FromRgb(clr.R, clr.G, clr.B);

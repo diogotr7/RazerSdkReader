@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public class MousepadGridWindowViewModel : GridViewerWindowViewModel<CChromaMousepad>
+public class MousepadGridWindowViewModel : GridViewerWindowViewModel<ChromaMousepad>
 {
     public MousepadGridWindowViewModel() : base(20, 1, "Mousepad")
     {
@@ -16,12 +16,12 @@ public class MousepadGridWindowViewModel : GridViewerWindowViewModel<CChromaMous
         });
     }
 
-    private void ReaderOnMousepadUpdated(object? sender, CChromaMousepad e)
+    private void ReaderOnMousepadUpdated(object? sender, ChromaMousepad e)
     {
         Update(e);
     }
 
-    protected override Color GetColor(in CChromaMousepad data, int index)
+    protected override Color GetColor(in ChromaMousepad data, int index)
     {
         var clr =  data.GetColor(index);
         return Color.FromRgb(clr.R, clr.G, clr.B);

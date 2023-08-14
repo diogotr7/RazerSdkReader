@@ -6,7 +6,6 @@ using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader;
 
-[SupportedOSPlatform("windows")]
 internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
 {
     private readonly EventWaitHandle _eventWaitHandle;
@@ -17,9 +16,9 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
     public event EventHandler<T>? Updated;
     public event EventHandler<Exception>? Exception; 
 
-    public SignaledReader(string mmf, string eventWaitHandle)
+    public SignaledReader(string memoryMappedFileName, string eventWaitHandle)
     {
-        _reader = new MemoryMappedStructReader<T>(mmf);
+        _reader = new MemoryMappedStructReader<T>(memoryMappedFileName);
         _eventWaitHandle = EventWaitHandleHelper.Create(eventWaitHandle);
     }
 

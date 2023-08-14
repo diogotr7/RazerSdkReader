@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public class MouseGridWindowViewModel : GridViewerWindowViewModel<CChromaMouse>
+public class MouseGridWindowViewModel : GridViewerWindowViewModel<ChromaMouse>
 {
     public MouseGridWindowViewModel() : base(7, 9, "Mouse")
     {
@@ -18,12 +18,12 @@ public class MouseGridWindowViewModel : GridViewerWindowViewModel<CChromaMouse>
         });
     }
 
-    private void ReaderOnMouseUpdated(object? sender, CChromaMouse e)
+    private void ReaderOnMouseUpdated(object? sender, ChromaMouse e)
     {
         Update(e);
     }
     
-    protected override Color GetColor(in CChromaMouse e, int index)
+    protected override Color GetColor(in ChromaMouse e, int index)
     {
         var clr =  e.GetColor(index);
         return Color.FromRgb(clr.R, clr.G, clr.B);

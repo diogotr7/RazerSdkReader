@@ -1,4 +1,6 @@
 using System.Runtime.Versioning;
+using System.Security.AccessControl;
+using System.Security.Principal;
 using System.Threading;
 
 namespace RazerSdkReader.Extensions;
@@ -7,16 +9,22 @@ internal static class EventWaitHandleHelper
 {
     public static EventWaitHandle Create(string name)
     {
-        return new EventWaitHandle(false, EventResetMode.ManualReset, name, out var _);
+        return EventWaitHandleAcl.Create(false, EventResetMode.ManualReset, name, out var _, GetSecurity());
     }
 
-    [SupportedOSPlatform("windows")]
+    private static EventWaitHandleSecurity GetSecurity()
+    {
+        var security = new EventWaitHandleSecurity();
+        var everyone = new SecurityIdentifier(WellKnownSidType.WorldSid, null);
+        security.AddAccessRule(new EventWaitHandleAccessRule(everyone, EventWaitHandleRights.FullControl, AccessControlType.Allow));
+        return security;
+    }
+
     public static EventWaitHandle Open(string name)
     {
         return EventWaitHandle.OpenExisting(name);
     }
 
-    [SupportedOSPlatform("windows")]
     public static void Pulse(string name)
     {
         var e = Open(name);

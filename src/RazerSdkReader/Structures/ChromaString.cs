@@ -3,7 +3,7 @@
 namespace RazerSdkReader.Structures;
 
 [UnmanagedArray(typeof(char), 260)]
-public readonly partial record struct CChromaString
+public readonly partial record struct ChromaString
 {
     public override string ToString()
     {
@@ -20,7 +20,7 @@ public readonly partial record struct CChromaString
         return sb.ToString();
     }
 
-    public static implicit operator string(CChromaString str)
+    public static implicit operator string(ChromaString str)
     {
         return str.ToString();
     }

@@ -31,11 +31,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["app-manager"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CAppManagerSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.AppManagerSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var appManager = MemoryMarshal.AsRef<CAppManager>(bytes);
+            var appManager = MemoryMarshal.AsRef<ChromaAppManager>(bytes);
         });
     }
     
@@ -44,11 +44,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["app-data"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CAppDataSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.AppDataSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var appData = MemoryMarshal.AsRef<CAppData>(bytes);
+            var appData = MemoryMarshal.AsRef<ChromaAppData>(bytes);
         });
     }
     
@@ -57,11 +57,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["headset"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CChromaHeadsetSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.HeadsetSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var headset = MemoryMarshal.AsRef<CChromaHeadset>(bytes);
+            var headset = MemoryMarshal.AsRef<ChromaHeadset>(bytes);
         });
     }
     
@@ -70,11 +70,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["keypad"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CChromaKeypadSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.KeypadSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var keypad = MemoryMarshal.AsRef<CChromaKeypad>(bytes);
+            var keypad = MemoryMarshal.AsRef<ChromaKeypad>(bytes);
         });
     }
     
@@ -83,11 +83,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["keyboard"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CChromaKeyboardSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.KeyboardSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var keyboard = MemoryMarshal.AsRef<CChromaKeyboard>(bytes);
+            var keyboard = MemoryMarshal.AsRef<ChromaKeyboard>(bytes);
         });
     }
     
@@ -96,11 +96,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["link"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CChromaLinkSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.LinkSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var link = MemoryMarshal.AsRef<CChromaLink>(bytes);
+            var link = MemoryMarshal.AsRef<ChromaLink>(bytes);
         });
     }
     
@@ -109,11 +109,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["mouse"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CChromaMouseSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.MouseSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var mouse = MemoryMarshal.AsRef<CChromaMouse>(bytes);
+            var mouse = MemoryMarshal.AsRef<ChromaMouse>(bytes);
         });
     }
     
@@ -122,11 +122,11 @@ public class ReadFromFileTests
     {
         var bytes = _data["mousepad"];
         
-        Assert.That(bytes, Has.Length.EqualTo(Constants.CChromaMousepadSize));
+        Assert.That(bytes, Has.Length.EqualTo(Constants.MousepadSize));
         
         Assert.DoesNotThrow(() =>
         {
-            var mousepad = MemoryMarshal.AsRef<CChromaMousepad>(bytes);
+            var mousepad = MemoryMarshal.AsRef<ChromaMousepad>(bytes);
         });
     }
 }

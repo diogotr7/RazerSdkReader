@@ -7,7 +7,7 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public class KeyboardGridWindowViewModel : GridViewerWindowViewModel<CChromaKeyboard>
+public class KeyboardGridWindowViewModel : GridViewerWindowViewModel<ChromaKeyboard>
 {
     public KeyboardGridWindowViewModel() : base(22, 6, "Keyboard")
     {
@@ -18,12 +18,12 @@ public class KeyboardGridWindowViewModel : GridViewerWindowViewModel<CChromaKeyb
         });
     }
 
-    private void ReaderOnKeyboardUpdated(object? sender, CChromaKeyboard e)
+    private void ReaderOnKeyboardUpdated(object? sender, ChromaKeyboard e)
     {
         Update(e);
     }
 
-    protected override Color GetColor(in CChromaKeyboard e, int index)
+    protected override Color GetColor(in ChromaKeyboard e, int index)
     {
         var clr =  e.GetColor(index);
         return Color.FromRgb(clr.R, clr.G, clr.B);

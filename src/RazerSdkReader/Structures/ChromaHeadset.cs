@@ -3,16 +3,16 @@
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaHeadset
+public readonly record struct ChromaHeadset
 {
     public readonly int WriteIndex;
     public readonly int Padding;
-    public readonly CChromaHeadsetData10 Data;
-    public readonly CChromaDevice10 Device;
+    public readonly ChromaHeadsetData10 Data;
+    public readonly ChromaDevice10 Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaHeadsetData
+public readonly record struct ChromaHeadsetData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -29,8 +29,8 @@ public readonly record struct HeadsetEffect
     public readonly Static Static;
 }
 
-[UnmanagedArray(typeof(CChromaColor), 5)]
+[UnmanagedArray(typeof(ChromaColor), 5)]
 public readonly partial record struct HeadsetCustom;
 
-[UnmanagedArray(typeof(CChromaHeadsetData), 10)]
-public readonly partial record struct CChromaHeadsetData10;
+[UnmanagedArray(typeof(ChromaHeadsetData), 10)]
+public readonly partial record struct ChromaHeadsetData10;

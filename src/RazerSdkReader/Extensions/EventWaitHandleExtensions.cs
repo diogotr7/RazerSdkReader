@@ -23,7 +23,7 @@ internal static class EventWaitHandleExtensions
         var tcs = new TaskCompletionSource<bool>();
         var threadPoolRegistration = ThreadPool.RegisterWaitForSingleObject(
             handle,
-            (state, timedOut) => ((TaskCompletionSource<bool>)state!).TrySetResult(!timedOut),
+            static (state, timedOut) => ((TaskCompletionSource<bool>)state!).TrySetResult(!timedOut),
             tcs,
             timeout,
             true);

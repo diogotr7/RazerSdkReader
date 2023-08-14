@@ -8,22 +8,22 @@ public readonly record struct Breathing
 {
     public readonly uint dwParam;
     public readonly BreathingEffectType BreathingType;
-    public readonly CChromaColor Color1;
-    public readonly CChromaColor Color2;
+    public readonly ChromaColor Color1;
+    public readonly ChromaColor Color2;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Static
 {
     public readonly uint dwParam;
-    public readonly CChromaColor Color;
+    public readonly ChromaColor Color;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct Blinking
 {
     public readonly uint dwParam;
-    public readonly CChromaColor Color;
+    public readonly ChromaColor Color;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -36,7 +36,7 @@ public readonly record struct None
 public readonly record struct Reactive
 {
     public readonly uint dwParam;
-    public readonly CChromaColor Color;
+    public readonly ChromaColor Color;
     public readonly EffectDuration Duration;
 }
 
@@ -52,8 +52,8 @@ public readonly record struct Starlight
     public readonly uint dwParam;
     public readonly BreathingEffectType Type;
     public readonly EffectDuration Duration;
-    public readonly CChromaColor Color1;
-    public readonly CChromaColor Color2;
+    public readonly ChromaColor Color1;
+    public readonly ChromaColor Color2;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -65,11 +65,11 @@ public readonly record struct Wave
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaDevice
+public readonly record struct ChromaDevice
 {
-    public readonly CChromaString Instance;
-    public readonly CChromaString InstanceName;
+    public readonly ChromaString Instance;
+    public readonly ChromaString InstanceName;
 }
 
-[UnmanagedArray(typeof(CChromaDevice), 10)]
-public readonly partial record struct CChromaDevice10;
+[UnmanagedArray(typeof(ChromaDevice), 10)]
+public readonly partial record struct ChromaDevice10;

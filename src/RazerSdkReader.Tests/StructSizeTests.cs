@@ -9,48 +9,48 @@ public class StructSizeTests
     [Test]
     public void TestKeyboardStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CChromaKeyboard>(), Is.EqualTo(Constants.CChromaKeyboardSize));
+        Assert.That(Unsafe.SizeOf<ChromaKeyboard>(), Is.EqualTo(Constants.KeyboardSize));
     }
 
     [Test]
     public void TestMouseStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CChromaMouse>(), Is.EqualTo(Constants.CChromaMouseSize));
+        Assert.That(Unsafe.SizeOf<ChromaMouse>(), Is.EqualTo(Constants.MouseSize));
     }
 
     [Test]
     public void TestHeadsetStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CChromaHeadset>(), Is.EqualTo(Constants.CChromaHeadsetSize));
+        Assert.That(Unsafe.SizeOf<ChromaHeadset>(), Is.EqualTo(Constants.HeadsetSize));
     }
 
     [Test]
     public void TestMousepadStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CChromaMousepad>(), Is.EqualTo(Constants.CChromaMousepadSize));
+        Assert.That(Unsafe.SizeOf<ChromaMousepad>(), Is.EqualTo(Constants.MousepadSize));
     }
 
     [Test]
     public void TestKeypadStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CChromaKeypad>(), Is.EqualTo(Constants.CChromaKeypadSize));
+        Assert.That(Unsafe.SizeOf<ChromaKeypad>(), Is.EqualTo(Constants.KeypadSize));
     }
 
     [Test]
     public void TestLinkStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CChromaLink>(), Is.EqualTo(Constants.CChromaLinkSize));
+        Assert.That(Unsafe.SizeOf<ChromaLink>(), Is.EqualTo(Constants.LinkSize));
     }
 
     [Test]
     public void TestAppManagerStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CAppManager>(), Is.EqualTo(Constants.CAppManagerSize));
+        Assert.That(Unsafe.SizeOf<ChromaAppManager>(), Is.EqualTo(Constants.AppManagerSize));
     }
 
     [Test]
     public void TestAppDataStructSize()
     {
-        Assert.That(Unsafe.SizeOf<CAppData>(), Is.EqualTo(Constants.CAppDataSize));
+        Assert.That(Unsafe.SizeOf<ChromaAppData>(), Is.EqualTo(Constants.AppDataSize));
     }
 }

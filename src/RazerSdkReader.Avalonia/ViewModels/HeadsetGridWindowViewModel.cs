@@ -5,7 +5,7 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public class HeadsetGridWindowViewModel : GridViewerWindowViewModel<CChromaHeadset>
+public class HeadsetGridWindowViewModel : GridViewerWindowViewModel<ChromaHeadset>
 {
     public HeadsetGridWindowViewModel() : base(5, 1, "Headset")
     {
@@ -16,12 +16,12 @@ public class HeadsetGridWindowViewModel : GridViewerWindowViewModel<CChromaHeads
         });
     }
 
-    private void ReaderOnHeadsetUpdated(object? sender, CChromaHeadset e)
+    private void ReaderOnHeadsetUpdated(object? sender, ChromaHeadset e)
     {
         Update(e);
     }
 
-    protected override Color GetColor(in CChromaHeadset data, int index)
+    protected override Color GetColor(in ChromaHeadset data, int index)
     {
         var clr =  data.GetColor(index);
         return Color.FromRgb(clr.R, clr.G, clr.B);

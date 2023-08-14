@@ -51,7 +51,7 @@ public static class Program
                 currentAppName = appData.AppInfo[i].AppName;
                 break;
             }
-            Console.WriteLine($"AppData active: {currentAppName}");
+            Console.WriteLine($"ChromaAppData active: {currentAppName}");
         };
         reader.AppManagerUpdated += (sender, appManager) =>
         {

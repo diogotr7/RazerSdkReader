@@ -7,11 +7,11 @@ namespace RazerSdkReader.Benchmarks;
 [MemoryDiagnoser]
 public class Benchmarks
 {
-    private readonly MemoryMappedStructReader<CChromaKeyboard> _reader = new(Constants.CChromaKeyboardFileMapping);
-    private readonly MemoryMappedFileProxy1 _mmf1 = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
-    private readonly MemoryMappedFileProxy2 _mmf2 = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
-    private readonly MemoryMappedFileProxy3 _mmf3 = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
-    private readonly MemoryMappedFileProxy4 _mmf4 = new(Constants.CChromaKeyboardFileMapping, (int)Constants.CChromaKeyboardSize);
+    private readonly MemoryMappedStructReader<ChromaKeyboard> _reader = new(Constants.KeyboardFileName);
+    private readonly MemoryMappedFileProxy1 _mmf1 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
+    private readonly MemoryMappedFileProxy2 _mmf2 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
+    private readonly MemoryMappedFileProxy3 _mmf3 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
+    private readonly MemoryMappedFileProxy4 _mmf4 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
 
     [Benchmark]
     public KeyboardData MemoryStream_Aurora()
@@ -32,13 +32,13 @@ public class Benchmarks
     }
 
     [Benchmark]
-    public CChromaKeyboard AsRefUnsafe()
+    public ChromaKeyboard AsRefUnsafe()
     {
-        return _mmf4.Read<CChromaKeyboard>();
+        return _mmf4.Read<ChromaKeyboard>();
     }
 
     [Benchmark]
-    public CChromaKeyboard MemoryMappedStructReader()
+    public ChromaKeyboard MemoryMappedStructReader()
     {
         return _reader.Read();
     }

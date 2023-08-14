@@ -4,11 +4,16 @@
         <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <NoWarn>$(NoWarn);CA1416</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\RazerSdkReader.Generators\RazerSdkReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <InternalsVisibleTo Include="$(AssemblyName).Tests" />
         <InternalsVisibleTo Include="$(AssemblyName).Benchmarks" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Threading.AccessControl" Version="7.0.1" />
     </ItemGroup>
 </Project>

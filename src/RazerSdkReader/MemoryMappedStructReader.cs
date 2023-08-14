@@ -5,7 +5,6 @@ using System.Runtime.Versioning;
 
 namespace RazerSdkReader;
 
-[SupportedOSPlatform("windows")]
 internal sealed class MemoryMappedStructReader<T> : IDisposable where T : unmanaged
 {
     private readonly MemoryMappedFile _file;

@@ -4,16 +4,16 @@ using RazerSdkReader.Enums;
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaMouse
+public readonly record struct ChromaMouse
 {
     public readonly int WriteIndex;
     public readonly uint Padding;
-    public readonly CChromaMouseData10 Data;
-    public readonly CChromaDevice10 Device;
+    public readonly ChromaMouseData10 Data;
+    public readonly ChromaDevice10 Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaMouseData
+public readonly record struct ChromaMouseData
 {
     public readonly uint Flag;
     public readonly uint Led;
@@ -34,11 +34,11 @@ public readonly record struct MouseEffect
     public readonly Wave Wave;
 }
 
-[UnmanagedArray(typeof(CChromaColor), 30)]
+[UnmanagedArray(typeof(ChromaColor), 30)]
 public readonly partial record struct MouseCustom;
 
-[UnmanagedArray(typeof(CChromaColor), 63)]
+[UnmanagedArray(typeof(ChromaColor), 63)]
 public readonly partial record struct MouseCustom2;
 
-[UnmanagedArray(typeof(CChromaMouseData), 10)]
-public readonly partial record struct CChromaMouseData10;
+[UnmanagedArray(typeof(ChromaMouseData), 10)]
+public readonly partial record struct ChromaMouseData10;

@@ -3,16 +3,16 @@
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaLink
+public readonly record struct ChromaLink
 { 
     public readonly int WriteIndex;
     public readonly uint Padding;
-    public readonly CChromaLinkData10 Data;
-    public readonly CChromaDevice10 Device;
+    public readonly ChromaLinkData10 Data;
+    public readonly ChromaDevice10 Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct CChromaLinkData
+public readonly record struct ChromaLinkData
 {
     public readonly uint Flag;
     public readonly int EffectType;
@@ -28,8 +28,8 @@ public readonly record struct LinkEffect
     public readonly Static Static;
 }
 
-[UnmanagedArray(typeof(CChromaColor), 50)]
+[UnmanagedArray(typeof(ChromaColor), 50)]
 public readonly partial record struct LinkCustom;
 
-[UnmanagedArray(typeof(CChromaLinkData), 10)]
-public readonly partial record struct CChromaLinkData10;
+[UnmanagedArray(typeof(ChromaLinkData), 10)]
+public readonly partial record struct ChromaLinkData10;
