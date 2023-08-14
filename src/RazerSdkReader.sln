@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.ConsoleApp",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Avalonia", "RazerSdkReader.Avalonia\RazerSdkReader.Avalonia.csproj", "{6DFBD631-9175-47EA-993F-EA8BDEDCC212}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Wooting", "RazerSdkReader.Wooting\RazerSdkReader.Wooting.csproj", "{9DBA472C-B283-4571-A341-B7048B416071}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{6DFBD631-9175-47EA-993F-EA8BDEDCC212}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6DFBD631-9175-47EA-993F-EA8BDEDCC212}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6DFBD631-9175-47EA-993F-EA8BDEDCC212}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBA472C-B283-4571-A341-B7048B416071}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBA472C-B283-4571-A341-B7048B416071}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBA472C-B283-4571-A341-B7048B416071}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBA472C-B283-4571-A341-B7048B416071}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
