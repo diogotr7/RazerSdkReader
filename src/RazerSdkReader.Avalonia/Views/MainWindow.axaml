@@ -7,8 +7,8 @@
         x:Class="RazerSdkReader.Avalonia.Views.MainWindow"
         x:DataType="vms:MainWindowViewModel"
         CanResize="False"
-        Width="100"
-        Height="180"
+        Width="150"
+        Height="210"
         Title="RazerSdkReader">
     <StackPanel Orientation="Vertical">
         <Button
@@ -46,5 +46,11 @@
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             Command="{Binding ChromaLinkCommand}" />
+        
+        <Button
+            Content="All"
+            HorizontalAlignment="Stretch"
+            HorizontalContentAlignment="Center"
+            Command="{Binding ExecuteAllCommand}" />
     </StackPanel>
 </Window>

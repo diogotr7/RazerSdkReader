@@ -103,6 +103,16 @@ public class MainWindowViewModel : ViewModelBase
             };
             _chromaLink.Show();
         });
+        
+        ExecuteAllCommand = ReactiveCommand.Create(() =>
+        {
+            KeyboardCommand.Execute(null);
+            MouseCommand.Execute(null);
+            MousepadCommand.Execute(null);
+            HeadsetCommand.Execute(null);
+            KeypadCommand.Execute(null);
+            ChromaLinkCommand.Execute(null);
+        });
     }
 
     private GridViewerWindow? _keyboard;
@@ -117,4 +127,5 @@ public class MainWindowViewModel : ViewModelBase
     public ICommand HeadsetCommand { get; }
     public ICommand KeypadCommand { get; }
     public ICommand ChromaLinkCommand { get; }
+    public ICommand ExecuteAllCommand { get; }
 }
