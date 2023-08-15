@@ -35,7 +35,7 @@ public sealed class RazerSdkReader : IDisposable
     public event EventHandler<ChromaLink>? ChromaLinkUpdated;
     public event EventHandler<ChromaAppData>? AppDataUpdated;
     public event EventHandler<ChromaAppManager>? AppManagerUpdated;
-    public event EventHandler<Exception>? Exception;
+    public event EventHandler<RazerSdkReaderException>? Exception;
 
     public void Start()
     {
@@ -175,7 +175,7 @@ public sealed class RazerSdkReader : IDisposable
         _appManagerReader.Dispose();
     }
 
-    private void OnReaderException(object? sender, Exception e)
+    private void OnReaderException(object? sender, RazerSdkReaderException e)
     {
         Exception?.Invoke(sender, e);
     }

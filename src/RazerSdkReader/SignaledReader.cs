@@ -14,7 +14,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
     private Task? _task;
 
     public event EventHandler<T>? Updated;
-    public event EventHandler<Exception>? Exception; 
+    public event EventHandler<RazerSdkReaderException>? Exception; 
 
     public SignaledReader(string memoryMappedFileName, string eventWaitHandle)
     {
@@ -50,7 +50,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
         }
         catch (Exception e)
         {
-            Exception?.Invoke(this, new Exception("ReadLoop Error", e));
+            Exception?.Invoke(this, new RazerSdkReaderException("ReadLoop Error", e));
         }
     }
     

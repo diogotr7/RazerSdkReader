@@ -35,13 +35,6 @@ internal sealed class MemoryMappedStructReader<T> : IDisposable where T : unmana
         return Unsafe.AsRef<T>(_view.SafeMemoryMappedViewHandle.DangerousGetHandle().ToPointer());
     }
 
-    public byte[] GetBytes()
-    {
-        var array = new byte[Size];
-        _view.ReadArray(0, array, 0, array.Length);
-        return array;
-    }
-
     public override string ToString()
     {
         return $"[{Name}, {Size}]";

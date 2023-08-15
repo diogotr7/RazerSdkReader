@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Structures;
 
@@ -8,10 +9,11 @@ public static class ChromaExtensions
 {
     private static int GetWriteIndex(int writeIndex) => writeIndex switch
     {
+        < 0 or > 9 => throw new ArgumentOutOfRangeException(nameof(writeIndex)),
         0 => 9,
         _ => writeIndex - 1
     };
-    
+
     public static ChromaColor GetColor(this ChromaKeyboard data, int index)
     {
         if (index is < 0 or >= Color6X22.Count)
@@ -23,24 +25,22 @@ public static class ChromaExtensions
         
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
-        
-        ChromaColor clr;
+
+        ChromaColor clr = default;
         var staticColor = snapshot.Effect.Static.Color;
 
         if (snapshot.EffectType == EffectType.CustomKey)
         {
             clr = snapshot.Effect.Custom2.Key[index];
-
+            
+            //this next part is required for some effects to work properly.
+            //For example, the chroma example app ambient effect.
             if (clr == staticColor)
                 clr = snapshot.Effect.Custom2.Color[index];
         }
         else if (snapshot.EffectType is EffectType.Custom or EffectType.Static)
         {
             clr = snapshot.Effect.Custom.Color[index];
-        }
-        else
-        {
-            clr = default;
         }
         
         return clr ^ staticColor;

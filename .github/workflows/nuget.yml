@@ -1,0 +1,20 @@
+name: Publish Nuget package
+
+on: 
+  push:
+    tags:
+      - '*'
+
+jobs:
+  push:
+    runs-on: windows-latest
+
+    steps:
+      - name: Clone
+        uses: actions/checkout@v3
+
+      - name: Build
+        run: dotnet build -c Release src
+
+      - name: Upload
+        run: dotnet nuget push **\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

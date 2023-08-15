@@ -1,19 +1,32 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <Version>1.0.0</Version>
+        <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>$(NoWarn);CA1416</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="System.Threading.AccessControl" Version="7.0.1" />
         <ProjectReference Include="..\RazerSdkReader.Generators\RazerSdkReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
         <InternalsVisibleTo Include="$(AssemblyName).Tests" />
         <InternalsVisibleTo Include="$(AssemblyName).Benchmarks" />
     </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="System.Threading.AccessControl" Version="7.0.1" />
-    </ItemGroup>
+    
+    <PropertyGroup>
+        <Authors>Diogo Trindade</Authors>
+        <Company>Diogo Trindade</Company>
+        <Description>Reader for Razer's Chroma lighting</Description>
+        <Copyright>Copyright (c) 2023 Diogo Trindade</Copyright>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl>https://github.com/diogotr7/RazerSdkReader</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/diogotr7/RazerSdkReader</RepositoryUrl>
+        <PackageTags>razer, chroma, sdk, reader, rgb, keyboard</PackageTags>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <IncludeSymbols>true</IncludeSymbols>
+        <DebugType>portable</DebugType>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
 </Project>
