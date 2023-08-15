@@ -6,7 +6,7 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        var reader = new RazerSdkReader();
+        var reader = new ChromaReader();
         reader.Exception += (sender, exception) =>
         {
             Console.WriteLine($"Exception: {exception}");

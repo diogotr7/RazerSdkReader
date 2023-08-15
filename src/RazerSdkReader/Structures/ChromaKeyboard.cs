@@ -1,15 +1,55 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
+using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct ChromaKeyboard
+public readonly record struct ChromaKeyboard : IColorProvider
 {
     public readonly int WriteIndex;
     public readonly int Padding;
     public readonly ChromaKeyboardData10 Data;
     public readonly ChromaDevice10 Device;
+    
+    public int Width => 22;
+    
+    public int Height => 6;
+    
+    public int Count => Width * Height;
+    
+    public ChromaColor GetColor(int index)
+    {
+        if (index < 0 || index >= Count)
+            throw new ArgumentOutOfRangeException(nameof(index));
+
+        var targetIndex = WriteIndex.FixIndex();
+        
+        var snapshot = Data[targetIndex];
+        
+        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
+            return default;
+
+        ChromaColor clr = default;
+        var staticColor = snapshot.Effect.Static.Color;
+
+        if (snapshot.EffectType == EffectType.CustomKey)
+        {
+            clr = snapshot.Effect.Custom2.Key[index];
+            
+            //this next part is required for some effects to work properly.
+            //For example, the chroma example app ambient effect.
+            if (clr == staticColor)
+                clr = snapshot.Effect.Custom2.Color[index];
+        }
+        else if (snapshot.EffectType is EffectType.Custom or EffectType.Static)
+        {
+            clr = snapshot.Effect.Custom.Color[index];
+        }
+        
+        return clr ^ staticColor;
+    }
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

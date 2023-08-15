@@ -9,7 +9,7 @@ public class MyApplicationContext : ApplicationContext
     private readonly NotifyIcon _notifyIcon;
     private readonly ContextMenuStrip _contextMenuStrip;
     private readonly RGBDeviceInfo[] _devices;
-    private readonly RazerSdkReader _razerEmulatorReader;
+    private readonly ChromaReader _razerEmulatorReader;
 
     public MyApplicationContext()
     {

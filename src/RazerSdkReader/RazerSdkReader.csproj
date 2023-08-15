@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
         <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -23,7 +23,6 @@
         <PackageProjectUrl>https://github.com/diogotr7/RazerSdkReader</PackageProjectUrl>
         <RepositoryUrl>https://github.com/diogotr7/RazerSdkReader</RepositoryUrl>
         <PackageTags>razer, chroma, sdk, reader, rgb, keyboard</PackageTags>
-        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <IncludeSymbols>true</IncludeSymbols>
         <DebugType>portable</DebugType>

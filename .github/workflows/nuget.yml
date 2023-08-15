@@ -16,5 +16,8 @@ jobs:
       - name: Build
         run: dotnet build -c Release src
 
+      - name: Test
+        run: dotnet test -c Release src
+
       - name: Upload
         run: dotnet nuget push **\*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate

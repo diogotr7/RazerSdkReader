@@ -17,7 +17,7 @@ public partial class App : Application
     {
         if (ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktop) return;
         
-        Reader = new RazerSdkReader();
+        Reader = new ChromaReader();
         Reader.Start();
         
         desktop.Exit += OnExit;
@@ -33,5 +33,5 @@ public partial class App : Application
         Reader.Dispose();
     }
     
-    public static RazerSdkReader Reader { get; set; }
+    public static ChromaReader Reader { get; set; }
 }

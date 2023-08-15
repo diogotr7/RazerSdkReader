@@ -1,14 +1,36 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
+using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
-public readonly record struct ChromaMousepad
+public readonly record struct ChromaMousepad : IColorProvider
 { 
     public readonly int WriteIndex;
     public readonly uint Padding;
     public readonly ChromaMousepadData10 Data;
     public readonly ChromaDevice10 Device;
+    
+    public int Width => 15;
+    
+    public int Height => 1;
+    
+    public int Count => Width * Height;
+    
+    public ChromaColor GetColor(int index)
+    {
+        if (index  < 0 || index >= Count)
+            throw new ArgumentOutOfRangeException(nameof(index));
+
+        var targetIndex = WriteIndex.FixIndex();
+        var snapshot = Data[targetIndex];
+        
+        var clr =  snapshot.Effect.Custom2[index];
+        var staticColor = snapshot.Effect.Static.Color;
+        
+        return clr ^ staticColor;
+    }
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

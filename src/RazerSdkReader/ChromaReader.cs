@@ -11,7 +11,7 @@ using RazerSdkReader.Structures;
 namespace RazerSdkReader;
 
 [SupportedOSPlatform("windows")]
-public sealed class RazerSdkReader : IDisposable
+public sealed class ChromaReader : IDisposable
 {
     private readonly Queue<Mutex> _mutexes = new();
     private TaskCompletionSource? _initCompletionSource;
