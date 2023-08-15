@@ -12,7 +12,7 @@ public readonly record struct ChromaMousepad : IColorProvider
     public readonly ChromaMousepadData10 Data;
     public readonly ChromaDevice10 Device;
     
-    public int Width => 15;
+    public int Width => 20;
     
     public int Height => 1;
     

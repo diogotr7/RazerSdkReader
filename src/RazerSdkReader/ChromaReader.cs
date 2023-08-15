@@ -106,73 +106,128 @@ public sealed class ChromaReader : IDisposable
 
     private void InitReaders()
     {
-        _keyboardReader = new SignaledReader<ChromaKeyboard>(Constants.KeyboardFileName, Constants.KeyboardWaitHandle);
-        _keyboardReader.Updated += OnKeyboardReaderOnUpdated;
-        _keyboardReader.Exception += OnReaderException;
-        _keyboardReader.Start();
+        if (KeyboardUpdated != null)
+        {
+            _keyboardReader = new SignaledReader<ChromaKeyboard>(Constants.KeyboardFileName, Constants.KeyboardWaitHandle);
+            _keyboardReader.Updated += OnKeyboardReaderOnUpdated;
+            _keyboardReader.Exception += OnReaderException;
+            _keyboardReader.Start();
+        }
 
-        _mouseReader = new SignaledReader<ChromaMouse>(Constants.MouseFileName, Constants.MouseWaitHandle);
-        _mouseReader.Updated += OnMouseReaderOnUpdated;
-        _mouseReader.Exception += OnReaderException;
-        _mouseReader.Start();
+        if (MouseUpdated != null)
+        {
+            _mouseReader = new SignaledReader<ChromaMouse>(Constants.MouseFileName, Constants.MouseWaitHandle);
+            _mouseReader.Updated += OnMouseReaderOnUpdated;
+            _mouseReader.Exception += OnReaderException;
+            _mouseReader.Start();
+        }
 
-        _mousepadReader = new SignaledReader<ChromaMousepad>(Constants.MousepadFileName, Constants.MousepadWaitHandle);
-        _mousepadReader.Updated += OnMousepadReaderOnUpdated;
-        _mousepadReader.Exception += OnReaderException;
-        _mousepadReader.Start();
+        if (MousepadUpdated != null)
+        {
+            _mousepadReader = new SignaledReader<ChromaMousepad>(Constants.MousepadFileName, Constants.MousepadWaitHandle);
+            _mousepadReader.Updated += OnMousepadReaderOnUpdated;
+            _mousepadReader.Exception += OnReaderException;
+            _mousepadReader.Start();
+        }
 
-        _keypadReader = new SignaledReader<ChromaKeypad>(Constants.KeypadFileName, Constants.KeypadWaitHandle);
-        _keypadReader.Updated += OnKeypadReaderOnUpdated;
-        _keypadReader.Exception += OnReaderException;
-        _keypadReader.Start();
+        if (KeypadUpdated != null)
+        {
+            _keypadReader = new SignaledReader<ChromaKeypad>(Constants.KeypadFileName, Constants.KeypadWaitHandle);
+            _keypadReader.Updated += OnKeypadReaderOnUpdated;
+            _keypadReader.Exception += OnReaderException;
+            _keypadReader.Start();
+        }
 
-        _headsetReader = new SignaledReader<ChromaHeadset>(Constants.HeadsetFileName, Constants.HeadsetWaitHandle);
-        _headsetReader.Updated += OnHeadsetReaderOnUpdated;
-        _headsetReader.Exception += OnReaderException;
-        _headsetReader.Start();
+        if (HeadsetUpdated != null)
+        {
+            _headsetReader = new SignaledReader<ChromaHeadset>(Constants.HeadsetFileName, Constants.HeadsetWaitHandle);
+            _headsetReader.Updated += OnHeadsetReaderOnUpdated;
+            _headsetReader.Exception += OnReaderException;
+            _headsetReader.Start();
+        }
 
-        _chromaLinkReader = new SignaledReader<ChromaLink>(Constants.LinkFileName, Constants.LinkWaitHandle);
-        _chromaLinkReader.Updated += OnChromaLinkReaderOnUpdated;
-        _chromaLinkReader.Exception += OnReaderException;
-        _chromaLinkReader.Start();
+        if (ChromaLinkUpdated != null)
+        {
+            _chromaLinkReader = new SignaledReader<ChromaLink>(Constants.LinkFileName, Constants.LinkWaitHandle);
+            _chromaLinkReader.Updated += OnChromaLinkReaderOnUpdated;
+            _chromaLinkReader.Exception += OnReaderException;
+            _chromaLinkReader.Start();
+        }
 
-        _appDataReader = new SignaledReader<ChromaAppData>(Constants.AppDataFileName, Constants.AppDataWaitHandle);
-        _appDataReader.Updated += OnAppDataReaderOnUpdated;
-        _appDataReader.Exception += OnReaderException;
-        _appDataReader.Start();
+        if (AppDataUpdated != null)
+        {
+            _appDataReader = new SignaledReader<ChromaAppData>(Constants.AppDataFileName, Constants.AppDataWaitHandle);
+            _appDataReader.Updated += OnAppDataReaderOnUpdated;
+            _appDataReader.Exception += OnReaderException;
+            _appDataReader.Start();
+        }
 
-        _appManagerReader = new SignaledReader<ChromaAppManager>(Constants.AppManagerFileName, Constants.AppManagerWaitHandle);
-        _appManagerReader.Updated += OnAppManagerReaderOnUpdated;
-        _appManagerReader.Exception += OnReaderException;
-        _appManagerReader.Start();
+        if (AppManagerUpdated != null)
+        {
+            _appManagerReader = new SignaledReader<ChromaAppManager>(Constants.AppManagerFileName, Constants.AppManagerWaitHandle);
+            _appManagerReader.Updated += OnAppManagerReaderOnUpdated;
+            _appManagerReader.Exception += OnReaderException;
+            _appManagerReader.Start();
+        }
     }
 
     private void DisposeReaders()
     {
-        _keyboardReader!.Updated -= OnKeyboardReaderOnUpdated;
-        _keyboardReader!.Exception -= OnReaderException;
-        _keyboardReader.Dispose();
-        _mouseReader!.Updated -= OnMouseReaderOnUpdated;
-        _mouseReader!.Exception -= OnReaderException;
-        _mouseReader.Dispose();
-        _mousepadReader!.Updated -= OnMousepadReaderOnUpdated;
-        _mousepadReader!.Exception -= OnReaderException;
-        _mousepadReader.Dispose();
-        _keypadReader!.Updated -= OnKeypadReaderOnUpdated;
-        _keypadReader!.Exception -= OnReaderException;
-        _keypadReader.Dispose();
-        _headsetReader!.Updated -= OnHeadsetReaderOnUpdated;
-        _headsetReader!.Exception -= OnReaderException;
-        _headsetReader.Dispose();
-        _chromaLinkReader!.Updated -= OnChromaLinkReaderOnUpdated;
-        _chromaLinkReader!.Exception -= OnReaderException;
-        _chromaLinkReader.Dispose();
-        _appDataReader!.Updated -= OnAppDataReaderOnUpdated;
-        _appDataReader!.Exception -= OnReaderException;
-        _appDataReader.Dispose();
-        _appManagerReader!.Updated -= OnAppManagerReaderOnUpdated;
-        _appManagerReader!.Exception -= OnReaderException;
-        _appManagerReader.Dispose();
+        if (_keyboardReader != null)
+        {
+            _keyboardReader.Updated -= OnKeyboardReaderOnUpdated;
+            _keyboardReader.Exception -= OnReaderException;
+            _keyboardReader.Dispose();
+        }
+        
+        if (_mouseReader != null)
+        {
+            _mouseReader.Updated -= OnMouseReaderOnUpdated;
+            _mouseReader.Exception -= OnReaderException;
+            _mouseReader.Dispose();
+        }
+        
+        if (_mousepadReader != null)
+        {
+            _mousepadReader.Updated -= OnMousepadReaderOnUpdated;
+            _mousepadReader.Exception -= OnReaderException;
+            _mousepadReader.Dispose();
+        }
+        
+        if (_keypadReader != null)
+        {
+            _keypadReader.Updated -= OnKeypadReaderOnUpdated;
+            _keypadReader.Exception -= OnReaderException;
+            _keypadReader.Dispose();
+        }
+        
+        if (_headsetReader != null)
+        {
+            _headsetReader.Updated -= OnHeadsetReaderOnUpdated;
+            _headsetReader.Exception -= OnReaderException;
+            _headsetReader.Dispose();
+        }
+        
+        if (_chromaLinkReader != null)
+        {
+            _chromaLinkReader.Updated -= OnChromaLinkReaderOnUpdated;
+            _chromaLinkReader.Exception -= OnReaderException;
+            _chromaLinkReader.Dispose();
+        }
+        
+        if (_appDataReader != null)
+        {
+            _appDataReader.Updated -= OnAppDataReaderOnUpdated;
+            _appDataReader.Exception -= OnReaderException;
+            _appDataReader.Dispose();
+        }
+        
+        if (_appManagerReader != null)
+        {
+            _appManagerReader.Updated -= OnAppManagerReaderOnUpdated;
+            _appManagerReader.Exception -= OnReaderException;
+            _appManagerReader.Dispose();
+        }
     }
 
     private void OnReaderException(object? sender, RazerSdkReaderException e)
