@@ -1,7 +1,11 @@
 # RazerSdkReader
+[![Nuget](https://img.shields.io/nuget/v/RazerSdkReader)](https://www.nuget.org/packages/RazerSdkReader)
+
 RazerSdkReader is a .NET library for reading data from Razer Chroma SDK devices. It provides a simple API for accessing data from Razer Chroma keyboards, mice, mousepads, keypads, headsets, ChromaLink devices, and more, replicating the functionality provided by the Razer Chroma Emulator.
 
 ## Usage
+
+Package is available on [Nuget](RazerSdkReader)
 
 Consult src/RazerSdkReader.ConsoleApp/Program.cs for a full example.
 
@@ -36,6 +40,3 @@ I've also included a simple GUI for testing purposes. It's in the src/RazerSdkRe
 ![Screenshot](screenshots/overwatch.png)
 
 ![Screenshot](screenshots/terraria.png)
-
-### Usage
-I will create a nuget package for this at some point, but for now you can just clone the repo and build it.
