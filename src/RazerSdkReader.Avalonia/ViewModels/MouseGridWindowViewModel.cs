@@ -22,10 +22,4 @@ public class MouseGridWindowViewModel : GridViewerWindowViewModel<ChromaMouse>
     {
         Update(e);
     }
-    
-    protected override Color GetColor(in ChromaMouse e, int index)
-    {
-        var clr =  e.GetColor(index);
-        return Color.FromRgb(clr.R, clr.G, clr.B);
-    }
 }

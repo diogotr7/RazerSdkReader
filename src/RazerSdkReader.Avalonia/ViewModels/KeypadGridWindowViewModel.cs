@@ -20,10 +20,4 @@ public class KeypadGridWindowViewModel : GridViewerWindowViewModel<ChromaKeypad>
     {
         Update(e);
     }
-
-    protected override Color GetColor(in ChromaKeypad data, int index)
-    {
-        var clr =  data.GetColor(index);
-        return Color.FromRgb(clr.R, clr.G, clr.B);
-    }
 }

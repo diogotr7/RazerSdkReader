@@ -20,10 +20,4 @@ public class ChromaLinkGridWindowViewModel : GridViewerWindowViewModel<ChromaLin
     {
         Update(e);
     }
-
-    protected override Color GetColor(in ChromaLink data, int index)
-    {
-        var clr =  data.GetColor(index);
-        return Color.FromRgb(clr.R, clr.G, clr.B);
-    }
 }

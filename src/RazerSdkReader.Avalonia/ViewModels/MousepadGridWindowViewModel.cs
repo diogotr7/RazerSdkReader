@@ -20,10 +20,4 @@ public class MousepadGridWindowViewModel : GridViewerWindowViewModel<ChromaMouse
     {
         Update(e);
     }
-
-    protected override Color GetColor(in ChromaMousepad data, int index)
-    {
-        var clr =  data.GetColor(index);
-        return Color.FromRgb(clr.R, clr.G, clr.B);
-    }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Reactive.Disposables;
 using Avalonia.Media;
 using Avalonia.Threading;
+using RazerSdkReader.Extensions;
 using RazerSdkReader.Structures;
 using ReactiveUI;
 
@@ -21,11 +22,5 @@ public class KeyboardGridWindowViewModel : GridViewerWindowViewModel<ChromaKeybo
     private void ReaderOnKeyboardUpdated(object? sender, ChromaKeyboard e)
     {
         Update(e);
-    }
-
-    protected override Color GetColor(in ChromaKeyboard e, int index)
-    {
-        var clr =  e.GetColor(index);
-        return Color.FromRgb(clr.R, clr.G, clr.B);
     }
 }

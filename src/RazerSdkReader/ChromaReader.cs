@@ -50,6 +50,7 @@ public sealed class ChromaReader : IDisposable
         _disposeEvent = new(false);
         _initCompletionSource = new();
         _mutexThread = new Thread(Thread);
+        _mutexThread.Name = "RazerSdkReader Mutex Thread";
         _mutexThread.Start();
 
         _initCompletionSource.Task.Wait();

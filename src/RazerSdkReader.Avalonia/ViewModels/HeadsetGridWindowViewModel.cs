@@ -20,10 +20,4 @@ public class HeadsetGridWindowViewModel : GridViewerWindowViewModel<ChromaHeadse
     {
         Update(e);
     }
-
-    protected override Color GetColor(in ChromaHeadset data, int index)
-    {
-        var clr =  data.GetColor(index);
-        return Color.FromRgb(clr.R, clr.G, clr.B);
-    }
 }
