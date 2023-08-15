@@ -9,7 +9,7 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public abstract class GridViewerWindowViewModel<T> : GridViewerWindowViewModel where T : unmanaged, IColorProvider
+public abstract class GridViewerWindowViewModel<T> : GridViewerWindowViewModel where T : IColorProvider
 {
     protected GridViewerWindowViewModel(int width, int height, string title) : base(width, height, title)
     {

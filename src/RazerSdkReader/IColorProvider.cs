@@ -7,5 +7,5 @@ public interface IColorProvider
     int Width { get; }
     int Height { get; }
     int Count { get; }
-    ChromaColor GetColor(int index);
+    ChromaColor GetColor(int index, int? frame = null);
 }

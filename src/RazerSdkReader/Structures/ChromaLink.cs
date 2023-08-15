@@ -20,12 +20,12 @@ public readonly record struct ChromaLink : IColorProvider
     
     public int Count => Width * Height;
     
-    public ChromaColor GetColor(int index)
+    public ChromaColor GetColor(int index, int? frame = null)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
         
-        var targetIndex = WriteIndex.FixIndex();
+        var targetIndex = frame ?? WriteIndex.ToReadIndex();
         var snapshot = Data[targetIndex];
         
         var clr =  snapshot.Effect.Custom[index];
