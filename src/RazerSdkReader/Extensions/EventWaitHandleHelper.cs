@@ -19,15 +19,11 @@ internal static class EventWaitHandleHelper
         return security;
     }
 
-    public static EventWaitHandle Open(string name)
-    {
-        return EventWaitHandle.OpenExisting(name);
-    }
-
     public static void Pulse(string name)
     {
-        var e = Open(name);
-        e.Pulse();
+        var e = EventWaitHandle.OpenExisting(name);
+        e.Set();
+        e.Reset();
         e.Close();
     }
 }

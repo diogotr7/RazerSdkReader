@@ -6,12 +6,6 @@ namespace RazerSdkReader.Extensions;
 
 internal static class EventWaitHandleExtensions
 {
-    public static void Pulse(this EventWaitHandle e)
-    {
-        e.Set();
-        e.Reset();
-    }
-
     public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, TimeSpan syncTimeout, CancellationToken cancellationToken = default)
     {
         // Handle synchronous cases.
