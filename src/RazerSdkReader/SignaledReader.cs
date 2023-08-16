@@ -42,6 +42,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
                 // performance and responsiveness.
                 await _eventWaitHandle.WaitOneAsync(TimeSpan.FromSeconds(5), _cts.Token);
                 Updated?.Invoke(this, _reader.Read());
+                //_eventWaitHandle.Reset();
             }
         }
         catch (TaskCanceledException)

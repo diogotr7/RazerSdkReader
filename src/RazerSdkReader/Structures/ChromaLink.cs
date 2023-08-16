@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using RazerSdkReader;
+using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using RazerSdkReader.Structures;
 
@@ -28,6 +29,9 @@ public readonly record struct ChromaLink : IColorProvider
         var targetIndex = frame ?? WriteIndex.ToReadIndex();
         var snapshot = Data[targetIndex];
         
+        if (snapshot.EffectType is not EffectType.Custom and not EffectType.Static)
+            return default;
+        
         var clr =  snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
         
@@ -39,7 +43,7 @@ public readonly record struct ChromaLink : IColorProvider
 public readonly record struct ChromaLinkData
 {
     public readonly uint Flag;
-    public readonly int EffectType;
+    public readonly EffectType EffectType;
     public readonly LinkEffect Effect;
     public readonly ulong Timestamp;
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
@@ -24,7 +25,11 @@ public readonly record struct ChromaKeypad : IColorProvider
             throw new ArgumentOutOfRangeException(nameof(index));
         
         var targetIndex = frame ?? WriteIndex.ToReadIndex();
-        var snapshot =Data[targetIndex];
+        var snapshot = Data[targetIndex];
+        
+        if (snapshot.EffectType is not EffectType.Custom and not EffectType.Static)
+            return default;
+        
         var clr =  snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
         
@@ -36,7 +41,7 @@ public readonly record struct ChromaKeypad : IColorProvider
 public readonly record struct ChromaKeypadData
 {
     public readonly uint Flag;
-    public readonly int EffectType;
+    public readonly EffectType EffectType;
     public readonly KeypadEffect Effect;
     public readonly ulong Timestamp;
 }

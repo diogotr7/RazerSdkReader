@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
@@ -26,6 +27,9 @@ public readonly record struct ChromaMousepad : IColorProvider
         var targetIndex = frame ?? WriteIndex.ToReadIndex();
         var snapshot = Data[targetIndex];
         
+        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
+            return default;
+        
         var clr =  snapshot.Effect.Custom2[index];
         var staticColor = snapshot.Effect.Static.Color;
         
@@ -37,7 +41,7 @@ public readonly record struct ChromaMousepad : IColorProvider
 public readonly record struct ChromaMousepadData
 {
     public readonly uint Flag;
-    public readonly int EffectType;
+    public readonly EffectType EffectType;
     public readonly MousepadEffect Effect;
     public readonly ulong Timestamp;
 }

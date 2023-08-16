@@ -22,19 +22,16 @@ public abstract class GridViewerWindowViewModel<T> : GridViewerWindowViewModel w
         var now = DateTime.Now;
         if ((now - _lastFrame).TotalMilliseconds < 15)
             return;
-        
         Dispatcher.UIThread.Invoke(() =>
         {
             for (var i = 0; i < Width * Height; i++)
             {
                 var clr = data.GetColor(i);
                 var oldClr = KeyColors[i];
-                if (clr.R == oldClr.R && clr.G == oldClr.G && clr.B == oldClr.B && clr.A == oldClr.A)
+                if (clr.R == oldClr.Color.R && clr.G == oldClr.Color.G && clr.B == oldClr.Color.B)
                     continue;
-
-                KeyColors[i] = Color.FromRgb(clr.R, clr.G, clr.B);
+                KeyColors[i].Color  = Color.FromRgb(clr.R, clr.G, clr.B);
             }
-            KeyColors.FireCollectionChanged();
             _lastFrame = now;
         });
     }
@@ -50,11 +47,11 @@ public abstract class GridViewerWindowViewModel : ActivatableViewModelBase, IScr
         KeyColors = new();
         for (var i = 0; i < Width * Height; i++)
         {
-            KeyColors.Add(new Color());
+            KeyColors.Add(new());
         }
     }
     
-    public MyCustomList<Color> KeyColors { get; }
+    public AvaloniaList<SolidColorBrush> KeyColors { get; }
     public string Title { get; }
     public int Width { get; }
     public int Height { get; }

@@ -3,7 +3,6 @@
         xmlns:vm="using:RazerSdkReader.Avalonia.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:converters="using:RazerSdkReader.Avalonia.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="RazerSdkReader.Avalonia.Views.GridViewerWindow"
         x:DataType="vm:GridViewerWindowViewModel"
@@ -12,23 +11,16 @@
         Height="{Binding HeightPx}"
         Title="{Binding Title}"
         Icon="/Assets/avalonia-logo.ico">
-    
-    <Window.Resources>
-        <!-- Needed to convert a given color into a brush -->
-        <converters:ColorToSolidColorBrushConverter x:Key="ColorToSolidColorBrushConverter" />
-    </Window.Resources>
-    
-    <ItemsControl ItemsSource="{Binding KeyColors}">
+    <ItemsControl ItemsSource="{CompiledBinding KeyColors}">
         <!-- Set the DataTemplate -->
         <ItemsControl.ItemTemplate>
-            <DataTemplate DataType="Color">
-                <Rectangle Fill="{Binding  Converter={StaticResource ColorToSolidColorBrushConverter}}" 
+            <DataTemplate DataType="SolidColorBrush">
+                <Rectangle Fill="{CompiledBinding .}" 
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            Margin="1"/>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
-        
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid
@@ -37,6 +29,4 @@
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
     </ItemsControl>
-
-
 </Window>

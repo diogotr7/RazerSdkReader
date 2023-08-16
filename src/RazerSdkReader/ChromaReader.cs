@@ -60,9 +60,9 @@ public sealed class ChromaReader : IDisposable
     {
         try
         {
-            InitReaders();
-
             InitMutexes();
+
+            InitReaders();
         }
         catch (Exception ex)
         {
