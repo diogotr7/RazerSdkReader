@@ -15,7 +15,7 @@ public class MyApplicationContext : ApplicationContext
     {
         _contextMenuStrip = new();
         _contextMenuStrip.Items.Add("Exit", null, Exit);
-        
+
         _notifyIcon = new();
         _notifyIcon.Text = "Razer SDK Reader for Wooting";
         _notifyIcon.Icon = new Icon(Resources.wooting, 40, 40);
@@ -25,28 +25,29 @@ public class MyApplicationContext : ApplicationContext
         if (!RGBControl.IsConnected())
         {
             MessageBox.Show("Wooting keyboard not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Exit(null, null);
+            Exit(null, EventArgs.Empty);
         }
 
         var count = RGBControl.GetDeviceCount();
         if (count == 0)
         {
             MessageBox.Show("Wooting keyboard not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Exit(null, null);
+            Exit(null, EventArgs.Empty);
         }
+
         _devices = new RGBDeviceInfo[count];
         for (byte i = 0; i < count; i++)
         {
             RGBControl.SetControlDevice(i);
             _devices[i] = RGBControl.GetDeviceInfo();
         }
-        
+
         _razerEmulatorReader = new();
         _razerEmulatorReader.KeyboardUpdated += RazerEmulatorReaderOnKeyboardUpdated;
         _razerEmulatorReader.Start();
     }
 
-    private void RazerEmulatorReaderOnKeyboardUpdated(object? sender, ChromaKeyboard e)
+    private void RazerEmulatorReaderOnKeyboardUpdated(object? sender, in ChromaKeyboard e)
     {
         const byte WIDTH = 22;
         const byte HEIGHT = 6;
@@ -58,7 +59,7 @@ public class MyApplicationContext : ApplicationContext
                 var key = e.GetColor(y * WIDTH + x);
                 var wootingX = (byte)(x - 1);
                 var wootingY = (byte)(y - 0);
-                
+
                 for (byte i = 0; i < _devices.Length; i++)
                 {
                     RGBControl.SetControlDevice(i);
@@ -84,6 +85,7 @@ public class MyApplicationContext : ApplicationContext
             RGBControl.SetControlDevice(i);
             RGBControl.ResetRGB();
         }
+
         RGBControl.Close();
         Application.Exit();
     }

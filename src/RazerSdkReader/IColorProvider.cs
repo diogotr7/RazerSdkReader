@@ -1,3 +1,4 @@
+using System.Diagnostics.Contracts;
 using RazerSdkReader.Structures;
 
 namespace RazerSdkReader;
@@ -7,5 +8,7 @@ public interface IColorProvider
     int Width { get; }
     int Height { get; }
     int Count { get; }
-    ChromaColor GetColor(int index, int? frame = null);
+
+    [Pure]
+    ChromaColor GetColor(int index);
 }

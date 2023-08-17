@@ -22,7 +22,7 @@
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             Command="{Binding MouseCommand}" />
-        
+
         <Button
             Content="Mousepad"
             HorizontalAlignment="Stretch"
@@ -46,7 +46,7 @@
             HorizontalAlignment="Stretch"
             HorizontalContentAlignment="Center"
             Command="{Binding ChromaLinkCommand}" />
-        
+
         <Button
             Content="All"
             HorizontalAlignment="Stretch"

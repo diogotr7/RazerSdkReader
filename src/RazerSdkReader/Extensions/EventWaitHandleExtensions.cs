@@ -15,7 +15,7 @@ internal static class EventWaitHandleExtensions
 
         return handle.WaitOneAsync(cancellationToken);
     }
-    
+
     //separate async case to avoid closure allocation in the common case
     private static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, CancellationToken cancellationToken = default)
     {

@@ -8,12 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Threading.AccessControl" Version="7.0.1" />
-        <ProjectReference Include="..\RazerSdkReader.Generators\RazerSdkReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-        <InternalsVisibleTo Include="$(AssemblyName).Tests" />
-        <InternalsVisibleTo Include="$(AssemblyName).Benchmarks" />
+        <PackageReference Include="System.Threading.AccessControl" Version="7.0.1"/>
+        <ProjectReference Include="..\RazerSdkReader.Generators\RazerSdkReader.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
+        <InternalsVisibleTo Include="$(AssemblyName).Tests"/>
+        <InternalsVisibleTo Include="$(AssemblyName).Benchmarks"/>
     </ItemGroup>
-    
+
     <PropertyGroup>
         <Authors>Diogo Trindade</Authors>
         <Company>Diogo Trindade</Company>

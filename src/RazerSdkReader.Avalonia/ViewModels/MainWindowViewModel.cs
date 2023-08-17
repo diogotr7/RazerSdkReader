@@ -16,14 +16,14 @@ public class MainWindowViewModel : ViewModelBase
                 _keyboard = null;
                 return;
             }
-            
+
             _keyboard = new GridViewerWindow()
             {
                 DataContext = new KeyboardGridWindowViewModel()
             };
             _keyboard.Show();
         });
-        
+
         MouseCommand = ReactiveCommand.Create(() =>
         {
             if (_mouse is not null)
@@ -32,14 +32,14 @@ public class MainWindowViewModel : ViewModelBase
                 _mouse = null;
                 return;
             }
-            
+
             _mouse = new GridViewerWindow()
             {
                 DataContext = new MouseGridWindowViewModel()
             };
             _mouse.Show();
         });
-        
+
         MousepadCommand = ReactiveCommand.Create(() =>
         {
             if (_mousepad is not null)
@@ -48,14 +48,14 @@ public class MainWindowViewModel : ViewModelBase
                 _mousepad = null;
                 return;
             }
-            
+
             _mousepad = new GridViewerWindow()
             {
                 DataContext = new MousepadGridWindowViewModel()
             };
             _mousepad.Show();
         });
-        
+
         HeadsetCommand = ReactiveCommand.Create(() =>
         {
             if (_headset is not null)
@@ -64,14 +64,14 @@ public class MainWindowViewModel : ViewModelBase
                 _headset = null;
                 return;
             }
-            
+
             _headset = new GridViewerWindow()
             {
                 DataContext = new HeadsetGridWindowViewModel()
             };
             _headset.Show();
         });
-        
+
         KeypadCommand = ReactiveCommand.Create(() =>
         {
             if (_keypad is not null)
@@ -80,14 +80,14 @@ public class MainWindowViewModel : ViewModelBase
                 _keypad = null;
                 return;
             }
-            
+
             _keypad = new GridViewerWindow()
             {
                 DataContext = new KeypadGridWindowViewModel()
             };
             _keypad.Show();
         });
-        
+
         ChromaLinkCommand = ReactiveCommand.Create(() =>
         {
             if (_chromaLink is not null)
@@ -96,14 +96,14 @@ public class MainWindowViewModel : ViewModelBase
                 _chromaLink = null;
                 return;
             }
-            
+
             _chromaLink = new GridViewerWindow()
             {
                 DataContext = new ChromaLinkGridWindowViewModel()
             };
             _chromaLink.Show();
         });
-        
+
         ExecuteAllCommand = ReactiveCommand.Create(() =>
         {
             KeyboardCommand.Execute(null);

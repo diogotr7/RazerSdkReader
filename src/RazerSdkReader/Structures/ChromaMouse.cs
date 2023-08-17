@@ -12,25 +12,25 @@ public readonly record struct ChromaMouse : IColorProvider
     public readonly uint Padding;
     public readonly ChromaMouseData10 Data;
     public readonly ChromaDevice10 Device;
-    
+
     public int Width => 7;
-    
+
     public int Height => 9;
-    
+
     public int Count => Width * Height;
-    
-    public ChromaColor GetColor(int index, int? frame = null)
+
+    public ChromaColor GetColor(int index)
     {
-        if (index< 0 || index >= Count)
+        if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var targetIndex = frame ?? WriteIndex.ToReadIndex();
-        
+        var targetIndex = WriteIndex.ToReadIndex();
+
         var snapshot = Data[targetIndex];
-        
+
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
-        
+
         var staticColor = snapshot.Effect.Static.Color;
         var clr = snapshot.Effect.Custom2[index];
         return clr ^ staticColor;

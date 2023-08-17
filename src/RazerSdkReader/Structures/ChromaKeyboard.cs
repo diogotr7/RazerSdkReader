@@ -12,22 +12,22 @@ public readonly record struct ChromaKeyboard : IColorProvider
     public readonly int Padding;
     public readonly ChromaKeyboardData10 Data;
     public readonly ChromaDevice10 Device;
-    
+
     public int Width => 22;
-    
+
     public int Height => 6;
-    
+
     public int Count => Width * Height;
-    
-    public ChromaColor GetColor(int index, int? frame = null)
+
+    public ChromaColor GetColor(int index)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var targetIndex = frame ?? WriteIndex.ToReadIndex();
-        
+        var targetIndex = WriteIndex.ToReadIndex();
+
         var snapshot = Data[targetIndex];
-        
+
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
 
@@ -37,7 +37,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
         if (snapshot.EffectType == EffectType.CustomKey)
         {
             clr = snapshot.Effect.Custom2.Key[index];
-            
+
             //this next part is required for some effects to work properly.
             //For example, the chroma example app ambient effect.
             if (clr == staticColor)
@@ -47,7 +47,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
         {
             clr = snapshot.Effect.Custom.Color[index];
         }
-        
+
         return clr ^ staticColor;
     }
 }

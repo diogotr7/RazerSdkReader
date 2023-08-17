@@ -15,16 +15,16 @@
         <!-- Set the DataTemplate -->
         <ItemsControl.ItemTemplate>
             <DataTemplate DataType="SolidColorBrush">
-                <Rectangle Fill="{CompiledBinding .}" 
+                <Rectangle Fill="{CompiledBinding .}"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
-                           Margin="1"/>
+                           Margin="1" />
             </DataTemplate>
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <UniformGrid
-                    Columns="{CompiledBinding Width}" 
+                    Columns="{CompiledBinding Width}"
                     Rows="{CompiledBinding Height}" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>

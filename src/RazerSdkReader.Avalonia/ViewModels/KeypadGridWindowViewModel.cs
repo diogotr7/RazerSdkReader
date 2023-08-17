@@ -11,13 +11,13 @@ public class KeypadGridWindowViewModel : GridViewerWindowViewModel<ChromaKeypad>
     {
         this.WhenActivated(d =>
         {
-            App.Reader.KeypadUpdated += ReaderOnKeypadUpdated;
+            App.Reader!.KeypadUpdated += ReaderOnKeypadUpdated;
             Disposable.Create(() => App.Reader.KeypadUpdated -= ReaderOnKeypadUpdated).DisposeWith(d);
         });
     }
 
-    private void ReaderOnKeypadUpdated(object? sender, ChromaKeypad e)
+    private void ReaderOnKeypadUpdated(object? sender, in ChromaKeypad e)
     {
-        Update(e);
+        Update(in e);
     }
 }

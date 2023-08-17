@@ -11,10 +11,11 @@ public readonly partial record struct ChromaString
 
         for (var i = 0; i < Count; i++)
         {
-            if (this[i] == 0)
+            var c = this[i];
+            if (c == 0)
                 break;
 
-            sb.Append(this[i]);
+            sb.Append(c);
         }
 
         return sb.ToString();

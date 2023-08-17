@@ -25,6 +25,7 @@ public unsafe class MemoryMappedFileProxy3 : IDisposable
         {
             _file = MemoryMappedFile.CreateNew(Name, Size, MemoryMappedFileAccess.Read, MemoryMappedFileOptions.None, HandleInheritability.None);
         }
+
         _view = _file.CreateViewAccessor(0, Size, MemoryMappedFileAccess.Read);
 
         byte* ptr = null;

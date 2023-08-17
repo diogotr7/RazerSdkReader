@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using RazerSdkReader.Extensions;
@@ -13,8 +12,8 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
     private CancellationTokenSource? _cts;
     private Task? _task;
 
-    public event EventHandler<T>? Updated;
-    public event EventHandler<RazerSdkReaderException>? Exception; 
+    public event InStructEventHandler<T>? Updated;
+    public event EventHandler<RazerSdkReaderException>? Exception;
 
     public SignaledReader(string memoryMappedFileName, string eventWaitHandle)
     {
@@ -41,8 +40,8 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
                 // hopefully this is a good compromise between
                 // performance and responsiveness.
                 await _eventWaitHandle.WaitOneAsync(TimeSpan.FromSeconds(5), _cts.Token);
-                Updated?.Invoke(this, _reader.Read());
-                //_eventWaitHandle.Reset();
+                var data = _reader.Read();
+                Updated?.Invoke(this, in data);
             }
         }
         catch (TaskCanceledException)
@@ -54,7 +53,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
             Exception?.Invoke(this, new RazerSdkReaderException("ReadLoop Error", e));
         }
     }
-    
+
     public void Dispose()
     {
         _cts?.Cancel();

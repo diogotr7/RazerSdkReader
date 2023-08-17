@@ -27,14 +27,14 @@ public sealed class ChromaReader : IDisposable
     private SignaledReader<ChromaAppData>? _appDataReader;
     private SignaledReader<ChromaAppManager>? _appManagerReader;
 
-    public event EventHandler<ChromaKeyboard>? KeyboardUpdated;
-    public event EventHandler<ChromaMouse>? MouseUpdated;
-    public event EventHandler<ChromaMousepad>? MousepadUpdated;
-    public event EventHandler<ChromaKeypad>? KeypadUpdated;
-    public event EventHandler<ChromaHeadset>? HeadsetUpdated;
-    public event EventHandler<ChromaLink>? ChromaLinkUpdated;
-    public event EventHandler<ChromaAppData>? AppDataUpdated;
-    public event EventHandler<ChromaAppManager>? AppManagerUpdated;
+    public event InStructEventHandler<ChromaKeyboard>? KeyboardUpdated;
+    public event InStructEventHandler<ChromaMouse>? MouseUpdated;
+    public event InStructEventHandler<ChromaMousepad>? MousepadUpdated;
+    public event InStructEventHandler<ChromaKeypad>? KeypadUpdated;
+    public event InStructEventHandler<ChromaHeadset>? HeadsetUpdated;
+    public event InStructEventHandler<ChromaLink>? ChromaLinkUpdated;
+    public event InStructEventHandler<ChromaAppData>? AppDataUpdated;
+    public event InStructEventHandler<ChromaAppManager>? AppManagerUpdated;
     public event EventHandler<RazerSdkReaderException>? Exception;
 
     public void Start()
@@ -61,7 +61,6 @@ public sealed class ChromaReader : IDisposable
         try
         {
             InitMutexes();
-
             InitReaders();
         }
         catch (Exception ex)
@@ -181,44 +180,44 @@ public sealed class ChromaReader : IDisposable
         Exception?.Invoke(sender, e);
     }
 
-    private void OnKeyboardReaderOnUpdated(object? sender, ChromaKeyboard keyboard)
+    private void OnKeyboardReaderOnUpdated(object? sender, in ChromaKeyboard keyboard)
     {
-        KeyboardUpdated?.Invoke(sender, keyboard);
+        KeyboardUpdated?.Invoke(sender, in keyboard);
     }
 
-    private void OnMouseReaderOnUpdated(object? sender, ChromaMouse mouse)
+    private void OnMouseReaderOnUpdated(object? sender, in ChromaMouse mouse)
     {
-        MouseUpdated?.Invoke(sender, mouse);
+        MouseUpdated?.Invoke(sender, in mouse);
     }
 
-    private void OnMousepadReaderOnUpdated(object? sender, ChromaMousepad mousepad)
+    private void OnMousepadReaderOnUpdated(object? sender, in ChromaMousepad mousepad)
     {
-        MousepadUpdated?.Invoke(sender, mousepad);
+        MousepadUpdated?.Invoke(sender, in mousepad);
     }
 
-    private void OnKeypadReaderOnUpdated(object? sender, ChromaKeypad keypad)
+    private void OnKeypadReaderOnUpdated(object? sender, in ChromaKeypad keypad)
     {
-        KeypadUpdated?.Invoke(sender, keypad);
+        KeypadUpdated?.Invoke(sender, in keypad);
     }
 
-    private void OnHeadsetReaderOnUpdated(object? sender, ChromaHeadset headset)
+    private void OnHeadsetReaderOnUpdated(object? sender, in ChromaHeadset headset)
     {
-        HeadsetUpdated?.Invoke(sender, headset);
+        HeadsetUpdated?.Invoke(sender, in headset);
     }
 
-    private void OnChromaLinkReaderOnUpdated(object? sender, ChromaLink chromaLink)
+    private void OnChromaLinkReaderOnUpdated(object? sender, in ChromaLink chromaLink)
     {
-        ChromaLinkUpdated?.Invoke(sender, chromaLink);
+        ChromaLinkUpdated?.Invoke(sender, in chromaLink);
     }
 
-    private void OnAppDataReaderOnUpdated(object? sender, ChromaAppData appData)
+    private void OnAppDataReaderOnUpdated(object? sender, in ChromaAppData appData)
     {
-        AppDataUpdated?.Invoke(sender, appData);
+        AppDataUpdated?.Invoke(sender, in appData);
     }
 
-    private void OnAppManagerReaderOnUpdated(object? sender, ChromaAppManager appManager)
+    private void OnAppManagerReaderOnUpdated(object? sender, in ChromaAppManager appManager)
     {
-        AppManagerUpdated?.Invoke(sender, appManager);
+        AppManagerUpdated?.Invoke(sender, in appManager);
     }
 
     public void Dispose()

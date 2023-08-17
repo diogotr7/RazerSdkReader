@@ -11,13 +11,13 @@ public class MousepadGridWindowViewModel : GridViewerWindowViewModel<ChromaMouse
     {
         this.WhenActivated(d =>
         {
-            App.Reader.MousepadUpdated += ReaderOnMousepadUpdated;
+            App.Reader!.MousepadUpdated += ReaderOnMousepadUpdated;
             Disposable.Create(() => App.Reader.MousepadUpdated -= ReaderOnMousepadUpdated).DisposeWith(d);
         });
     }
 
-    private void ReaderOnMousepadUpdated(object? sender, ChromaMousepad e)
+    private void ReaderOnMousepadUpdated(object? sender, in ChromaMousepad e)
     {
-        Update(e);
+        Update(in e);
     }
 }

@@ -9,7 +9,7 @@ public readonly record struct ChromaColor
     public readonly byte G;
     public readonly byte B;
     public readonly byte A;
-    
+
     private ChromaColor(byte r, byte g, byte b, byte a)
     {
         R = r;
@@ -17,6 +17,7 @@ public readonly record struct ChromaColor
         B = b;
         A = a;
     }
-    
-    public static ChromaColor operator ^(ChromaColor a, ChromaColor b) => new((byte)(a.R ^ b.R), (byte)(a.G ^ b.G), (byte)(a.B ^ b.B), (byte)(a.A ^ b.A));
+
+    public static ChromaColor operator ^(ChromaColor a, ChromaColor b) =>
+        new((byte)(a.R ^ b.R), (byte)(a.G ^ b.G), (byte)(a.B ^ b.B), (byte)(a.A ^ b.A));
 }

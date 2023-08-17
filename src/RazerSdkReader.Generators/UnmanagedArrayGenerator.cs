@@ -121,6 +121,7 @@ public class UnmanagedArrayGenerator : ISourceGenerator
         {
             sb.AppendLine($"        {i} => Child{i.ToString(format)},");
         }
+
         sb.AppendLine($"        _ => throw new IndexOutOfRangeException()");
         sb.AppendLine("    };");
         sb.AppendLine("}");

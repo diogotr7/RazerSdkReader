@@ -11,13 +11,13 @@ public class HeadsetGridWindowViewModel : GridViewerWindowViewModel<ChromaHeadse
     {
         this.WhenActivated(d =>
         {
-            App.Reader.HeadsetUpdated += ReaderOnHeadsetUpdated;
+            App.Reader!.HeadsetUpdated += ReaderOnHeadsetUpdated;
             Disposable.Create(() => App.Reader.HeadsetUpdated -= ReaderOnHeadsetUpdated).DisposeWith(d);
         });
     }
 
-    private void ReaderOnHeadsetUpdated(object? sender, ChromaHeadset e)
+    private void ReaderOnHeadsetUpdated(object? sender, in ChromaHeadset e)
     {
-        Update(e);
+        Update(in e);
     }
 }

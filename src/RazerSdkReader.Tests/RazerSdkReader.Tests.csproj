@@ -18,11 +18,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\RazerSdkReader\RazerSdkReader.csproj" />
+        <ProjectReference Include="..\RazerSdkReader\RazerSdkReader.csproj"/>
     </ItemGroup>
-    
+
     <ItemGroup>
-        <Content Include="TestData/**/*.*" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="TestData/**/*.*" CopyToOutputDirectory="PreserveNewest"/>
     </ItemGroup>
 
 </Project>

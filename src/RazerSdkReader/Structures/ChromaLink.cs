@@ -9,32 +9,32 @@ namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaLink : IColorProvider
-{ 
+{
     public readonly int WriteIndex;
     public readonly uint Padding;
     public readonly ChromaLinkData10 Data;
     public readonly ChromaDevice10 Device;
-    
+
     public int Width => 5;
-    
+
     public int Height => 1;
-    
+
     public int Count => Width * Height;
-    
-    public ChromaColor GetColor(int index, int? frame = null)
+
+    public ChromaColor GetColor(int index)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
-        
-        var targetIndex = frame ?? WriteIndex.ToReadIndex();
+
+        var targetIndex = WriteIndex.ToReadIndex();
         var snapshot = Data[targetIndex];
-        
+
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.Static)
             return default;
-        
-        var clr =  snapshot.Effect.Custom[index];
+
+        var clr = snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
-        
+
         return clr ^ staticColor;
     }
 }

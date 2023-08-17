@@ -13,13 +13,13 @@ public class MouseGridWindowViewModel : GridViewerWindowViewModel<ChromaMouse>
     {
         this.WhenActivated(d =>
         {
-            App.Reader.MouseUpdated += ReaderOnMouseUpdated;
+            App.Reader!.MouseUpdated += ReaderOnMouseUpdated;
             Disposable.Create(() => App.Reader.MouseUpdated -= ReaderOnMouseUpdated).DisposeWith(d);
         });
     }
 
-    private void ReaderOnMouseUpdated(object? sender, ChromaMouse e)
+    private void ReaderOnMouseUpdated(object? sender, in ChromaMouse e)
     {
-        Update(e);
+        Update(in e);
     }
 }

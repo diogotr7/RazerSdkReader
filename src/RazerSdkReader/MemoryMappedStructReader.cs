@@ -31,7 +31,7 @@ internal sealed class MemoryMappedStructReader<T> : IDisposable where T : unmana
     {
         if (_view.SafeMemoryMappedViewHandle.IsClosed)
             throw new ObjectDisposedException(nameof(MemoryMappedStructReader<T>));
-        
+
         return Unsafe.AsRef<T>(_view.SafeMemoryMappedViewHandle.DangerousGetHandle().ToPointer());
     }
 

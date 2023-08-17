@@ -7,6 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\RazerSdkReader\RazerSdkReader.csproj" />
+        <ProjectReference Include="..\RazerSdkReader\RazerSdkReader.csproj"/>
     </ItemGroup>
 </Project>

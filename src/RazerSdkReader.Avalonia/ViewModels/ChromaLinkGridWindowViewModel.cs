@@ -11,13 +11,13 @@ public class ChromaLinkGridWindowViewModel : GridViewerWindowViewModel<ChromaLin
     {
         this.WhenActivated(d =>
         {
-            App.Reader.ChromaLinkUpdated += ReaderOnChromaLinkUpdated;
+            App.Reader!.ChromaLinkUpdated += ReaderOnChromaLinkUpdated;
             Disposable.Create(() => App.Reader.ChromaLinkUpdated -= ReaderOnChromaLinkUpdated).DisposeWith(d);
         });
     }
 
-    private void ReaderOnChromaLinkUpdated(object? sender, ChromaLink e)
+    private void ReaderOnChromaLinkUpdated(object? sender, in ChromaLink e)
     {
-        Update(e);
+        Update(in e);
     }
 }

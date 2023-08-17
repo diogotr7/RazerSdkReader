@@ -14,13 +14,13 @@ public class KeyboardGridWindowViewModel : GridViewerWindowViewModel<ChromaKeybo
     {
         this.WhenActivated(d =>
         {
-            App.Reader.KeyboardUpdated += ReaderOnKeyboardUpdated;
+            App.Reader!.KeyboardUpdated += ReaderOnKeyboardUpdated;
             Disposable.Create(() => App.Reader.KeyboardUpdated -= ReaderOnKeyboardUpdated).DisposeWith(d);
         });
     }
 
-    private void ReaderOnKeyboardUpdated(object? sender, ChromaKeyboard e)
+    private void ReaderOnKeyboardUpdated(object? sender, in ChromaKeyboard e)
     {
-        Update(e);
+        Update(in e);
     }
 }
