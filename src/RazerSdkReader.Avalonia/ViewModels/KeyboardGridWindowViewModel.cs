@@ -10,7 +10,7 @@ namespace RazerSdkReader.Avalonia.ViewModels;
 
 public class KeyboardGridWindowViewModel : GridViewerWindowViewModel<ChromaKeyboard>
 {
-    public KeyboardGridWindowViewModel() : base(22, 6, "Keyboard")
+    public KeyboardGridWindowViewModel()
     {
         this.WhenActivated(d =>
         {

@@ -7,7 +7,7 @@ namespace RazerSdkReader.Avalonia.ViewModels;
 
 public class HeadsetGridWindowViewModel : GridViewerWindowViewModel<ChromaHeadset>
 {
-    public HeadsetGridWindowViewModel() : base(5, 1, "Headset")
+    public HeadsetGridWindowViewModel()
     {
         this.WhenActivated(d =>
         {

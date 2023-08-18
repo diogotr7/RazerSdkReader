@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
 using Avalonia.Collections;
 using Avalonia.Media;
 using Avalonia.Threading;
@@ -9,55 +6,48 @@ using ReactiveUI;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public abstract class GridViewerWindowViewModel<T> : GridViewerWindowViewModel where T : IColorProvider
+public abstract class GridViewerWindowViewModel<T> : GridViewerWindowViewModel where T : unmanaged, IColorProvider
 {
-    protected GridViewerWindowViewModel(int width, int height, string title) : base(width, height, title)
+    protected GridViewerWindowViewModel()
     {
-    }
-
-    private DateTime _lastFrame = DateTime.Now;
-
-    protected void Update(in T data)
-    {
-        var now = DateTime.Now;
-        if ((now - _lastFrame).TotalMilliseconds < 15)
-            return;
-
-        var copy = data;
-        Dispatcher.UIThread.Invoke(() =>
-        {
-            for (var i = 0; i < Width * Height; i++)
-            {
-                var clr = copy.GetColor(i);
-                var oldClr = KeyColors[i];
-                if (clr.R == oldClr.Color.R && clr.G == oldClr.Color.G && clr.B == oldClr.Color.B)
-                    continue;
-                KeyColors[i].Color = Color.FromRgb(clr.R, clr.G, clr.B);
-            }
-
-            _lastFrame = now;
-        });
-    }
-}
-
-public abstract class GridViewerWindowViewModel : ActivatableViewModelBase, IScreen
-{
-    protected GridViewerWindowViewModel(int width, int height, string title)
-    {
-        Title = title;
-        Width = width;
-        Height = height;
-        KeyColors = new();
+        _data = default;
+        Title = typeof(T).Name.Replace("Chroma", "");
+        Width = _data.Width;
+        Height = _data.Height;
         for (var i = 0; i < Width * Height; i++)
         {
             KeyColors.Add(new());
         }
     }
+    
+    protected void Update(in T data)
+    {
+        _data = data;
+        _cached ??= RunOnUiThread;
 
-    public AvaloniaList<SolidColorBrush> KeyColors { get; }
-    public string Title { get; }
-    public int Width { get; }
-    public int Height { get; }
+        Dispatcher.UIThread.Invoke(_cached);
+    }
+
+    private T _data;
+    private Action? _cached;
+    private void RunOnUiThread()
+    {
+        Dispatcher.UIThread.VerifyAccess();
+        
+        for (var i = 0; i < Width * Height; i++)
+        {
+            var color = _data.GetColor(i);
+            KeyColors[i].Color = Color.FromRgb(color.R, color.G, color.B);
+        }
+    }
+}
+
+public abstract class GridViewerWindowViewModel : ActivatableViewModelBase, IScreen
+{
+    public AvaloniaList<SolidColorBrush> KeyColors { get; init; } = new();
+    public string Title { get; init; } = string.Empty;
+    public int Width { get; init; }
+    public int Height { get; init; }
     public int WidthPx => Width * 50 + 1 + 1;
     public int HeightPx => Height * 50 + 1 + 1;
     public RoutingState Router { get; } = new();

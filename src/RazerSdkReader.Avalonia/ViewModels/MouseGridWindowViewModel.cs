@@ -9,7 +9,7 @@ namespace RazerSdkReader.Avalonia.ViewModels;
 
 public class MouseGridWindowViewModel : GridViewerWindowViewModel<ChromaMouse>
 {
-    public MouseGridWindowViewModel() : base(7, 9, "Mouse")
+    public MouseGridWindowViewModel()
     {
         this.WhenActivated(d =>
         {

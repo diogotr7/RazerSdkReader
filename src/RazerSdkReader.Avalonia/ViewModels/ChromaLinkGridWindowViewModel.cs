@@ -7,7 +7,7 @@ namespace RazerSdkReader.Avalonia.ViewModels;
 
 public class ChromaLinkGridWindowViewModel : GridViewerWindowViewModel<ChromaLink>
 {
-    public ChromaLinkGridWindowViewModel() : base(5, 1, "ChromaLink")
+    public ChromaLinkGridWindowViewModel()
     {
         this.WhenActivated(d =>
         {
