@@ -13,9 +13,9 @@ namespace RazerSdkReader;
 [SupportedOSPlatform("windows")]
 public sealed class ChromaReader : IDisposable
 {
-    private readonly Queue<Mutex> _mutexes = new();
     private TaskCompletionSource? _initCompletionSource;
     private AutoResetEvent? _disposeEvent;
+    private ChromaMutex? _chromaMutex;
     private Thread? _mutexThread;
 
     private SignaledReader<ChromaKeyboard>? _keyboardReader;
@@ -60,23 +60,23 @@ public sealed class ChromaReader : IDisposable
     {
         try
         {
-            InitMutexes();
+            _chromaMutex = new ChromaMutex();
             InitReaders();
         }
         catch (Exception ex)
         {
-            _initCompletionSource?.TrySetException(new InvalidOperationException("Failed to initialize RazerSdkReader.", ex));
+            _initCompletionSource?.SetException(new InvalidOperationException("Failed to initialize RazerSdkReader.", ex));
             return;
         }
 
-        _initCompletionSource?.TrySetResult();
+        _initCompletionSource?.SetResult();
 
         _disposeEvent?.WaitOne();
 
         try
         {
             DisposeReaders();
-            DisposeMutexes();
+            _chromaMutex.Dispose();
         }
         catch
         {
@@ -84,25 +84,7 @@ public sealed class ChromaReader : IDisposable
         }
     }
 
-    private void InitMutexes()
-    {
-        _mutexes.Enqueue(MutexHelper.CreateMutex(Constants.SynapseOnlineMutex));
-        EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        _mutexes.Enqueue(MutexHelper.CreateMutex(Constants.OldSynapseOnlineMutex));
-        EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        _mutexes.Enqueue(MutexHelper.CreateMutex(Constants.OldSynapseVersionMutex));
-        EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
-        _mutexes.Enqueue(MutexHelper.CreateMutex(Constants.ChromaEmulatorMutex));
-    }
-
-    private void DisposeMutexes()
-    {
-        while (_mutexes.TryDequeue(out var mutex))
-        {
-            mutex.ReleaseMutex();
-            mutex.Dispose();
-        }
-    }
+    #region Init readers
 
     private void InitReaders()
     {
@@ -147,6 +129,10 @@ public sealed class ChromaReader : IDisposable
         _appManagerReader.Start();
     }
 
+    #endregion
+
+    #region Stop readers
+
     private void DisposeReaders()
     {
         _keyboardReader!.Updated -= OnKeyboardReaderOnUpdated;
@@ -174,6 +160,10 @@ public sealed class ChromaReader : IDisposable
         _appManagerReader!.Exception -= OnReaderException;
         _appManagerReader.Dispose();
     }
+
+    #endregion
+
+    #region Event Handlers
 
     private void OnReaderException(object? sender, RazerSdkReaderException e)
     {
@@ -219,6 +209,8 @@ public sealed class ChromaReader : IDisposable
     {
         AppManagerUpdated?.Invoke(sender, in appManager);
     }
+
+    #endregion
 
     public void Dispose()
     {
