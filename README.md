@@ -9,18 +9,26 @@ Package is available on [Nuget](RazerSdkReader)
 
 Consult src/RazerSdkReader.ConsoleApp/Program.cs for a full example.
 
-```csharp
+```cs
 using RazerSdkReader;
 
+void RazerEmulatorReaderOnKeyboardUpdated(object? sender, in ChromaKeyboard e)
+{
+    for (byte y = 1; y < e.Height; y++)
+    {
+        for (byte x = 1; x < e.Width; x++)
+        {
+            var color = e.GetColor(y * e.Width + x);
+            //do something with the color
+        }
+    }
+}
+
 // Create a new instance of the RazerSdkReader class
-RazerSdkReader reader = new RazerSdkReader();
+var reader = new ChromaReader();
 
 //subscribe to update events
-reader.KeyboardUpdated += (sender, keyboard) =>
-{
-    var clr = keyboard.GetColor(0);
-    Console.WriteLine($"Keyboard Color: {clr}");
-};
+reader.KeyboardUpdated += OnKeyboardUpdated;
 
 //start the reader
 reader.Start();
