@@ -17,7 +17,6 @@ public static class Program
         reader.HeadsetUpdated += Write;
         reader.ChromaLinkUpdated += Write;
         reader.AppDataUpdated += WriteAppData;
-        reader.AppManagerUpdated += WriteAppManager;
 
         reader.Start();
         Console.ReadLine();
@@ -34,21 +33,7 @@ public static class Program
 
     private static void WriteAppData(object? sender, in ChromaAppData appData)
     {
-        var currentAppName = "";
-        for (int i = 0; i < appData.AppCount; i++)
-        {
-            if (appData.CurrentAppId != appData.AppInfo[i].AppId) continue;
-
-            currentAppName = appData.AppInfo[i].AppName;
-            break;
-        }
-
-        Console.WriteLine($"ChromaAppData active: {currentAppName}");
-    }
-
-    private static void WriteAppManager(object? sender, in ChromaAppManager appManager)
-    {
-        Console.WriteLine($"ChromaAppManager updated");
+        Console.WriteLine($"ChromaAppData active: {appData.CurrentAppName}");
     }
 
     private static void WriteException(object? sender, Exception exception)

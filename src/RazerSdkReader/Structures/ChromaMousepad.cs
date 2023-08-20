@@ -9,7 +9,7 @@ namespace RazerSdkReader.Structures;
 public readonly record struct ChromaMousepad : IColorProvider
 {
     public readonly int WriteIndex;
-    public readonly uint Padding;
+    private readonly uint Padding;
     public readonly ChromaMousepadData10 Data;
     public readonly ChromaDevice10 Device;
 

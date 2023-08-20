@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
 
@@ -11,11 +12,26 @@ public readonly record struct ChromaAppData
     //I'm not sure what the padding here or in ChromaAppInfo is.
 
     public readonly uint AppCount;
-    public readonly ChromaString UnusedAppName;
+    private readonly ChromaString UnusedAppName;
     public readonly uint CurrentAppId;
-    public readonly uint Padding;
+    private readonly uint Padding;
 
     public readonly ChromaAppInfo50 AppInfo;
+    
+    public string CurrentAppName
+    {
+        get
+        {
+            for (var i = 0; i < AppCount; i++)
+            {
+                if (CurrentAppId != AppInfo[i].AppId) continue;
+
+                return AppInfo[i].AppName;
+            }
+
+            return "";
+        }
+    }
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -23,7 +39,7 @@ public readonly record struct ChromaAppInfo
 {
     public readonly ChromaString AppName;
     public readonly uint AppId;
-    public readonly uint Padding;
+    private readonly uint Padding;
 }
 
 [UnmanagedArray(typeof(ChromaAppInfo), 50)]

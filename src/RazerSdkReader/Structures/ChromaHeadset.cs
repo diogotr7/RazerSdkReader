@@ -9,7 +9,7 @@ namespace RazerSdkReader.Structures;
 public readonly record struct ChromaHeadset : IColorProvider
 {
     public readonly int WriteIndex;
-    public readonly int Padding;
+    private readonly int Padding;
     public readonly ChromaHeadsetData10 Data;
     public readonly ChromaDevice10 Device;
 
@@ -43,7 +43,7 @@ public readonly record struct ChromaHeadsetData
     public readonly uint Flag;
     public readonly EffectType EffectType;
     public readonly HeadsetEffect Effect;
-    public readonly uint Padding;
+    private readonly uint Padding;
     public readonly ulong Timestamp;
 }
 

@@ -9,7 +9,7 @@ namespace RazerSdkReader.Structures;
 public readonly record struct ChromaKeyboard : IColorProvider
 {
     public readonly int WriteIndex;
-    public readonly int Padding;
+    private readonly int Padding;
     public readonly ChromaKeyboardData10 Data;
     public readonly ChromaDevice10 Device;
 
@@ -58,7 +58,7 @@ public readonly record struct ChromaKeyboardData
     public readonly uint Flag;
     public readonly EffectType EffectType;
     public readonly KeyboardEffect Effect;
-    public readonly uint Padding;
+    private readonly uint Padding;
     public readonly ulong Timestamp;
 }
 

@@ -1,12 +1,13 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
 
+//unused, information largely useless. ChromaAppData is more useful.
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaAppManager
 {
     public readonly int WriteIndex;
-    public readonly uint Padding;
+    private readonly uint Padding;
     public readonly ChromaAppManager10 Data;
 }
 

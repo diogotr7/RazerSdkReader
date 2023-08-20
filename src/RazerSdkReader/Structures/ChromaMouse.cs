@@ -9,7 +9,7 @@ namespace RazerSdkReader.Structures;
 public readonly record struct ChromaMouse : IColorProvider
 {
     public readonly int WriteIndex;
-    public readonly uint Padding;
+    private readonly uint Padding;
     public readonly ChromaMouseData10 Data;
     public readonly ChromaDevice10 Device;
 
@@ -41,7 +41,7 @@ public readonly record struct ChromaMouse : IColorProvider
 public readonly record struct ChromaMouseData
 {
     public readonly uint Flag;
-    public readonly uint Led;
+    public readonly MouseLedType Led;
     public readonly EffectType EffectType;
     public readonly MouseEffect Effect;
     public readonly ulong Timestamp;

@@ -15,4 +15,6 @@ internal static class IntExtensions
         0 => 9,
         _ => writeIndex - 1
     };
+    
+    public static DateTime ToDateTime(this ulong timestamp) => DateTime.Now.AddMilliseconds(-Environment.TickCount64).AddMilliseconds(timestamp);
 }

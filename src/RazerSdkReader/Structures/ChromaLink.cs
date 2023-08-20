@@ -11,7 +11,7 @@ namespace RazerSdkReader.Structures;
 public readonly record struct ChromaLink : IColorProvider
 {
     public readonly int WriteIndex;
-    public readonly uint Padding;
+    private readonly uint Padding;
     public readonly ChromaLinkData10 Data;
     public readonly ChromaDevice10 Device;
 
