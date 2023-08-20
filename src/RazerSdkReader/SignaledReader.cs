@@ -53,6 +53,11 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
             Exception?.Invoke(this, new RazerSdkReaderException("ReadLoop Error", e));
         }
     }
+    
+    internal T Read()
+    {
+        return _reader.Read();
+    }
 
     public void Dispose()
     {
