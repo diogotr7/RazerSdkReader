@@ -1,5 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
+using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -12,7 +11,7 @@ namespace RazerSdkReader.Generators;
 ///     we stack X times the struct manually with fields, then add an operator to access them by index.
 /// </summary>
 [Generator]
-public class UnmanagedArrayGenerator : ISourceGenerator
+public class UnmanagedArrayGenerator : IIncrementalGenerator
 {
     //Example:
     //[UnmanagedArray(typeof(ChildTestStruct), 2)]
@@ -32,65 +31,70 @@ public class UnmanagedArrayGenerator : ISourceGenerator
     //    };
     //}
 
-    public void Initialize(GeneratorInitializationContext context)
+    public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        //empty
+        var input = context.SyntaxProvider.CreateSyntaxProvider(IsAttributePresent, GetStructInfo);
+
+        context.RegisterSourceOutput(input,
+            (spc, structInfo) =>
+            {
+                spc.AddSource($"{structInfo.ParentStruct}.g.cs", StructGenerator.Generate(structInfo));
+            });
     }
 
-    public void Execute(GeneratorExecutionContext context)
+    private static bool IsAttributePresent(SyntaxNode syntaxNode, CancellationToken token)
     {
-        List<StructInfo> structInfos = new();
+        if (syntaxNode is not AttributeSyntax attribute)
+            return false;
 
-        var structs = context.Compilation.SyntaxTrees
-            .SelectMany(st => st.GetRoot()
-                .DescendantNodes()
-                .OfType<RecordDeclarationSyntax>()
-                .Where(r => r.AttributeLists
-                    .SelectMany(al => al.Attributes)
-                    .Any(a => a.Name.GetText().ToString() == "UnmanagedArray")));
-
-        foreach (var s in structs)
+        var name = attribute.Name switch
         {
-            var tree = s.SyntaxTree;
-            var model = context.Compilation.GetSemanticModel(tree);
+            SimpleNameSyntax ins => ins.Identifier.Text,
+            QualifiedNameSyntax qns => qns.Right.Identifier.Text,
+            _ => null
+        };
 
-            var structAttribute = s.AttributeLists
-                .SelectMany(al => al.Attributes)
-                .First(a => a.Name.GetText().ToString() == "UnmanagedArray");
+        return name is "UnmanagedArray" or "UnmanagedArrayAttribute";
+    }
 
-            var structParameters = structAttribute.ArgumentList!.Arguments;
+    private static bool IsStructOrRecordStruct(SyntaxNode node) => node switch
+    {
+        StructDeclarationSyntax => true,
+        RecordDeclarationSyntax rds => rds.Kind() == SyntaxKind.RecordStructDeclaration,
+        _ => false
+    };
 
-            var childType = model.GetTypeInfo((structParameters[0].Expression as TypeOfExpressionSyntax)!.Type);
-            var childCountExpression = model.GetConstantValue(structParameters[1].Expression);
-            if (childCountExpression.Value is not int childCount)
-            {
-                //diag
-                context.ReportDiagnostic(Diagnostic.Create(
-                    new DiagnosticDescriptor(
-                        "RAZSDK001",
-                        "Invalid child count",
-                        "Invalid child count",
-                        "RazerSdkReader",
-                        DiagnosticSeverity.Error,
-                        true),
-                    Location.None));
-                return;
-            }
+    private static StructInfo GetStructInfo(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    {
+        var structAttribute = (AttributeSyntax)context.Node;
 
-            var parentType = model.GetDeclaredSymbol(s);
+        // "attribute.Parent" is "AttributeListSyntax"
+        // "attribute.Parent.Parent" is a C# fragment the attributes are applied to
+        if (!IsStructOrRecordStruct(structAttribute.Parent?.Parent))
+            return null;
 
-            structInfos.Add(new StructInfo
-            {
-                Namespace = parentType!.ContainingNamespace.ToString(),
-                ParentStruct = parentType!.ToString().Split('.').Last(),
-                ChildStruct = childType!.Type!.ToString().Split('.').Last(),
-                Count = childCount
-            });
-        }
+        var structDeclarationSyntax = (TypeDeclarationSyntax)structAttribute.Parent!.Parent;
+        if (structDeclarationSyntax is null)
+            return null;
 
-        foreach (var structInfo in structInfos)
+        var parentType = context.SemanticModel.GetDeclaredSymbol(structDeclarationSyntax);
+
+        var structParameters = structAttribute.ArgumentList!.Arguments;
+        if (structParameters.Count != 2)
+            return null;
+
+        var childType = context.SemanticModel.GetTypeInfo((structParameters[0].Expression as TypeOfExpressionSyntax)!.Type);
+        var childCountExpression = context.SemanticModel.GetConstantValue(structParameters[1].Expression);
+        if (childCountExpression.Value is not int childCount)
+            return null;
+
+        var format = new SymbolDisplayFormat(miscellaneousOptions: SymbolDisplayMiscellaneousOptions.EscapeKeywordIdentifiers);
+        return new StructInfo
         {
-            context.AddSource($"{structInfo.ParentStruct}.g.cs", StructGenerator.Generate(structInfo));
-        }
+            Namespace = parentType!.ContainingNamespace.ToString(),
+            ParentStruct = parentType!.ToDisplayString(format),
+            ChildStruct = childType!.Type!.ToDisplayString(format),
+            Count = childCount
+        };
     }
 }
