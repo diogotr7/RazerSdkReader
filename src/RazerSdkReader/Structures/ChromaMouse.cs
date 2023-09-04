@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
+using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 

@@ -4,6 +4,7 @@ using RazerSdkReader;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using RazerSdkReader.Structures;
+using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 

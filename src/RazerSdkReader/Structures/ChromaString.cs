@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 

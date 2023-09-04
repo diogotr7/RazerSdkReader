@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
