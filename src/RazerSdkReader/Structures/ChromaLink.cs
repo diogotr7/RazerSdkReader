@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using RazerSdkReader;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using RazerSdkReader.Structures;
