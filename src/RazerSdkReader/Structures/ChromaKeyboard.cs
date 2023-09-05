@@ -27,7 +27,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         var targetIndex = WriteIndex.ToReadIndex();
 
-        var snapshot = Data[targetIndex];
+        var snapshot = Data.AsSpan()[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
@@ -37,16 +37,16 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         if (snapshot.EffectType == EffectType.CustomKey)
         {
-            clr = snapshot.Effect.Custom2.Key[index];
+            clr = snapshot.Effect.Custom2.Key.AsSpan()[index];
 
             //this next part is required for some effects to work properly.
             //For example, the chroma example app ambient effect.
             if (clr == staticColor)
-                clr = snapshot.Effect.Custom2.Color[index];
+                clr = snapshot.Effect.Custom2.Color.AsSpan()[index];
         }
         else if (snapshot.EffectType is EffectType.Custom or EffectType.Static)
         {
-            clr = snapshot.Effect.Custom.Color[index];
+            clr = snapshot.Effect.Custom.Color.AsSpan()[index];
         }
 
         return clr ^ staticColor;

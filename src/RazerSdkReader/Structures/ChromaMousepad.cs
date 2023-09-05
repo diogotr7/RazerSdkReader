@@ -26,12 +26,12 @@ public readonly record struct ChromaMousepad : IColorProvider
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var targetIndex = WriteIndex.ToReadIndex();
-        var snapshot = Data[targetIndex];
+        var snapshot = Data.AsSpan()[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
 
-        var clr = snapshot.Effect.Custom2[index];
+        var clr = snapshot.Effect.Custom2.AsSpan()[index];
         var staticColor = snapshot.Effect.Static.Color;
 
         return clr ^ staticColor;

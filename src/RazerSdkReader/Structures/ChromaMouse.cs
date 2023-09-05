@@ -27,13 +27,13 @@ public readonly record struct ChromaMouse : IColorProvider
 
         var targetIndex = WriteIndex.ToReadIndex();
 
-        var snapshot = Data[targetIndex];
+        var snapshot = Data.AsSpan()[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
 
         var staticColor = snapshot.Effect.Static.Color;
-        var clr = snapshot.Effect.Custom2[index];
+        var clr = snapshot.Effect.Custom2.AsSpan()[index];
         return clr ^ staticColor;
     }
 }

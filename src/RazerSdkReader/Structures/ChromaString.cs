@@ -3,18 +3,15 @@ using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
-[UnmanagedArray(typeof(char), ChromaStringLength)]
+[UnmanagedArray(typeof(char), 260)]
 public readonly partial record struct ChromaString
 {
-    private const int ChromaStringLength = 260;
-    
     public override string ToString()
     {
         var sb = new StringBuilder();
 
-        for (var i = 0; i < ChromaStringLength; i++)
+        foreach (ref readonly var c in AsSpan())
         {
-            var c = this[i];
             if (c == 0)
                 break;
 

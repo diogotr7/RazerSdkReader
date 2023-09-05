@@ -23,14 +23,14 @@ public readonly record struct ChromaAppData
     {
         get
         {
-            for (var i = 0; i < AppCount; i++)
+            foreach (ref readonly var app in AppInfo.AsSpan())
             {
-                if (CurrentAppId != AppInfo[i].AppId) continue;
+                if (CurrentAppId != app.AppId) continue;
 
-                return AppInfo[i].AppName;
+                return app.AppName;
             }
-
-            return "";
+            
+            return string.Empty;
         }
     }
 }
