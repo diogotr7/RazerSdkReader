@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -26,12 +26,12 @@ public readonly record struct ChromaKeypad : IColorProvider
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var targetIndex = WriteIndex.ToReadIndex();
-        var snapshot = Data.AsSpan()[targetIndex];
+        var snapshot = Data[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.Static)
             return default;
 
-        var clr = snapshot.Effect.Custom.AsSpan()[index];
+        var clr = snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
 
         return clr ^ staticColor;
@@ -57,8 +57,14 @@ public readonly record struct KeypadEffect
     public readonly Wave Wave;
 }
 
-[UnmanagedArray(typeof(ChromaColor), 20)]
-public readonly partial record struct KeypadCustom;
+[InlineArray(20)]
+public  struct KeypadCustom
+{
+    public ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaKeypadData), 10)]
-public readonly partial record struct ChromaKeypadData10;
+[InlineArray( 10)]
+public struct ChromaKeypadData10
+{
+    public ChromaKeypadData _field;
+}

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <Version>1.6.0</Version>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <NoWarn>$(NoWarn);CA1416</NoWarn>
@@ -9,7 +9,6 @@
 
     <ItemGroup>
         <PackageReference Include="System.Threading.AccessControl" Version="7.0.1"/>
-        <PackageReference Include="UnmanagedArray.Generators" Version="1.1.0" />
         <InternalsVisibleTo Include="$(AssemblyName).Tests"/>
         <InternalsVisibleTo Include="$(AssemblyName).Benchmarks"/>
     </ItemGroup>

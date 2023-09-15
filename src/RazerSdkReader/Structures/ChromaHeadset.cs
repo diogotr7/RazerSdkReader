@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -26,12 +26,12 @@ public readonly record struct ChromaHeadset : IColorProvider
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var targetIndex = WriteIndex.ToReadIndex();
-        var snapshot = Data.AsSpan()[targetIndex];
+        var snapshot = Data[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.Static)
             return default;
 
-        var clr = snapshot.Effect.Custom.AsSpan()[index];
+        var clr = snapshot.Effect.Custom[index];
         var staticColor = snapshot.Effect.Static.Color;
 
         return clr ^ staticColor;
@@ -56,8 +56,14 @@ public readonly record struct HeadsetEffect
     public readonly Static Static;
 }
 
-[UnmanagedArray(typeof(ChromaColor), 5)]
-public readonly partial record struct HeadsetCustom;
+[InlineArray( 5)]
+public struct HeadsetCustom
+{
+    public ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaHeadsetData), 10)]
-public readonly partial record struct ChromaHeadsetData10;
+[InlineArray(10)]
+public struct ChromaHeadsetData10
+{
+    public ChromaHeadsetData _field;
+}

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -27,13 +27,18 @@ public readonly record struct ChromaMouse : IColorProvider
 
         var targetIndex = WriteIndex.ToReadIndex();
 
-        var snapshot = Data.AsSpan()[targetIndex];
+        var snapshot = Data[targetIndex];
 
-        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
+        if (
+            snapshot.EffectType
+            is not EffectType.Custom
+                and not EffectType.CustomKey
+                and not EffectType.Static
+        )
             return default;
 
         var staticColor = snapshot.Effect.Static.Color;
-        var clr = snapshot.Effect.Custom2.AsSpan()[index];
+        var clr = snapshot.Effect.Custom2[index];
         return clr ^ staticColor;
     }
 }
@@ -60,11 +65,20 @@ public readonly record struct MouseEffect
     public readonly Wave Wave;
 }
 
-[UnmanagedArray(typeof(ChromaColor), 30)]
-public readonly partial record struct MouseCustom;
+[InlineArray( 30)]
+public  struct MouseCustom
+{
+    public ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaColor), 63)]
-public readonly partial record struct MouseCustom2;
+[InlineArray( 63)]
+public struct MouseCustom2
+{
+    public ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaMouseData), 10)]
-public readonly partial record struct ChromaMouseData10;
+[InlineArray( 10)]
+public struct ChromaMouseData10
+{
+    public ChromaMouseData _field;
+}

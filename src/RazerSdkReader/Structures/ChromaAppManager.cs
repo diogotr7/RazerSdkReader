@@ -1,5 +1,5 @@
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -20,5 +20,8 @@ public readonly record struct ChromaAppManagerData
     public readonly ulong Timestamp;
 }
 
-[UnmanagedArray(typeof(ChromaAppManagerData), 10)]
-public readonly partial record struct ChromaAppManager10;
+[InlineArray(10)]
+public struct ChromaAppManager10
+{
+    public ChromaAppManagerData _field;
+}

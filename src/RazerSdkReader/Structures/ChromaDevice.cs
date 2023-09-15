@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -25,5 +25,8 @@ public readonly record struct ChromaDeviceDataInfo
     public readonly Guid DeviceId;
 }
 
-[UnmanagedArray(typeof(ChromaDeviceDataInfo), 50)]
-public readonly partial record struct ChromaDeviceDataInfo50;
+[InlineArray(50)]
+public struct ChromaDeviceDataInfo50
+{
+    public ChromaDeviceDataInfo _field;
+}

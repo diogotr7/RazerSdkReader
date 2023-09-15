@@ -1,16 +1,19 @@
-﻿using System.Text;
-using UnmanagedArrayGenerator;
+﻿using System;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace RazerSdkReader.Structures;
 
-[UnmanagedArray(typeof(char), 260)]
-public readonly partial record struct ChromaString
+[InlineArray( 260)]
+public struct ChromaString
 {
+    public char _field;
+    
     public override string ToString()
     {
         var sb = new StringBuilder();
-
-        foreach (ref readonly var c in AsSpan())
+        Span<char> x = this;
+        foreach (ref readonly var c in this)
         {
             if (c == 0)
                 break;

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -26,12 +26,12 @@ public readonly record struct ChromaMousepad : IColorProvider
             throw new ArgumentOutOfRangeException(nameof(index));
 
         var targetIndex = WriteIndex.ToReadIndex();
-        var snapshot = Data.AsSpan()[targetIndex];
+        var snapshot = Data[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
 
-        var clr = snapshot.Effect.Custom2.AsSpan()[index];
+        var clr = snapshot.Effect.Custom2[index];
         var staticColor = snapshot.Effect.Static.Color;
 
         return clr ^ staticColor;
@@ -57,11 +57,20 @@ public readonly record struct MousepadEffect
     public readonly MousepadCustom2 Custom2;
 }
 
-[UnmanagedArray(typeof(ChromaColor), 15)]
-public readonly partial record struct MousepadCustom;
+[InlineArray(15)]
+public record struct MousepadCustom
+{
+    private ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaColor), 20)]
-public readonly partial record struct MousepadCustom2;
+[InlineArray(20)]
+public record struct MousepadCustom2
+{
+    private ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaMousepadData), 10)]
-public readonly partial record struct ChromaMousepadData10;
+[InlineArray(10)]
+public record struct ChromaMousepadData10
+{
+    private ChromaMousepadData _field;
+}

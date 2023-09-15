@@ -1,6 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -23,7 +22,7 @@ public readonly record struct ChromaAppData
     {
         get
         {
-            foreach (ref readonly var app in AppInfo.AsSpan())
+            foreach (ref readonly var app in AppInfo)
             {
                 if (CurrentAppId != app.AppId) continue;
 
@@ -43,5 +42,8 @@ public readonly record struct ChromaAppInfo
     private readonly uint Padding;
 }
 
-[UnmanagedArray(typeof(ChromaAppInfo), 50)]
-public readonly partial record struct ChromaAppInfo50;
+[InlineArray(50)]
+public struct ChromaAppInfo50
+{
+    public ChromaAppInfo _field;
+}

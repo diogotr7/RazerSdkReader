@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
 
 namespace RazerSdkReader.Structures;
 
@@ -27,7 +27,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         var targetIndex = WriteIndex.ToReadIndex();
 
-        var snapshot = Data.AsSpan()[targetIndex];
+        var snapshot = Data[targetIndex];
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
@@ -37,16 +37,16 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         if (snapshot.EffectType == EffectType.CustomKey)
         {
-            clr = snapshot.Effect.Custom2.Key.AsSpan()[index];
+            clr = snapshot.Effect.Custom2.Key[index];
 
             //this next part is required for some effects to work properly.
             //For example, the chroma example app ambient effect.
             if (clr == staticColor)
-                clr = snapshot.Effect.Custom2.Color.AsSpan()[index];
+                clr = snapshot.Effect.Custom2.Color[index];
         }
         else if (snapshot.EffectType is EffectType.Custom or EffectType.Static)
         {
-            clr = snapshot.Effect.Custom.Color.AsSpan()[index];
+            clr = snapshot.Effect.Custom.Color[index];
         }
 
         return clr ^ staticColor;
@@ -96,11 +96,20 @@ public readonly record struct KeyboardCustom3
     public readonly Color6X22 Key;
 }
 
-[UnmanagedArray(typeof(ChromaColor), 192)]
-public readonly partial record struct Color8X24;
+[InlineArray(192)]
+public struct Color8X24
+{
+    public ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaColor), 132)]
-public readonly partial record struct Color6X22;
+[InlineArray(132)]
+public struct Color6X22
+{
+    public ChromaColor _field;
+}
 
-[UnmanagedArray(typeof(ChromaKeyboardData), 10)]
-public readonly partial record struct ChromaKeyboardData10;
+[InlineArray(10)]
+public struct ChromaKeyboardData10
+{
+    public ChromaKeyboardData _field;
+}
