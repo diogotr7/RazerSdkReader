@@ -9,7 +9,7 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaHeadset : IColorProvider
 {
-    public readonly int WriteIndex;
+    public readonly uint WriteIndex;
     private readonly int Padding;
     public readonly ChromaHeadsetData10 Data;
     public readonly ChromaDevice10 Device;
