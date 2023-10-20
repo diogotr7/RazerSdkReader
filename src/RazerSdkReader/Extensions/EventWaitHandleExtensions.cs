@@ -6,11 +6,10 @@ namespace RazerSdkReader.Extensions;
 
 internal static class EventWaitHandleExtensions
 {
-    public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, TimeSpan syncTimeout, CancellationToken cancellationToken = default)
+    public static ValueTask<bool> WaitOneAsync(this EventWaitHandle handle, int syncTimeoutMs, CancellationToken cancellationToken = default)
     {
         // Handle synchronous cases.
-        var alreadySignalled = handle.WaitOne((int)syncTimeout.TotalMilliseconds);
-        if (alreadySignalled)
+        if (handle.WaitOne(syncTimeoutMs))
             return ValueTask.FromResult(true);
 
         return handle.WaitOneAsync(cancellationToken);

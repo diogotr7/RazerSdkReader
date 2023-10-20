@@ -39,7 +39,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
                 // if it times out, then wait asynchronously.
                 // hopefully this is a good compromise between
                 // performance and responsiveness.
-                await _eventWaitHandle.WaitOneAsync(TimeSpan.FromSeconds(5), _cts.Token);
+                await _eventWaitHandle.WaitOneAsync(5000, _cts.Token);
                 var data = _reader.Read();
                 Updated?.Invoke(this, in data);
             }
