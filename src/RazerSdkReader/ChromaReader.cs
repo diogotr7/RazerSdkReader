@@ -18,21 +18,21 @@ public sealed class ChromaReader : IDisposable
     private ChromaMutex? _chromaMutex;
     private Thread? _mutexThread;
 
+    private SignaledReader<ChromaAppData>? _appDataReader;
     private SignaledReader<ChromaKeyboard>? _keyboardReader;
     private SignaledReader<ChromaMouse>? _mouseReader;
     private SignaledReader<ChromaMousepad>? _mousepadReader;
     private SignaledReader<ChromaKeypad>? _keypadReader;
     private SignaledReader<ChromaHeadset>? _headsetReader;
     private SignaledReader<ChromaLink>? _chromaLinkReader;
-    private SignaledReader<ChromaAppData>? _appDataReader;
 
+    public event InStructEventHandler<ChromaAppData>? AppDataUpdated;
     public event InStructEventHandler<ChromaKeyboard>? KeyboardUpdated;
     public event InStructEventHandler<ChromaMouse>? MouseUpdated;
     public event InStructEventHandler<ChromaMousepad>? MousepadUpdated;
     public event InStructEventHandler<ChromaKeypad>? KeypadUpdated;
     public event InStructEventHandler<ChromaHeadset>? HeadsetUpdated;
     public event InStructEventHandler<ChromaLink>? ChromaLinkUpdated;
-    public event InStructEventHandler<ChromaAppData>? AppDataUpdated;
     public event EventHandler<RazerSdkReaderException>? Exception;
 
     public void Start()
@@ -86,6 +86,12 @@ public sealed class ChromaReader : IDisposable
 
     private void InitReaders()
     {
+        _appDataReader = new SignaledReader<ChromaAppData>(Constants.AppDataFileName, Constants.AppDataWaitHandle);
+        OnAppDataReaderOnUpdated(this, _appDataReader.Read());
+        _appDataReader.Updated += OnAppDataReaderOnUpdated;
+        _appDataReader.Exception += OnReaderException;
+        _appDataReader.Start();
+        
         _keyboardReader = new SignaledReader<ChromaKeyboard>(Constants.KeyboardFileName, Constants.KeyboardWaitHandle);
         OnKeyboardReaderOnUpdated(this,_keyboardReader.Read());
         _keyboardReader.Updated += OnKeyboardReaderOnUpdated;
@@ -121,12 +127,6 @@ public sealed class ChromaReader : IDisposable
         _chromaLinkReader.Updated += OnChromaLinkReaderOnUpdated;
         _chromaLinkReader.Exception += OnReaderException;
         _chromaLinkReader.Start();
-
-        _appDataReader = new SignaledReader<ChromaAppData>(Constants.AppDataFileName, Constants.AppDataWaitHandle);
-        OnAppDataReaderOnUpdated(this, _appDataReader.Read());
-        _appDataReader.Updated += OnAppDataReaderOnUpdated;
-        _appDataReader.Exception += OnReaderException;
-        _appDataReader.Start();
     }
 
     #endregion
@@ -135,6 +135,9 @@ public sealed class ChromaReader : IDisposable
 
     private void DisposeReaders()
     {
+        _appDataReader!.Updated -= OnAppDataReaderOnUpdated;
+        _appDataReader!.Exception -= OnReaderException;
+        _appDataReader.Dispose();
         _keyboardReader!.Updated -= OnKeyboardReaderOnUpdated;
         _keyboardReader!.Exception -= OnReaderException;
         _keyboardReader.Dispose();
@@ -153,9 +156,6 @@ public sealed class ChromaReader : IDisposable
         _chromaLinkReader!.Updated -= OnChromaLinkReaderOnUpdated;
         _chromaLinkReader!.Exception -= OnReaderException;
         _chromaLinkReader.Dispose();
-        _appDataReader!.Updated -= OnAppDataReaderOnUpdated;
-        _appDataReader!.Exception -= OnReaderException;
-        _appDataReader.Dispose();
     }
 
     #endregion
@@ -165,6 +165,11 @@ public sealed class ChromaReader : IDisposable
     private void OnReaderException(object? sender, RazerSdkReaderException e)
     {
         Exception?.Invoke(sender, e);
+    }
+    
+    private void OnAppDataReaderOnUpdated(object? sender, in ChromaAppData appData)
+    {
+        AppDataUpdated?.Invoke(sender, in appData);
     }
 
     private void OnKeyboardReaderOnUpdated(object? sender, in ChromaKeyboard keyboard)
@@ -195,11 +200,6 @@ public sealed class ChromaReader : IDisposable
     private void OnChromaLinkReaderOnUpdated(object? sender, in ChromaLink chromaLink)
     {
         ChromaLinkUpdated?.Invoke(sender, in chromaLink);
-    }
-
-    private void OnAppDataReaderOnUpdated(object? sender, in ChromaAppData appData)
-    {
-        AppDataUpdated?.Invoke(sender, in appData);
     }
 
     #endregion
