@@ -1,92 +1,95 @@
-﻿using RazerSdkReader.Structures;
+﻿using System.Diagnostics;
+using RazerSdkReader.Structures;
 using RazerSdkReader.Wooting.Properties;
-using Wooting;
 
 namespace RazerSdkReader.Wooting;
-
+// ReSharper disable LocalizableElement
 public class MyApplicationContext : ApplicationContext
 {
     private readonly NotifyIcon _notifyIcon;
-    private readonly ContextMenuStrip _contextMenuStrip;
-    private readonly RGBDeviceInfo[] _devices;
-    private readonly ChromaReader _razerEmulatorReader;
-
+    private readonly KeyboardManager _keyboardManager;
+    private readonly ChromaReader? _razerEmulatorReader;
+    private readonly object _lock;
+    private string? _currentApp;
+    
     public MyApplicationContext()
     {
-        _contextMenuStrip = new();
-        _contextMenuStrip.Items.Add("Exit", null, Exit);
-
-        _notifyIcon = new();
+        _lock = new object();
+        _notifyIcon = new NotifyIcon();
         _notifyIcon.Text = "Razer SDK Reader for Wooting";
         _notifyIcon.Icon = new Icon(Resources.wooting, 40, 40);
         _notifyIcon.Visible = true;
-        _notifyIcon.ContextMenuStrip = _contextMenuStrip;
-
-        if (!RGBControl.IsConnected())
+        _notifyIcon.ContextMenuStrip = new();
+        _notifyIcon.ContextMenuStrip.Items.Add("Exit", null, TrayIconExit);
+        
+        _keyboardManager = new KeyboardManager();
+        try
         {
-            MessageBox.Show("Wooting keyboard not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Exit(null, EventArgs.Empty);
+            _razerEmulatorReader = new ChromaReader();
+            _razerEmulatorReader.AppDataUpdated += RazerEmulatorReaderOnAppDataUpdated;
+            _razerEmulatorReader.KeyboardUpdated += RazerEmulatorReaderOnKeyboardUpdated;
+            _razerEmulatorReader.Start();
         }
-
-        var count = RGBControl.GetDeviceCount();
-        if (count == 0)
+        catch (Exception e)
         {
-            MessageBox.Show("Wooting keyboard not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            Exit(null, EventArgs.Empty);
+            MessageBox.Show(e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            Application.Exit();
         }
+    }
 
-        _devices = new RGBDeviceInfo[count];
-        for (byte i = 0; i < count; i++)
+    private void RazerEmulatorReaderOnAppDataUpdated(object? sender, in ChromaAppData data)
+    {
+        lock (_lock)
         {
-            RGBControl.SetControlDevice(i);
-            _devices[i] = RGBControl.GetDeviceInfo();
+            _currentApp = data.CurrentAppName;
+        
+            if (string.IsNullOrEmpty(_currentApp))
+            {
+                _notifyIcon.Text = "Razer SDK Reader for Wooting";
+                _notifyIcon.Icon = new Icon(Resources.wooting, 40, 40);
+                _keyboardManager.DeactivateRgbControl();
+            }
+            else
+            {
+                _notifyIcon.Text = $"Razer SDK Reader for Wooting - {_currentApp}";
+                _notifyIcon.Icon = new Icon(Resources.chroma, 40, 40);
+                _keyboardManager.ActivateRgbControl();
+            }
         }
-
-        _razerEmulatorReader = new();
-        _razerEmulatorReader.KeyboardUpdated += RazerEmulatorReaderOnKeyboardUpdated;
-        _razerEmulatorReader.Start();
     }
 
     private void RazerEmulatorReaderOnKeyboardUpdated(object? sender, in ChromaKeyboard e)
     {
-        const byte WIDTH = 22;
-        const byte HEIGHT = 6;
-
-        for (byte y = 1; y < HEIGHT; y++)
+        if (string.IsNullOrEmpty(_currentApp))
+            return;
+        
+        lock (_lock)
         {
-            for (byte x = 1; x < WIDTH; x++)
+            for (byte y = 1; y < e.Height; y++)
             {
-                var key = e.GetColor(y * WIDTH + x);
-                var wootingX = (byte)(x - 1);
-                var wootingY = (byte)(y - 0);
-
-                for (byte i = 0; i < _devices.Length; i++)
+                for (byte x = 1; x < e.Width; x++)
                 {
-                    RGBControl.SetControlDevice(i);
-                    RGBControl.SetKey(wootingY, wootingX, key.R, key.G, key.B);
+                    var key = e.GetColor(y * e.Width + x);
+                    var wootingX = (byte)(x - 1);
+                    var wootingY = (byte)(y - 0);
+                    
+                    _keyboardManager.SetKey(wootingY, wootingX, key.R, key.G, key.B);
                 }
             }
-        }
-
-        for (byte i = 0; i < _devices.Length; i++)
-        {
-            RGBControl.SetControlDevice(i);
-            RGBControl.UpdateKeyboard();
+    
+            _keyboardManager.UpdateKeyboard();
         }
     }
 
-    private void Exit(object? sender, EventArgs e)
+    private void TrayIconExit(object? sender, EventArgs e)
     {
         _notifyIcon.Visible = false;
-        _razerEmulatorReader.KeyboardUpdated -= RazerEmulatorReaderOnKeyboardUpdated;
+        _razerEmulatorReader!.KeyboardUpdated -= RazerEmulatorReaderOnKeyboardUpdated;
+        _razerEmulatorReader!.AppDataUpdated -= RazerEmulatorReaderOnAppDataUpdated;
         _razerEmulatorReader.Dispose();
-        for (byte i = 0; i < _devices.Length; i++)
-        {
-            RGBControl.SetControlDevice(i);
-            RGBControl.ResetRGB();
-        }
+        _keyboardManager.DeactivateRgbControl();
+        _keyboardManager.Dispose();
 
-        RGBControl.Close();
         Application.Exit();
     }
 }
