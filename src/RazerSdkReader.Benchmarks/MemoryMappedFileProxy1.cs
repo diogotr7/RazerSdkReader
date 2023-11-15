@@ -11,7 +11,7 @@ public class MemoryMappedFileProxy1 : IDisposable
     public string Name { get; }
     public int Size { get; }
 
-    public MemoryMappedFileProxy1(string name, int size, bool createNew = true)
+    public MemoryMappedFileProxy1(string name, int size)
     {
         Name = name;
         Size = size;

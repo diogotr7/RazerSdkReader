@@ -55,15 +55,3 @@ public readonly record struct HeadsetEffect
     public readonly HeadsetCustom Custom;
     public readonly Static Static;
 }
-
-[InlineArray(5)]
-public struct HeadsetCustom
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaHeadsetData10
-{
-    public ChromaHeadsetData _field;
-}

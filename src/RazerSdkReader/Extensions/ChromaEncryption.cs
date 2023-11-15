@@ -30,28 +30,28 @@ public static class ChromaEncryption
         "VgI0hif21hYCxpZ2hkeW5nYCR4Yn9ld2" +
         "hgIWAjeW5nbGVgI2xpY2tgL25gJHhlaW" +
         "JwI39mZHd6A=";
-    
+
     public static readonly byte[] Key = Convert.FromBase64String(Base64Key);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChromaColor Decrypt(in ChromaColor color, ulong timestamp)
     {
-        var seed = (uint)(timestamp % 128);
+        var seed = timestamp % 0x80;
         if (seed >= 124)
         {
             seed -= 3;
         }
-        
+
         //0 * 128  + 0
         //1 * 128  + 1
         //2 * 128  + 2
         //3 * 128  + 3
-        
+
         var r = (byte)(color.R ^ Key[0U + seed]);
         var g = (byte)(color.G ^ Key[129U + seed]);
         var b = (byte)(color.B ^ Key[258U + seed]);
         var a = (byte)(color.A ^ Key[387U + seed]);
-        
-        return new ChromaColor(r, g, b, a); 
+
+        return new ChromaColor(r, g, b, a);
     }
 }

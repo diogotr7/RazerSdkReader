@@ -56,21 +56,3 @@ public readonly record struct MousepadEffect
     public readonly MousepadCustom Custom;
     public readonly MousepadCustom2 Custom2;
 }
-
-[InlineArray(15)]
-public struct MousepadCustom
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(20)]
-public struct MousepadCustom2
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaMousepadData10
-{
-    private ChromaMousepadData _field;
-}

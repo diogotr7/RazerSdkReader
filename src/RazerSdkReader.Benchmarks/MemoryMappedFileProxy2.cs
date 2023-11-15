@@ -59,9 +59,6 @@ public sealed class MemoryMappedFileProxy2 : IDisposable
     {
         _view.Dispose();
         _file.Dispose();
-
-        _view = null;
-        _file = null;
     }
 
     public void Dispose()

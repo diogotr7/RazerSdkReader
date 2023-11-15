@@ -19,9 +19,3 @@ public readonly record struct ChromaAppManagerData
     public readonly int Register;
     public readonly ulong Timestamp;
 }
-
-[InlineArray(10)]
-public struct ChromaAppManager10
-{
-    public ChromaAppManagerData _field;
-}

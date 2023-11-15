@@ -54,15 +54,3 @@ public readonly record struct LinkEffect
     public readonly LinkCustom Custom;
     public readonly Static Static;
 }
-
-[InlineArray(50)]
-public struct LinkCustom
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaLinkData10
-{
-    public ChromaLinkData _field;
-}

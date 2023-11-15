@@ -71,9 +71,3 @@ public readonly record struct ChromaDevice
     public readonly ChromaString Instance;
     public readonly ChromaString InstanceName;
 }
-
-[InlineArray(10)]
-public struct ChromaDevice10
-{
-    public ChromaDevice _field;
-}

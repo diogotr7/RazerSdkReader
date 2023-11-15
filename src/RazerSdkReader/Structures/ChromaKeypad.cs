@@ -56,15 +56,3 @@ public readonly record struct KeypadEffect
     public readonly Static Static;
     public readonly Wave Wave;
 }
-
-[InlineArray(20)]
-public struct KeypadCustom
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaKeypadData10
-{
-    public ChromaKeypadData _field;
-}

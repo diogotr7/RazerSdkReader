@@ -41,9 +41,3 @@ public readonly record struct ChromaAppInfo
     public readonly uint AppId;
     private readonly uint Padding;
 }
-
-[InlineArray(50)]
-public struct ChromaAppInfo50
-{
-    public ChromaAppInfo _field;
-}

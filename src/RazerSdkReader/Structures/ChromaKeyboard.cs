@@ -101,21 +101,3 @@ public readonly record struct KeyboardCustom3
     public readonly Color8X24 Color;
     public readonly Color6X22 Key;
 }
-
-[InlineArray(192)]
-public struct Color8X24
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(132)]
-public struct Color6X22
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaKeyboardData10
-{
-    public ChromaKeyboardData _field;
-}

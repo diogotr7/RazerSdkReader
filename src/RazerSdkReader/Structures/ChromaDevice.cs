@@ -24,9 +24,3 @@ public readonly record struct ChromaDeviceDataInfo
     public readonly ChromaString DevicePath;
     public readonly Guid DeviceId;
 }
-
-[InlineArray(50)]
-public struct ChromaDeviceDataInfo50
-{
-    public ChromaDeviceDataInfo _field;
-}

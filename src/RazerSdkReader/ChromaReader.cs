@@ -38,15 +38,17 @@ public sealed class ChromaReader : IDisposable
         if (_mutexThread is { IsAlive: true })
             return;
 
-        var isServiceRunning = Process.GetProcessesByName("RzSDKService").Any();
+        var isServiceRunning = Process.GetProcessesByName("RzSDKService").Length != 0;
 
         if (!isServiceRunning)
             throw new InvalidOperationException("RzSdkService is not running.");
 
         _disposeEvent = new(false);
         _initCompletionSource = new();
-        _mutexThread = new Thread(Thread);
-        _mutexThread.Name = "RazerSdkReader Mutex Thread";
+        _mutexThread = new Thread(Thread)
+        {
+            Name = "RazerSdkReader Mutex Thread"
+        };
         _mutexThread.Start();
 
         _initCompletionSource.Task.Wait();

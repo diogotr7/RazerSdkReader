@@ -35,7 +35,9 @@ public readonly record struct ChromaMouse : IColorProvider
                 and not EffectType.CustomKey
                 and not EffectType.Static
         )
+        {
             return default;
+        }
 
         var staticColor = snapshot.Effect.Static.Color;
         var clr = snapshot.Effect.Custom2[index];
@@ -63,22 +65,4 @@ public readonly record struct MouseEffect
     public readonly Reactive Reactive;
     public readonly Static Static;
     public readonly Wave Wave;
-}
-
-[InlineArray(30)]
-public struct MouseCustom
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(63)]
-public struct MouseCustom2
-{
-    public ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaMouseData10
-{
-    public ChromaMouseData _field;
 }

@@ -24,7 +24,7 @@ public class ColorReadingBenchmarks
         {
             for (var j = 0; j < height; j++)
             {
-                var index = i + j * height;
+                var index = i + (j * height);
                 x ^= _keyboard.GetColor(index);
             }
         }
