@@ -18,11 +18,13 @@ public class ColorReadingBenchmarks
     public void GetAllColorsOnce()
     {
         ChromaColor x = default;
-        for (var i = 0; i < _keyboard.Width; i++)
+        var width = _keyboard.Width;
+        var height = _keyboard.Height;
+        for (var i = 0; i < width; i++)
         {
-            for (var j = 0; j < _keyboard.Height; j++)
+            for (var j = 0; j < height; j++)
             {
-                var index = i + j * _keyboard.Width;
+                var index = i + j * height;
                 x ^= _keyboard.GetColor(index);
             }
         }
