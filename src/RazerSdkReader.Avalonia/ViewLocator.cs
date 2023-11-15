@@ -1,7 +1,7 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using RazerSdkReader.Avalonia.ViewModels;
+using System;
 
 namespace RazerSdkReader.Avalonia;
 

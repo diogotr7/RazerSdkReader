@@ -43,17 +43,15 @@ public class MemoryMappedFileProxy1 : IDisposable
         if (_view.Position != 0)
             _view.Seek(0, SeekOrigin.Begin);
 
-        using (var memory = new MemoryStream(Size))
-        {
-            const int bufferSize = 4096;
-            var buffer = new byte[bufferSize];
+        using var memory = new MemoryStream(Size);
+        const int bufferSize = 4096;
+        var buffer = new byte[bufferSize];
 
-            int read;
-            while ((read = _view.Read(buffer, 0, bufferSize)) > 0)
-                memory.Write(buffer, 0, read);
+        int read;
+        while ((read = _view.Read(buffer, 0, bufferSize)) > 0)
+            memory.Write(buffer, 0, read);
 
-            return memory.ToArray();
-        }
+        return memory.ToArray();
     }
 
     protected virtual void Dispose(bool disposing)

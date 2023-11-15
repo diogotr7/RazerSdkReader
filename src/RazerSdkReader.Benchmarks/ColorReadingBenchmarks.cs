@@ -1,13 +1,13 @@
-﻿using System.Runtime.InteropServices;
-using BenchmarkDotNet.Attributes;
+﻿using BenchmarkDotNet.Attributes;
 using RazerSdkReader.Structures;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Benchmarks;
 
 public class ColorReadingBenchmarks
 {
     private readonly ChromaKeyboard _keyboard;
-    
+
     public ColorReadingBenchmarks()
     {
         var bytes = File.ReadAllBytes("keyboard.bin");
@@ -23,7 +23,7 @@ public class ColorReadingBenchmarks
             for (var j = 0; j < _keyboard.Height; j++)
             {
                 var index = i + j * _keyboard.Width;
-                 x ^= _keyboard.GetColor(index);
+                x ^= _keyboard.GetColor(index);
             }
         }
     }

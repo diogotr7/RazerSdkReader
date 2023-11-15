@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using RazerSdkReader.Structures;
+﻿using RazerSdkReader.Structures;
 using RazerSdkReader.Wooting.Properties;
 
 namespace RazerSdkReader.Wooting;
@@ -11,7 +10,7 @@ public class MyApplicationContext : ApplicationContext
     private readonly ChromaReader? _razerEmulatorReader;
     private readonly object _lock;
     private string? _currentApp;
-    
+
     public MyApplicationContext()
     {
         _lock = new object();
@@ -21,7 +20,7 @@ public class MyApplicationContext : ApplicationContext
         _notifyIcon.Visible = true;
         _notifyIcon.ContextMenuStrip = new();
         _notifyIcon.ContextMenuStrip.Items.Add("Exit", null, TrayIconExit);
-        
+
         _keyboardManager = new KeyboardManager();
         try
         {
@@ -42,7 +41,7 @@ public class MyApplicationContext : ApplicationContext
         lock (_lock)
         {
             _currentApp = data.CurrentAppName;
-        
+
             if (string.IsNullOrEmpty(_currentApp))
             {
                 _notifyIcon.Text = "Razer SDK Reader for Wooting";
@@ -62,7 +61,7 @@ public class MyApplicationContext : ApplicationContext
     {
         if (string.IsNullOrEmpty(_currentApp))
             return;
-        
+
         lock (_lock)
         {
             for (byte y = 1; y < e.Height; y++)
@@ -72,11 +71,11 @@ public class MyApplicationContext : ApplicationContext
                     var key = e.GetColor(y * e.Width + x);
                     var wootingX = (byte)(x - 1);
                     var wootingY = (byte)(y - 0);
-                    
+
                     _keyboardManager.SetKey(wootingY, wootingX, key.R, key.G, key.B);
                 }
             }
-    
+
             _keyboardManager.UpdateKeyboard();
         }
     }

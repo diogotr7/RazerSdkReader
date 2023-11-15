@@ -1,6 +1,7 @@
-﻿using System;
-using System.Runtime.CompilerServices;
 using RazerSdkReader.Structures;
+using System;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace RazerSdkReader.Extensions;
 

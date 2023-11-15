@@ -21,7 +21,7 @@ public class MemoryMappedFileProxy5 : IDisposable
 
     internal T Read<T>() where T : unmanaged
     {
-        _view.Read<T>(0, out var x );
+        _view.Read<T>(0, out var x);
 
         return x;
     }

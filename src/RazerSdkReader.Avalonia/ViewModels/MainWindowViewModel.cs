@@ -1,6 +1,6 @@
-﻿using System.Windows.Input;
-using RazerSdkReader.Avalonia.Views;
+﻿using RazerSdkReader.Avalonia.Views;
 using ReactiveUI;
+using System.Windows.Input;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 

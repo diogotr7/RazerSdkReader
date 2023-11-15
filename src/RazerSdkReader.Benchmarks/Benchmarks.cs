@@ -43,7 +43,7 @@ public class Benchmarks
     {
         return _reader.Read();
     }
-    
+
     [Benchmark]
     public ChromaKeyboard MemoryMappedFileProxy5()
     {

@@ -1,6 +1,6 @@
-using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using RazerSdkReader.Structures;
+using System.Runtime.CompilerServices;
 
 namespace RazerSdkReader.Tests;
 
