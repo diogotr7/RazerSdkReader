@@ -16,18 +16,7 @@ public class MemoryMappedFileProxy1 : IDisposable
         Name = name;
         Size = size;
 
-        try
-        {
-            _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
-        }
-        catch (FileNotFoundException)
-        {
-            if (!createNew)
-                throw;
-
-            _file = MemoryMappedFile.CreateNew(Name, Size, MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, HandleInheritability.None);
-        }
-
+        _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
         _view = _file.CreateViewStream(0, Size, MemoryMappedFileAccess.Read);
     }
 

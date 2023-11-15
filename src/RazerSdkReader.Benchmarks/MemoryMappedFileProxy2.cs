@@ -20,15 +20,7 @@ public sealed class MemoryMappedFileProxy2 : IDisposable
         Size = size;
         _array = new byte[Size];
 
-        try
-        {
-            _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
-        }
-        catch (FileNotFoundException)
-        {
-            _file = MemoryMappedFile.CreateNew(Name, Size, MemoryMappedFileAccess.Read, MemoryMappedFileOptions.None, HandleInheritability.None);
-        }
-
+        _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
         _view = _file.CreateViewStream(0, Size, MemoryMappedFileAccess.Read);
     }
 

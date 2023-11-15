@@ -12,6 +12,7 @@ public class Benchmarks
     private readonly MemoryMappedFileProxy2 _mmf2 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
     private readonly MemoryMappedFileProxy3 _mmf3 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
     private readonly MemoryMappedFileProxy4 _mmf4 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
+    private readonly MemoryMappedFileProxy5 _mmf5 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
 
     [Benchmark]
     public KeyboardData MemoryStream_Aurora()
@@ -41,5 +42,11 @@ public class Benchmarks
     public ChromaKeyboard MemoryMappedStructReader()
     {
         return _reader.Read();
+    }
+    
+    [Benchmark]
+    public ChromaKeyboard MemoryMappedFileProxy5()
+    {
+        return _mmf5.Read<ChromaKeyboard>();
     }
 }
