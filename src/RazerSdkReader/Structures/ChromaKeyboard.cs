@@ -34,10 +34,6 @@ public readonly record struct ChromaKeyboard : IColorProvider
         var targetIndex = WriteIndex.ToReadIndex();
 
         var snapshot = Data[targetIndex];
-        
-        var clr2 = snapshot.Effect.Custom2.Color[index];
-
-        return ChromaEncryption.Decrypt(clr2, snapshot.Timestamp);
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
             return default;
