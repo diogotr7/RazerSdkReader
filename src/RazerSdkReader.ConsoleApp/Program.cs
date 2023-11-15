@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Runtime.Loader;
-using RazerSdkReader.Structures;
+﻿using RazerSdkReader.Structures;
+using System;
 
 namespace RazerSdkReader.ConsoleApp;
 
@@ -11,27 +7,6 @@ public static class Program
 {
     public static void Main(string[] args)
     {
-        var bytes = File.ReadAllBytes("keyboard.bin");
-        var _keyboard = MemoryMarshal.Read<ChromaKeyboard>(bytes);
-        
-        var sw = Stopwatch.StartNew();
-        while (true)
-        {
-            ChromaColor x = default;
-            for (var i = 0; i < _keyboard.Width; i++)
-            {
-                for (var j = 0; j < _keyboard.Height; j++)
-                {
-                    var index = i + j * _keyboard.Width;
-                    x ^= _keyboard.GetColor(index);
-                }
-            }
-            if (sw.ElapsedMilliseconds > 5000)
-            {
-                return;
-            }
-        }
-        
         var reader = new ChromaReader();
         reader.Exception += WriteException;
         reader.KeyboardUpdated += Write;
