@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO.MemoryMappedFiles;
 using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
 
 namespace RazerSdkReader;
 

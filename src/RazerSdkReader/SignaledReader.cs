@@ -1,7 +1,7 @@
+using RazerSdkReader.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader;
 
@@ -53,7 +53,7 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
             Exception?.Invoke(this, new RazerSdkReaderException("ReadLoop Error", e));
         }
     }
-    
+
     internal T Read()
     {
         return _reader.Read();

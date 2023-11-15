@@ -17,7 +17,7 @@ public readonly record struct ChromaAppData
     private readonly uint Padding;
 
     public readonly ChromaAppInfo50 AppInfo;
-    
+
     public string CurrentAppName
     {
         get
@@ -28,7 +28,7 @@ public readonly record struct ChromaAppData
 
                 return app.AppName;
             }
-            
+
             return string.Empty;
         }
     }

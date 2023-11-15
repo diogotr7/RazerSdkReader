@@ -1,8 +1,8 @@
+using RazerSdkReader.Enums;
+using RazerSdkReader.Extensions;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using RazerSdkReader.Enums;
-using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
 
@@ -14,7 +14,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
     private const int HEIGHT = 6;
     private const int COUNT = WIDTH * HEIGHT;
     // ReSharper restore InconsistentNaming
-    
+
     public readonly uint WriteIndex;
     private readonly int Padding;
     public readonly ChromaKeyboardData10 Data;
@@ -26,7 +26,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
     public int Count => COUNT;
 
-    public ChromaColor GetColor(int index)
+    public readonly ChromaColor GetColor(int index)
     {
         if (index is < 0 or >= COUNT)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -36,7 +36,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
         var snapshot = Data[targetIndex];
         
         var clr2 = snapshot.Effect.Custom2.Color[index];
-        
+
         return ChromaEncryption.Decrypt(clr2, snapshot.Timestamp);
 
         if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)

@@ -1,5 +1,5 @@
-using System.Diagnostics.Contracts;
 using RazerSdkReader.Structures;
+using System.Diagnostics.Contracts;
 
 namespace RazerSdkReader;
 

@@ -1,12 +1,10 @@
+using RazerSdkReader.Structures;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
-using RazerSdkReader.Extensions;
-using RazerSdkReader.Structures;
 
 namespace RazerSdkReader;
 
@@ -91,39 +89,39 @@ public sealed class ChromaReader : IDisposable
         _appDataReader.Updated += OnAppDataReaderOnUpdated;
         _appDataReader.Exception += OnReaderException;
         _appDataReader.Start();
-        
+
         _keyboardReader = new SignaledReader<ChromaKeyboard>(Constants.KeyboardFileName, Constants.KeyboardWaitHandle);
-        OnKeyboardReaderOnUpdated(this,_keyboardReader.Read());
+        OnKeyboardReaderOnUpdated(this, _keyboardReader.Read());
         _keyboardReader.Updated += OnKeyboardReaderOnUpdated;
         _keyboardReader.Exception += OnReaderException;
         _keyboardReader.Start();
 
         _mouseReader = new SignaledReader<ChromaMouse>(Constants.MouseFileName, Constants.MouseWaitHandle);
-        OnMouseReaderOnUpdated(this,_mouseReader.Read());
+        OnMouseReaderOnUpdated(this, _mouseReader.Read());
         _mouseReader.Updated += OnMouseReaderOnUpdated;
         _mouseReader.Exception += OnReaderException;
         _mouseReader.Start();
 
         _mousepadReader = new SignaledReader<ChromaMousepad>(Constants.MousepadFileName, Constants.MousepadWaitHandle);
-        OnMousepadReaderOnUpdated(this,_mousepadReader.Read());
+        OnMousepadReaderOnUpdated(this, _mousepadReader.Read());
         _mousepadReader.Updated += OnMousepadReaderOnUpdated;
         _mousepadReader.Exception += OnReaderException;
         _mousepadReader.Start();
 
         _keypadReader = new SignaledReader<ChromaKeypad>(Constants.KeypadFileName, Constants.KeypadWaitHandle);
-        OnKeypadReaderOnUpdated(this,_keypadReader.Read());
+        OnKeypadReaderOnUpdated(this, _keypadReader.Read());
         _keypadReader.Updated += OnKeypadReaderOnUpdated;
         _keypadReader.Exception += OnReaderException;
         _keypadReader.Start();
 
         _headsetReader = new SignaledReader<ChromaHeadset>(Constants.HeadsetFileName, Constants.HeadsetWaitHandle);
-        OnHeadsetReaderOnUpdated(this,_headsetReader.Read());
+        OnHeadsetReaderOnUpdated(this, _headsetReader.Read());
         _headsetReader.Updated += OnHeadsetReaderOnUpdated;
         _headsetReader.Exception += OnReaderException;
         _headsetReader.Start();
 
         _chromaLinkReader = new SignaledReader<ChromaLink>(Constants.LinkFileName, Constants.LinkWaitHandle);
-        OnChromaLinkReaderOnUpdated(this,_chromaLinkReader.Read());
+        OnChromaLinkReaderOnUpdated(this, _chromaLinkReader.Read());
         _chromaLinkReader.Updated += OnChromaLinkReaderOnUpdated;
         _chromaLinkReader.Exception += OnReaderException;
         _chromaLinkReader.Start();
@@ -166,7 +164,7 @@ public sealed class ChromaReader : IDisposable
     {
         Exception?.Invoke(sender, e);
     }
-    
+
     private void OnAppDataReaderOnUpdated(object? sender, in ChromaAppData appData)
     {
         AppDataUpdated?.Invoke(sender, in appData);

@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using RazerSdkReader.Enums;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using RazerSdkReader.Enums;
 
 namespace RazerSdkReader.Structures;
 

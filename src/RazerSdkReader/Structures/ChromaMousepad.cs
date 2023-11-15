@@ -1,8 +1,8 @@
-﻿using System;
+﻿using RazerSdkReader.Enums;
+using RazerSdkReader.Extensions;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using RazerSdkReader.Enums;
-using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
 
@@ -20,7 +20,7 @@ public readonly record struct ChromaMousepad : IColorProvider
 
     public int Count => Width * Height;
 
-    public ChromaColor GetColor(int index)
+    public readonly ChromaColor GetColor(int index)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -60,17 +60,17 @@ public readonly record struct MousepadEffect
 [InlineArray(15)]
 public record struct MousepadCustom
 {
-    private ChromaColor _field;
+    private readonly ChromaColor _field;
 }
 
 [InlineArray(20)]
 public record struct MousepadCustom2
 {
-    private ChromaColor _field;
+    private readonly ChromaColor _field;
 }
 
 [InlineArray(10)]
 public record struct ChromaMousepadData10
 {
-    private ChromaMousepadData _field;
+    private readonly ChromaMousepadData _field;
 }

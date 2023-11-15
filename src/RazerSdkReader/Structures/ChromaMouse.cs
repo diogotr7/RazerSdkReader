@@ -1,8 +1,8 @@
-﻿using System;
+﻿using RazerSdkReader.Enums;
+using RazerSdkReader.Extensions;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using RazerSdkReader.Enums;
-using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader.Structures;
 
@@ -20,7 +20,7 @@ public readonly record struct ChromaMouse : IColorProvider
 
     public int Count => Width * Height;
 
-    public ChromaColor GetColor(int index)
+    public readonly ChromaColor GetColor(int index)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -65,19 +65,19 @@ public readonly record struct MouseEffect
     public readonly Wave Wave;
 }
 
-[InlineArray( 30)]
-public  struct MouseCustom
+[InlineArray(30)]
+public struct MouseCustom
 {
     public ChromaColor _field;
 }
 
-[InlineArray( 63)]
+[InlineArray(63)]
 public struct MouseCustom2
 {
     public ChromaColor _field;
 }
 
-[InlineArray( 10)]
+[InlineArray(10)]
 public struct ChromaMouseData10
 {
     public ChromaMouseData _field;

@@ -1,9 +1,8 @@
-﻿using System;
+﻿using RazerSdkReader.Enums;
+using RazerSdkReader.Extensions;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using RazerSdkReader.Enums;
-using RazerSdkReader.Extensions;
-using RazerSdkReader.Structures;
 
 namespace RazerSdkReader.Structures;
 
@@ -21,7 +20,7 @@ public readonly record struct ChromaLink : IColorProvider
 
     public int Count => Width * Height;
 
-    public ChromaColor GetColor(int index)
+    public readonly ChromaColor GetColor(int index)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
