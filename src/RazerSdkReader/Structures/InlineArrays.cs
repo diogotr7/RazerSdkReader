@@ -3,10 +3,8 @@ using System.Text;
 
 namespace RazerSdkReader.Structures;
 
-#pragma warning disable RCS1169 // Make field read-only.
 #pragma warning disable IDE0044 // Add readonly modifier
 #pragma warning disable IDE0051 // Remove unused private members
-#pragma warning disable RCS1213 // Remove unused member declaration.
 
 [InlineArray(260)]
 public struct ChromaString
@@ -146,7 +144,5 @@ public struct ChromaDevice10
 {
     private ChromaDevice _field;
 }
-#pragma warning restore RCS1169 // Make field read-only.
 #pragma warning restore IDE0044 // Add readonly modifier
 #pragma warning restore IDE0051 // Remove unused private members
-#pragma warning restore RCS1213 // Remove unused member declaration.

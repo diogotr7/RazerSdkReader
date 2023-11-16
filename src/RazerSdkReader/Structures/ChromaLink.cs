@@ -1,5 +1,6 @@
 ﻿using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
+using RazerSdkReader.Structures;
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -25,16 +26,9 @@ public readonly record struct ChromaLink : IColorProvider
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var targetIndex = WriteIndex.ToReadIndex();
-        var snapshot = Data[targetIndex];
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        if (snapshot.EffectType is not EffectType.Custom and not EffectType.Static)
-            return default;
-
-        var clr = snapshot.Effect.Custom[index];
-        var staticColor = snapshot.Effect.Static.Color;
-
-        return clr ^ staticColor;
+        return ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp);
     }
 }
 

@@ -28,34 +28,12 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
     public readonly ChromaColor GetColor(int index)
     {
-        if (index is < 0 or >= COUNT)
+        if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var targetIndex = WriteIndex.ToReadIndex();
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        var snapshot = Data[targetIndex];
-
-        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
-            return default;
-
-        ChromaColor clr = default;
-        var staticColor = snapshot.Effect.Static.Color;
-
-        if (snapshot.EffectType == EffectType.CustomKey)
-        {
-            clr = snapshot.Effect.Custom2.Key[index];
-
-            //this next part is required for some effects to work properly.
-            //For example, the chroma example app ambient effect.
-            if (clr == staticColor)
-                clr = snapshot.Effect.Custom2.Color[index];
-        }
-        else if (snapshot.EffectType is EffectType.Custom or EffectType.Static)
-        {
-            clr = snapshot.Effect.Custom.Color[index];
-        }
-
-        return clr ^ staticColor;
+        return ChromaEncryption.Decrypt(data.Effect.Custom2.Color[index], data.Timestamp);
     }
 }
 
