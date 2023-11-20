@@ -1,6 +1,7 @@
 using RazerSdkReader.Structures;
 using System;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace RazerSdkReader.Extensions;
@@ -25,21 +26,21 @@ public static class ChromaEncryption
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChromaColor Decrypt(in ChromaColor color, ulong timestamp)
     {
-        var seed = timestamp % 128;
+        var seed = (int)timestamp % 128;
         if (seed > 124)
         {
             seed -= 3;
         }
-
-        //0 * 128  + 0
-        //1 * 128  + 1
-        //2 * 128  + 2
-        //3 * 128  + 3
-
-        var r = (byte)(color.R ^ Key[0U + seed]);
-        var g = (byte)(color.G ^ Key[129U + seed]);
-        var b = (byte)(color.B ^ Key[258U + seed]);
-        var a = (byte)(color.A ^ Key[387U + seed]);
+        
+        var r = Key[0 * 128 + 0 + seed];
+        var g = Key[1 * 128 + 1 + seed];
+        var b = Key[2 * 128 + 2 + seed];
+        var a = Key[3 * 128 + 3 + seed];
+        
+        r ^= color.R;
+        g ^= color.G;
+        b ^= color.B;
+        a ^= color.A;
 
         return new ChromaColor(r, g, b, a);
     }

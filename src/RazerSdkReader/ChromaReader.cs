@@ -44,6 +44,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _appDataUpdated -= value;
     }
+
     public event InStructEventHandler<ChromaKeyboard>? KeyboardUpdated
     {
         add
@@ -56,6 +57,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _keyboardUpdated -= value;
     }
+
     public event InStructEventHandler<ChromaMouse>? MouseUpdated
     {
         add
@@ -68,6 +70,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _mouseUpdated -= value;
     }
+
     public event InStructEventHandler<ChromaMousepad>? MousepadUpdated
     {
         add
@@ -80,6 +83,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _mousepadUpdated -= value;
     }
+
     public event InStructEventHandler<ChromaKeypad>? KeypadUpdated
     {
         add
@@ -92,6 +96,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _keypadUpdated -= value;
     }
+
     public event InStructEventHandler<ChromaHeadset>? HeadsetUpdated
     {
         add
@@ -104,6 +109,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _headsetUpdated -= value;
     }
+
     public event InStructEventHandler<ChromaLink>? ChromaLinkUpdated
     {
         add
@@ -116,6 +122,7 @@ public sealed class ChromaReader : IDisposable
 
         remove => _chromaLinkUpdated -= value;
     }
+
     public event EventHandler<RazerSdkReaderException>? Exception;
 
     public bool EnableAppData { get; init; } = true;
