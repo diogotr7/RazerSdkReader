@@ -9,11 +9,9 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaKeyboard : IColorProvider
 {
-    // ReSharper disable InconsistentNaming
     private const int WIDTH = 22;
     private const int HEIGHT = 6;
     private const int COUNT = WIDTH * HEIGHT;
-    // ReSharper restore InconsistentNaming
 
     public readonly uint WriteIndex;
     private readonly int Padding;
@@ -26,7 +24,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
     public int Count => COUNT;
 
-    public readonly ChromaColor GetColor(int index)
+    public ChromaColor GetColor(int index)
     {
         if (index < 0 || index >= Count)
             throw new ArgumentOutOfRangeException(nameof(index));
@@ -44,7 +42,7 @@ public readonly record struct ChromaKeyboardData
     public readonly EffectType EffectType;
     public readonly KeyboardEffect Effect;
     private readonly uint Padding;
-    public readonly ulong Timestamp;
+    public readonly ChromaTimestamp Timestamp;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

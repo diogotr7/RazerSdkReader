@@ -10,20 +10,24 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaLink : IColorProvider
 {
+    private const int WIDTH = 5;
+    private const int HEIGHT = 4;
+    private const int COUNT = WIDTH * HEIGHT;
+
     public readonly uint WriteIndex;
     private readonly uint Padding;
     public readonly ChromaLinkData10 Data;
     public readonly ChromaDevice10 Device;
 
-    public int Width => 5;
+    public int Width => WIDTH;
 
-    public int Height => 1;
+    public int Height => HEIGHT;
 
-    public int Count => Width * Height;
+    public int Count => COUNT;
 
-    public readonly ChromaColor GetColor(int index)
+    public ChromaColor GetColor(int index)
     {
-        if (index < 0 || index >= Count)
+        if (index < 0 || index >= COUNT)
             throw new ArgumentOutOfRangeException(nameof(index));
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
@@ -38,7 +42,7 @@ public readonly record struct ChromaLinkData
     public readonly uint Flag;
     public readonly EffectType EffectType;
     public readonly LinkEffect Effect;
-    public readonly ulong Timestamp;
+    public readonly ChromaTimestamp Timestamp;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

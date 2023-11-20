@@ -1,6 +1,7 @@
 using RazerSdkReader.Structures;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Numerics;
 using System.Runtime.CompilerServices;
 
@@ -24,9 +25,9 @@ public static class ChromaEncryption
     public static readonly byte[] Key = Convert.FromBase64String(Base64Key);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ChromaColor Decrypt(in ChromaColor color, ulong timestamp)
+    public static ChromaColor Decrypt(in ChromaColor color, in ChromaTimestamp timestamp)
     {
-        var seed = (int)timestamp % 128;
+        var seed = timestamp.TickCount64 % 128;
         if (seed > 124)
         {
             seed -= 3;
@@ -46,22 +47,29 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Decrypt(in ReadOnlySpan<ChromaColor> input, in Span<ChromaColor> output, ulong timestamp)
+    public static void Decrypt(in ReadOnlySpan<ChromaColor> input, in Span<ChromaColor> output, in ChromaTimestamp timestamp)
     {
-        Debug.Assert(input.Length == output.Length);
+        ArgumentOutOfRangeException.ThrowIfNotEqual(output.Length, input.Length);
 
-        var seed = timestamp % 128;
+        var seed = timestamp.TickCount64 % 128;
         if (seed > 124)
         {
             seed -= 3;
         }
 
+        var rKey = Key[0UL + seed];
+        var gKey = Key[129UL + seed];
+        var bKey = Key[258UL + seed];
+        var aKey = Key[387UL + seed];
+
         for (var i = 0; i < input.Length; i++)
         {
-            var r = (byte)(input[i].R ^ Key[0U + seed]);
-            var g = (byte)(input[i].G ^ Key[129U + seed]);
-            var b = (byte)(input[i].B ^ Key[258U + seed]);
-            var a = (byte)(input[i].A ^ Key[387U + seed]);
+            ref readonly var color = ref input[i];
+            
+            var r = (byte)(color.R ^ rKey);
+            var g = (byte)(color.G ^ gKey);
+            var b = (byte)(color.B ^ bKey);
+            var a = (byte)(color.A ^ aKey);
 
             output[i] = new ChromaColor(r, g, b, a);
         }
