@@ -1,15 +1,29 @@
+﻿using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Jobs;
 using RazerSdkReader.Structures;
-using System.Runtime.InteropServices;
 
-namespace RazerSdkReader.Benchmarks;
-
-[ShortRunJob]
-public class ColorReadingBenchmarks
+[Config(typeof(MyConfig))]
+public class Benchmarks
 {
+    private class MyConfig : ManualConfig
+    {
+        public MyConfig()
+        {
+            var baseJob = Job.ShortRun;
+
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.1.0").WithBaseline(true));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.4.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.5.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.6.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.7.0-beta1"));
+        }
+    }
+    
     private readonly ChromaKeyboard _keyboard;
 
-    public ColorReadingBenchmarks()
+    public Benchmarks()
     {
         var bytes = File.ReadAllBytes("keyboard.bin");
         _keyboard = MemoryMarshal.Read<ChromaKeyboard>(bytes);
@@ -29,12 +43,5 @@ public class ColorReadingBenchmarks
                 colors[index] = _keyboard.GetColor(index);
             }
         }
-    }
-    
-    [Benchmark]
-    public void Decrypt()
-    {
-        Span<ChromaColor> output = stackalloc ChromaColor[_keyboard.Count];
-        _keyboard.GetColors(output);
     }
 }

@@ -1,12 +1,14 @@
 using RazerSdkReader.Structures;
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Extensions;
 
 public static class ChromaEncryption
 {
-    public const string Base64Key =
+    private const string Base64Key =
         "RYZWAjSGJ/bWFgJ19ie2N4b2BwKWNwKX9lcnAvbmVtI3R/YH0jeG9gcCR/YCdlZH" +
         "AkeGVgLW9jdHAvZXRwL2ZgKX9lcnAjSGJ/bWFgJGVmeWNlY34gICdYZWR4ZWJwKW" +
         "R3I3AjfWFidHAsaWdoZHluZ2AiYWN1ZGAvbmApbm0vZ1ViknVgIHVzeGluZ2AkeG" +
@@ -19,58 +21,87 @@ public static class ChromaEncryption
         "VuYWJsZWAgcWJ0fmVic3Akf2AlbmFibGVgI0hif21hYCxpZ2hkeW5nYCR4Yn9ld2" +
         "hgIWAjeW5nbGVgI2xpY2tgL25gJHhlaWJwI39mZHd6A=";
 
-    public static readonly byte[] Key = Convert.FromBase64String(Base64Key);
+    private static readonly byte[] Key = Convert.FromBase64String(Base64Key);
+
+    private static readonly uint[] PreProcessedKey = PreProcessKey();
+
+    private static uint[] PreProcessKey()
+    {
+        // I do this processing so I can take advantage of SIMD instructions,
+        // the data layout is much easier to work with.
+        
+        //I could preprocess it into a base64 string like the original key, but
+        // I'm keeping it like this incase the key changes in the future, and so
+        // i have a reference for how the data conversion works. It's also only
+        // converted once per program run, so it's not a big deal :)
+        var key = new uint[Key.Length / 4];
+
+        for (var i = 0; i < key.Length; i++)
+        {
+            var correctedIndex = i;
+            if (correctedIndex > 124)
+            {
+                correctedIndex -= 3;
+            }
+
+            var r = Key[0 * 128 + 0 + correctedIndex];
+            var g = Key[1 * 128 + 1 + correctedIndex];
+            var b = Key[2 * 128 + 2 + correctedIndex];
+            var a = Key[3 * 128 + 3 + correctedIndex];
+
+            key[i] = BitConverter.ToUInt32([r, g, b, a]);
+        }
+        
+        return key;
+    }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChromaColor Decrypt(ChromaColor color, ChromaTimestamp timestamp)
     {
-        var seed = timestamp.TickCount64 % 128;
-        if (seed > 124)
-        {
-            seed -= 3;
-        }
-        
-        var r = Key[0 * 128 + 0 + seed];
-        var g = Key[1 * 128 + 1 + seed];
-        var b = Key[2 * 128 + 2 + seed];
-        var a = Key[3 * 128 + 3 + seed];
-        
-        r ^= color.R;
-        g ^= color.G;
-        b ^= color.B;
-        a ^= color.A;
+        var key = PreProcessedKey[timestamp.TickCount64 % 128];
 
-        return new ChromaColor(r, g, b, a);
+        var colorAsInt = Unsafe.As<ChromaColor, uint>(ref color);
+
+        var xor = colorAsInt ^ key;
+
+        return Unsafe.As<uint, ChromaColor>(ref xor);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Decrypt(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
     {
         var smallest = Math.Min(input.Length, output.Length);
-        
-        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(smallest, 0);
-        
-        var seed = timestamp.TickCount64 % 128;
-        if (seed > 124)
-        {
-            seed -= 3;
-        }
 
-        var rKey = Key[0UL + seed];
-        var gKey = Key[129UL + seed];
-        var bKey = Key[258UL + seed];
-        var aKey = Key[387UL + seed];
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(smallest, 0);
+
+        var key = PreProcessedKey[timestamp.TickCount64 % 128];
+        var inputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(input);
+        var outputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(output);
 
         for (var i = 0; i < smallest; i++)
         {
-            ref readonly var color = ref input[i];
-            
-            var r = (byte)(color.R ^ rKey);
-            var g = (byte)(color.G ^ gKey);
-            var b = (byte)(color.B ^ bKey);
-            var a = (byte)(color.A ^ aKey);
+            outputAsInt[i] = inputAsInt[i] ^ key;
+        }
+    }
 
-            output[i] = new ChromaColor(r, g, b, a);
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    public static void DecryptSimd(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
+    {
+        var smallest = Math.Min(input.Length, output.Length);
+
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(smallest, 0);
+
+        var key = PreProcessedKey[timestamp.TickCount64 % 128];
+        var inputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(input);
+        var outputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(output);
+
+        var remaining = smallest % Vector<uint>.Count;
+
+        for (var i = 0; i < smallest - remaining; i += Vector<uint>.Count)
+        {
+            var v1 = new Vector<uint>(inputAsInt[i..]);
+            var v2 = new Vector<uint>(key);
+            (v1 ^ v2).CopyTo(outputAsInt[i..]);
         }
     }
 }

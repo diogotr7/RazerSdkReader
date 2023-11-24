@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RazerSdkReader.Wooting", "R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.Profile", "RazerSdkReader.Profile\RazerSdkReader.Profile.csproj", "{31B493F3-FD92-46CB-9A2E-DF5BAB455E63}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazerSdkReader.NugetBenchmarks", "RazerSdkReader.NugetBenchmarks\RazerSdkReader.NugetBenchmarks.csproj", "{10AC57ED-778B-4C1F-BA86-F57F5CDAF70D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{31B493F3-FD92-46CB-9A2E-DF5BAB455E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31B493F3-FD92-46CB-9A2E-DF5BAB455E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31B493F3-FD92-46CB-9A2E-DF5BAB455E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10AC57ED-778B-4C1F-BA86-F57F5CDAF70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10AC57ED-778B-4C1F-BA86-F57F5CDAF70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10AC57ED-778B-4C1F-BA86-F57F5CDAF70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10AC57ED-778B-4C1F-BA86-F57F5CDAF70D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
