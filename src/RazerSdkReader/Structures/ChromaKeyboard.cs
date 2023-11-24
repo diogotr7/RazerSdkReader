@@ -1,6 +1,7 @@
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -17,7 +18,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
     private readonly int Padding;
     public readonly ChromaKeyboardData10 Data;
     public readonly ChromaDevice10 Device;
-
+    
     public int Width => WIDTH;
 
     public int Height => HEIGHT;
@@ -26,12 +27,21 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
     public ChromaColor GetColor(int index)
     {
-        if (index < 0 || index >= Count)
+        if (index is < 0 or >= COUNT)
             throw new ArgumentOutOfRangeException(nameof(index));
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
         return ChromaEncryption.Decrypt(data.Effect.Custom2.Color[index], data.Timestamp);
+    }
+
+    public void GetColors(Span<ChromaColor> colors)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(colors.Length, COUNT);
+
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
+
+        ChromaEncryption.Decrypt(data.Effect.Custom2.Color, colors, data.Timestamp);
     }
 }
 

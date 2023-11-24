@@ -1,6 +1,7 @@
 ﻿using Avalonia.Collections;
 using Avalonia.Media;
 using Avalonia.Threading;
+using RazerSdkReader.Structures;
 using ReactiveUI;
 using System;
 
@@ -34,9 +35,12 @@ public abstract class GridViewerWindowViewModel<T> : GridViewerWindowViewModel w
     {
         Dispatcher.UIThread.VerifyAccess();
 
-        for (var i = 0; i < Width * Height; i++)
+        Span<ChromaColor> newData = stackalloc ChromaColor[_data.Count];
+        _data.GetColors(newData);
+
+        for (var i = 0; i < newData.Length; i++)
         {
-            var color = _data.GetColor(i);
+            ref readonly var color = ref newData[i];
             KeyColors[i].Color = Color.FromRgb(color.R, color.G, color.B);
         }
     }

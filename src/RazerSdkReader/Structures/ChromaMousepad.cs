@@ -1,4 +1,4 @@
-﻿using RazerSdkReader.Enums;
+using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using System;
 using System.Runtime.CompilerServices;
@@ -26,12 +26,21 @@ public readonly record struct ChromaMousepad : IColorProvider
 
     public ChromaColor GetColor(int index)
     {
-        if (index < 0 || index >= COUNT)
+        if (index is < 0 or >= COUNT)
             throw new ArgumentOutOfRangeException(nameof(index));
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
         return ChromaEncryption.Decrypt(data.Effect.Custom2[index], data.Timestamp);
+    }
+
+    public void GetColors(Span<ChromaColor> colors)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(colors.Length, COUNT);
+
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
+
+        ChromaEncryption.Decrypt(data.Effect.Custom2, colors, data.Timestamp);
     }
 }
 

@@ -1,8 +1,5 @@
 using RazerSdkReader.Structures;
 using System;
-using System.Diagnostics;
-using System.Drawing;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 
 namespace RazerSdkReader.Extensions;
@@ -25,7 +22,7 @@ public static class ChromaEncryption
     public static readonly byte[] Key = Convert.FromBase64String(Base64Key);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ChromaColor Decrypt(in ChromaColor color, in ChromaTimestamp timestamp)
+    public static ChromaColor Decrypt(ChromaColor color, ChromaTimestamp timestamp)
     {
         var seed = timestamp.TickCount64 % 128;
         if (seed > 124)
@@ -47,10 +44,12 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Decrypt(in ReadOnlySpan<ChromaColor> input, in Span<ChromaColor> output, in ChromaTimestamp timestamp)
+    public static void Decrypt(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
     {
-        ArgumentOutOfRangeException.ThrowIfNotEqual(output.Length, input.Length);
-
+        var smallest = Math.Min(input.Length, output.Length);
+        
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(smallest, 0);
+        
         var seed = timestamp.TickCount64 % 128;
         if (seed > 124)
         {
@@ -62,7 +61,7 @@ public static class ChromaEncryption
         var bKey = Key[258UL + seed];
         var aKey = Key[387UL + seed];
 
-        for (var i = 0; i < input.Length; i++)
+        for (var i = 0; i < smallest; i++)
         {
             ref readonly var color = ref input[i];
             
