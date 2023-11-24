@@ -10,9 +10,9 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaKeypad : IColorProvider
 {
-    private const int WIDTH = 5;
-    private const int HEIGHT = 4;
-    private const int COUNT = WIDTH * HEIGHT;
+    public const int WIDTH = 5;
+    public const int HEIGHT = 4;
+    public const int COUNT = WIDTH * HEIGHT;
 
     public readonly uint WriteIndex;
     private readonly uint Padding;

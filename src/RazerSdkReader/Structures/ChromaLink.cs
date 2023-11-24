@@ -8,9 +8,9 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaLink : IColorProvider
 {
-    private const int WIDTH = 5;
-    private const int HEIGHT = 1;//technically 10, but only 5 are ever used.
-    private const int COUNT = WIDTH * HEIGHT;
+    public const int WIDTH = 5;
+    public const int HEIGHT = 1;//technically 10, but only 5 are ever used.
+    public const int COUNT = WIDTH * HEIGHT;
 
     public readonly uint WriteIndex;
     private readonly uint Padding;
