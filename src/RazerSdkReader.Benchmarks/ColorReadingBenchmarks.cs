@@ -32,7 +32,7 @@ public class ColorReadingBenchmarks
     }
     
     [Benchmark]
-    public void Decrypt()
+    public void GetColorsSpan()
     {
         Span<ChromaColor> output = stackalloc ChromaColor[_keyboard.Count];
         _keyboard.GetColors(output);

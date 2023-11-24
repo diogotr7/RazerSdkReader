@@ -68,7 +68,8 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Decrypt(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
+    [Obsolete("This method is obsolete, use the faster SIMD-optimized Decrypt method instead.")]
+    public static void DecryptSingle(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
     {
         var smallest = Math.Min(input.Length, output.Length);
 
@@ -85,7 +86,7 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void DecryptSimd(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
+    public static void Decrypt(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
     {
         var smallest = Math.Min(input.Length, output.Length);
 
@@ -102,6 +103,11 @@ public static class ChromaEncryption
             var v1 = new Vector<uint>(inputAsInt[i..]);
             var v2 = new Vector<uint>(key);
             (v1 ^ v2).CopyTo(outputAsInt[i..]);
+        }
+        
+        for (var i = smallest - remaining; i < smallest; i++)
+        {
+            outputAsInt[i] = inputAsInt[i] ^ key;
         }
     }
 }

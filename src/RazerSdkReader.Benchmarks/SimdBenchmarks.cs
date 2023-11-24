@@ -7,7 +7,7 @@ namespace RazerSdkReader.Benchmarks;
 [ShortRunJob]
 public class SimdBenchmarks
 {
-    [Params(2,5,15,50,200,1000)]
+    [Params(ChromaHeadset.COUNT, ChromaKeyboard.COUNT, ChromaKeypad.COUNT, ChromaMouse.COUNT, 1000)]
     public int Count { get; set; }
 
     [Benchmark]
@@ -15,14 +15,16 @@ public class SimdBenchmarks
     {
         Span<ChromaColor> colors = stackalloc ChromaColor[Count];
         Span<ChromaColor> output = stackalloc ChromaColor[Count];
-        ChromaEncryption.Decrypt(colors, output, new ChromaTimestamp());
+#pragma warning disable CS0618 // Type or member is obsolete
+        ChromaEncryption.DecryptSingle(colors, output, new ChromaTimestamp());
+#pragma warning restore CS0618 // Type or member is obsolete
     }
-    
+
     [Benchmark]
     public void Simd()
     {
         Span<ChromaColor> colors = stackalloc ChromaColor[Count];
         Span<ChromaColor> output = stackalloc ChromaColor[Count];
-        ChromaEncryption.DecryptSimd(colors, output, new ChromaTimestamp());
+        ChromaEncryption.Decrypt(colors, output, new ChromaTimestamp());
     }
 }
