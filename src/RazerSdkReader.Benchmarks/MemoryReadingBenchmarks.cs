@@ -5,7 +5,7 @@ namespace RazerSdkReader.Benchmarks;
 
 [ShortRunJob]
 [MemoryDiagnoser]
-public class Benchmarks
+public class MemoryReadingBenchmarks
 {
     private readonly MemoryMappedStructReader<ChromaKeyboard> _reader = new(Constants.KeyboardFileName);
     private readonly MemoryMappedFileProxy1 _mmf1 = new(Constants.KeyboardFileName, (int)Constants.KeyboardSize);
