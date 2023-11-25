@@ -54,7 +54,7 @@ public static class ChromaEncryption
         
         return key;
     }
-
+    
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static ChromaColor Decrypt(ChromaColor color, ChromaTimestamp timestamp)
     {
@@ -68,44 +68,28 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    [Obsolete("This method is obsolete, use the faster SIMD-optimized Decrypt method instead.")]
-    public static void DecryptSingle(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
-    {
-        var smallest = Math.Min(input.Length, output.Length);
-
-        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(smallest, 0);
-
-        var key = PreProcessedKey[timestamp.TickCount64 % 128];
-        var inputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(input);
-        var outputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(output);
-
-        for (var i = 0; i < smallest; i++)
-        {
-            outputAsInt[i] = inputAsInt[i] ^ key;
-        }
-    }
-
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void Decrypt(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
     {
         var smallest = Math.Min(input.Length, output.Length);
-
-        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(smallest, 0);
-
         var key = PreProcessedKey[timestamp.TickCount64 % 128];
         var inputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(input);
         var outputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(output);
-
+            
         var remaining = smallest % Vector<uint>.Count;
+        //vectorCount is the last index that can be processed using SIMD instructions
+        var vectorCount = smallest - remaining;
 
-        for (var i = 0; i < smallest - remaining; i += Vector<uint>.Count)
+        //XOR the data using SIMD instructions
+        for (var i = 0; i < vectorCount; i += Vector<uint>.Count)
         {
             var v1 = new Vector<uint>(inputAsInt[i..]);
             var v2 = new Vector<uint>(key);
             (v1 ^ v2).CopyTo(outputAsInt[i..]);
         }
-        
-        for (var i = smallest - remaining; i < smallest; i++)
+    
+        //anything after a multiple of Vector.Count (8 on my machine) is processed using a for loop.
+        //this also covers the case where the span is less than Vector.Count
+        for (var i = vectorCount; i < smallest; i++)
         {
             outputAsInt[i] = inputAsInt[i] ^ key;
         }
