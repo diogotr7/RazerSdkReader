@@ -1,38 +1,33 @@
-using System.IO.MemoryMappedFiles;
-using System.Runtime.InteropServices;
+﻿using System.IO.MemoryMappedFiles;
 
 namespace RazerSdkReader.Benchmarks;
 
-public unsafe class MemoryMappedFileProxy4 : IDisposable
+public class MemoryMappedFileProxy5 : IDisposable
 {
     private readonly MemoryMappedFile _file;
     private readonly MemoryMappedViewAccessor _view;
-    private readonly IntPtr _pointer;
 
     internal string Name { get; }
     internal int Size { get; }
 
-    internal MemoryMappedFileProxy4(string name, int size)
+    internal MemoryMappedFileProxy5(string name, int size)
     {
         Name = name;
         Size = size;
 
         _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
         _view = _file.CreateViewAccessor(0, Size, MemoryMappedFileAccess.Read);
-
-        byte* ptr = null;
-        _view.SafeMemoryMappedViewHandle.AcquirePointer(ref ptr);
-        _pointer = new IntPtr(ptr);
     }
 
     internal T Read<T>() where T : unmanaged
     {
-        return MemoryMarshal.AsRef<T>(new ReadOnlySpan<byte>(_pointer.ToPointer(), Size));
+        _view.Read<T>(0, out var x);
+
+        return x;
     }
 
     protected virtual void Dispose(bool disposing)
     {
-        _view.SafeMemoryMappedViewHandle.ReleasePointer();
         _view.Dispose();
         _file.Dispose();
     }

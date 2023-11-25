@@ -1,40 +1,46 @@
-﻿using System;
-using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
+using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaMousepad : IColorProvider
 {
+    public const int WIDTH = 20;
+    public const int HEIGHT = 1;
+    public const int COUNT = WIDTH * HEIGHT;
+
     public readonly uint WriteIndex;
     private readonly uint Padding;
     public readonly ChromaMousepadData10 Data;
     public readonly ChromaDevice10 Device;
 
-    public int Width => 20;
+    public int Width => WIDTH;
 
-    public int Height => 1;
+    public int Height => HEIGHT;
 
-    public int Count => Width * Height;
+    public int Count => COUNT;
 
     public ChromaColor GetColor(int index)
     {
-        if (index < 0 || index >= Count)
+        if (index is < 0 or >= COUNT)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var targetIndex = WriteIndex.ToReadIndex();
-        var snapshot = Data.AsSpan()[targetIndex];
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
-            return default;
+        return ChromaEncryption.Decrypt(data.Effect.Custom2[index], data.Timestamp);
+    }
 
-        var clr = snapshot.Effect.Custom2.AsSpan()[index];
-        var staticColor = snapshot.Effect.Static.Color;
+    public void GetColors(Span<ChromaColor> colors)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(colors.Length, COUNT);
 
-        return clr ^ staticColor;
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
+
+        ChromaEncryption.Decrypt(data.Effect.Custom2, colors, data.Timestamp);
     }
 }
 
@@ -44,7 +50,7 @@ public readonly record struct ChromaMousepadData
     public readonly uint Flag;
     public readonly EffectType EffectType;
     public readonly MousepadEffect Effect;
-    public readonly ulong Timestamp;
+    public readonly ChromaTimestamp Timestamp;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -56,12 +62,3 @@ public readonly record struct MousepadEffect
     public readonly MousepadCustom Custom;
     public readonly MousepadCustom2 Custom2;
 }
-
-[UnmanagedArray(typeof(ChromaColor), 15)]
-public readonly partial record struct MousepadCustom;
-
-[UnmanagedArray(typeof(ChromaColor), 20)]
-public readonly partial record struct MousepadCustom2;
-
-[UnmanagedArray(typeof(ChromaMousepadData), 10)]
-public readonly partial record struct ChromaMousepadData10;

@@ -1,7 +1,7 @@
+using RazerSdkReader.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using RazerSdkReader.Extensions;
 
 namespace RazerSdkReader;
 
@@ -19,7 +19,7 @@ internal sealed class ChromaMutex : IDisposable
         EventWaitHandleHelper.Pulse(Constants.SynapseEvent);
         _mutexes.Enqueue(MutexHelper.CreateMutex(Constants.ChromaEmulatorMutex));
     }
-    
+
     public void Dispose()
     {
         while (_mutexes.TryDequeue(out var mutex))

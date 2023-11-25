@@ -17,15 +17,7 @@ public unsafe class MemoryMappedFileProxy3 : IDisposable
         Name = name;
         Size = size;
 
-        try
-        {
-            _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
-        }
-        catch (FileNotFoundException)
-        {
-            _file = MemoryMappedFile.CreateNew(Name, Size, MemoryMappedFileAccess.Read, MemoryMappedFileOptions.None, HandleInheritability.None);
-        }
-
+        _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
         _view = _file.CreateViewAccessor(0, Size, MemoryMappedFileAccess.Read);
 
         byte* ptr = null;

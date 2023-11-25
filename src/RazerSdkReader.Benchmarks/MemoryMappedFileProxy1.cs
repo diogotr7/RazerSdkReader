@@ -11,23 +11,12 @@ public class MemoryMappedFileProxy1 : IDisposable
     public string Name { get; }
     public int Size { get; }
 
-    public MemoryMappedFileProxy1(string name, int size, bool createNew = true)
+    public MemoryMappedFileProxy1(string name, int size)
     {
         Name = name;
         Size = size;
 
-        try
-        {
-            _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
-        }
-        catch (FileNotFoundException)
-        {
-            if (!createNew)
-                throw;
-
-            _file = MemoryMappedFile.CreateNew(Name, Size, MemoryMappedFileAccess.ReadWrite, MemoryMappedFileOptions.None, HandleInheritability.None);
-        }
-
+        _file = MemoryMappedFile.OpenExisting(Name, MemoryMappedFileRights.Read);
         _view = _file.CreateViewStream(0, Size, MemoryMappedFileAccess.Read);
     }
 
@@ -54,17 +43,15 @@ public class MemoryMappedFileProxy1 : IDisposable
         if (_view.Position != 0)
             _view.Seek(0, SeekOrigin.Begin);
 
-        using (var memory = new MemoryStream(Size))
-        {
-            const int bufferSize = 4096;
-            var buffer = new byte[bufferSize];
+        using var memory = new MemoryStream(Size);
+        const int bufferSize = 4096;
+        var buffer = new byte[bufferSize];
 
-            int read;
-            while ((read = _view.Read(buffer, 0, bufferSize)) > 0)
-                memory.Write(buffer, 0, read);
+        int read;
+        while ((read = _view.Read(buffer, 0, bufferSize)) > 0)
+            memory.Write(buffer, 0, read);
 
-            return memory.ToArray();
-        }
+        return memory.ToArray();
     }
 
     protected virtual void Dispose(bool disposing)

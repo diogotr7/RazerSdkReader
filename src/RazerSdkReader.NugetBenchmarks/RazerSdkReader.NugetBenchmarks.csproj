@@ -1,22 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="BenchmarkDotNet" Version="0.13.8" />
+        <PackageReference Include="RazerSdkReader" Version="1.1.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\RazerSdkReader\RazerSdkReader.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="*.bin" CopyToOutputDirectory="PreserveNewest" />
+        <Content Include="*.bin" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 </Project>

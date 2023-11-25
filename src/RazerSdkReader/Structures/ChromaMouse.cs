@@ -1,40 +1,46 @@
-﻿using System;
-using System.Runtime.InteropServices;
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
-using UnmanagedArrayGenerator;
+using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaMouse : IColorProvider
 {
+    public const int WIDTH = 7;
+    public const int HEIGHT = 9;
+    public const int COUNT = WIDTH * HEIGHT;
+
     public readonly uint WriteIndex;
     private readonly uint Padding;
     public readonly ChromaMouseData10 Data;
     public readonly ChromaDevice10 Device;
 
-    public int Width => 7;
+    public int Width => WIDTH;
 
-    public int Height => 9;
+    public int Height => HEIGHT;
 
-    public int Count => Width * Height;
+    public int Count => COUNT;
 
     public ChromaColor GetColor(int index)
     {
-        if (index < 0 || index >= Count)
+        if (index is < 0 or >= COUNT)
             throw new ArgumentOutOfRangeException(nameof(index));
 
-        var targetIndex = WriteIndex.ToReadIndex();
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        var snapshot = Data.AsSpan()[targetIndex];
+        return ChromaEncryption.Decrypt(data.Effect.Custom2[index], data.Timestamp);
+    }
 
-        if (snapshot.EffectType is not EffectType.Custom and not EffectType.CustomKey and not EffectType.Static)
-            return default;
+    public void GetColors(Span<ChromaColor> colors)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThan(colors.Length, COUNT);
 
-        var staticColor = snapshot.Effect.Static.Color;
-        var clr = snapshot.Effect.Custom2.AsSpan()[index];
-        return clr ^ staticColor;
+        ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
+
+        ChromaEncryption.Decrypt(data.Effect.Custom2, colors, data.Timestamp);
     }
 }
 
@@ -45,7 +51,7 @@ public readonly record struct ChromaMouseData
     public readonly MouseLedType Led;
     public readonly EffectType EffectType;
     public readonly MouseEffect Effect;
-    public readonly ulong Timestamp;
+    public readonly ChromaTimestamp Timestamp;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -59,12 +65,3 @@ public readonly record struct MouseEffect
     public readonly Static Static;
     public readonly Wave Wave;
 }
-
-[UnmanagedArray(typeof(ChromaColor), 30)]
-public readonly partial record struct MouseCustom;
-
-[UnmanagedArray(typeof(ChromaColor), 63)]
-public readonly partial record struct MouseCustom2;
-
-[UnmanagedArray(typeof(ChromaMouseData), 10)]
-public readonly partial record struct ChromaMouseData10;

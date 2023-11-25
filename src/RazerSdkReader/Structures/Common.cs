@@ -1,6 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using RazerSdkReader.Enums;
-using UnmanagedArrayGenerator;
+﻿using RazerSdkReader.Enums;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
 
@@ -71,6 +71,3 @@ public readonly record struct ChromaDevice
     public readonly ChromaString Instance;
     public readonly ChromaString InstanceName;
 }
-
-[UnmanagedArray(typeof(ChromaDevice), 10)]
-public readonly partial record struct ChromaDevice10;

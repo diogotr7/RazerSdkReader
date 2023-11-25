@@ -1,7 +1,6 @@
-using System.Reactive.Disposables;
-using Avalonia.Media;
 using RazerSdkReader.Structures;
 using ReactiveUI;
+using System.Reactive.Disposables;
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
