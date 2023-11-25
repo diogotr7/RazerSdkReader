@@ -14,11 +14,8 @@ public class Benchmarks
             var baseJob = Job.ShortRun;
 
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.1.0").WithBaseline(true));
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.4.0"));
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.5.0"));
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.6.0"));
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.7.0-beta1"));
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.7.0-beta2"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.7.0"));
         }
     }
     

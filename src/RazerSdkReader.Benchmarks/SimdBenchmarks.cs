@@ -7,10 +7,11 @@ namespace RazerSdkReader.Benchmarks;
 [ShortRunJob]
 public class SimdBenchmarks
 {
-    [Params(ChromaHeadset.COUNT, ChromaKeyboard.COUNT, ChromaKeypad.COUNT, ChromaMouse.COUNT, 1000)]
+    //[Params(ChromaHeadset.COUNT, ChromaKeyboard.COUNT, ChromaKeypad.COUNT, ChromaMouse.COUNT, 1000)]
+    [Params(2,8,32,256)]
     public int Count { get; set; }
 
-    [Benchmark]
+    [Benchmark(Baseline = true)]
     public void Regular()
     {
         Span<ChromaColor> colors = stackalloc ChromaColor[Count];
