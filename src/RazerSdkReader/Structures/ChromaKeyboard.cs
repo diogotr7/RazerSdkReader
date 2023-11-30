@@ -35,8 +35,6 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
     public void GetColors(Span<ChromaColor> colors)
     {
-        ArgumentOutOfRangeException.ThrowIfLessThan(colors.Length, COUNT);
-
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
         ChromaEncryption.Decrypt(data.Effect.Custom2.Color, colors, data.Timestamp);
