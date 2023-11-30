@@ -32,7 +32,8 @@ public interface IColorProvider
     ChromaColor GetColor(int index);
     
     /// <summary>
-    ///     Gets the colors in the grid. The length of the <paramref name="colors"/> span must be equal to or greater than <see cref="Count"/>.
+    ///     Gets the colors in the grid. The length of the <paramref name="colors"/> span must be equal to or greater than <see cref="Count"/>. <para/>
+    ///     Much faster than calling <see cref="GetColor(int)"/> for each index.
     /// </summary>
     /// <param name="colors"></param>
     void GetColors(Span<ChromaColor> colors);

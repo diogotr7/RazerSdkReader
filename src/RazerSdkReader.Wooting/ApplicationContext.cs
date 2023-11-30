@@ -9,11 +9,13 @@ public class MyApplicationContext : ApplicationContext
     private readonly KeyboardManager _keyboardManager;
     private readonly ChromaReader? _razerEmulatorReader;
     private readonly object _lock;
+    private readonly ChromaColor[] _colors;
     private string? _currentApp;
 
     public MyApplicationContext()
     {
         _lock = new object();
+        _colors = new ChromaColor[ChromaKeyboard.COUNT];
         _notifyIcon = new NotifyIcon();
         _notifyIcon.Text = "Razer SDK Reader for Wooting";
         _notifyIcon.Icon = new Icon(Resources.wooting, 40, 40);
@@ -24,7 +26,16 @@ public class MyApplicationContext : ApplicationContext
         _keyboardManager = new KeyboardManager();
         try
         {
-            _razerEmulatorReader = new ChromaReader();
+            _razerEmulatorReader = new ChromaReader
+            {
+                EnableAppData = true,
+                EnableKeyboard = true,
+                EnableKeypad = false,
+                EnableMouse = false,
+                EnableMousepad = false,
+                EnableHeadset = false,
+                EnableChromaLink = false
+            };
             _razerEmulatorReader.AppDataUpdated += RazerEmulatorReaderOnAppDataUpdated;
             _razerEmulatorReader.KeyboardUpdated += RazerEmulatorReaderOnKeyboardUpdated;
             _razerEmulatorReader.Start();
@@ -64,11 +75,13 @@ public class MyApplicationContext : ApplicationContext
 
         lock (_lock)
         {
+            e.GetColors(_colors);
+            
             for (byte y = 1; y < e.Height; y++)
             {
                 for (byte x = 1; x < e.Width; x++)
                 {
-                    var key = e.GetColor(y * e.Width + x);
+                    var key = _colors[y * e.Width + x];
                     var wootingX = (byte)(x - 1);
                     var wootingY = (byte)(y - 0);
 

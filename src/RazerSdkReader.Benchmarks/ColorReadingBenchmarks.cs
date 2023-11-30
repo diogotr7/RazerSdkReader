@@ -7,34 +7,25 @@ namespace RazerSdkReader.Benchmarks;
 [ShortRunJob]
 public class ColorReadingBenchmarks
 {
-    private readonly ChromaKeyboard _keyboard;
+    private readonly ChromaKeyboard _keyboard = new();
+    
+    [Params(5, 25, 75, ChromaKeyboard.COUNT)]
+    public int Count { get; set; }
 
-    public ColorReadingBenchmarks()
-    {
-        var bytes = File.ReadAllBytes("keyboard.bin");
-        _keyboard = MemoryMarshal.Read<ChromaKeyboard>(bytes);
-    }
-
-    [Benchmark]
+    [Benchmark(Baseline = true)]
     public void GetAllColorsOnce()
     {
-        var width = _keyboard.Width;
-        var height = _keyboard.Height;
-        Span<ChromaColor> colors = stackalloc ChromaColor[width * height];
-        for (var i = 0; i < width; i++)
+        Span<ChromaColor> colors = stackalloc ChromaColor[Count];
+        for (var i = 0; i < colors.Length; i++)
         {
-            for (var j = 0; j < height; j++)
-            {
-                var index = i + (j * height);
-                colors[index] = _keyboard.GetColor(index);
-            }
+            colors[i] = _keyboard.GetColor(i);
         }
     }
     
     [Benchmark]
     public void GetColorsSpan()
     {
-        Span<ChromaColor> output = stackalloc ChromaColor[_keyboard.Count];
+        Span<ChromaColor> output = stackalloc ChromaColor[Count];
         _keyboard.GetColors(output);
     }
 }
