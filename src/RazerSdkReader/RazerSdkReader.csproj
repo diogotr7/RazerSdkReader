@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="System.Threading.AccessControl" Version="7.0.1"/>
+        <PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
         <InternalsVisibleTo Include="$(AssemblyName).Tests"/>
         <InternalsVisibleTo Include="$(AssemblyName).Benchmarks"/>
     </ItemGroup>
