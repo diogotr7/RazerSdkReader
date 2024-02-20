@@ -8,7 +8,7 @@ internal static class EventWaitHandleHelper
 {
     public static EventWaitHandle Create(string name)
     {
-        return EventWaitHandleAcl.Create(false, EventResetMode.ManualReset, name, out var _, GetSecurity());
+        return EventWaitHandleAcl.Create(false, EventResetMode.ManualReset, name, out _, GetSecurity());
     }
 
     private static EventWaitHandleSecurity GetSecurity()
