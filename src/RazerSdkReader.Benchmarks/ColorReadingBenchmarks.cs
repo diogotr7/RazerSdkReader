@@ -9,7 +9,7 @@ public class ColorReadingBenchmarks
 {
     private readonly ChromaKeyboard _keyboard = new();
     
-    [Params(5, 25, 75, ChromaKeyboard.COUNT)]
+    [Params(5, ChromaKeyboard.COUNT)]
     public int Count { get; set; }
 
     [Benchmark(Baseline = true)]
