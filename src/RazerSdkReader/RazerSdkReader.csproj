@@ -11,6 +11,7 @@
         <PackageReference Include="System.Threading.AccessControl" Version="8.0.0" />
         <InternalsVisibleTo Include="$(AssemblyName).Tests"/>
         <InternalsVisibleTo Include="$(AssemblyName).Benchmarks"/>
+        <InternalsVisibleTo Include="$(AssemblyName).Profile"/>
     </ItemGroup>
 
     <PropertyGroup>

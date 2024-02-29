@@ -111,20 +111,19 @@ public static class ChromaEncryption
         var remaining = smallest % Vector<uint>.Count;
         //vectorCount is the last index that can be processed using SIMD instructions
         var vectorCount = smallest - remaining;
-        
+
         //Create a vector with the alpha channel set to 0xFF
         //so we can write the result directly to the output span
         var alphaMask = new Vector<uint>(0xFF000000);
+        var keyVector = new Vector<uint>(key);
 
         //XOR the data using SIMD instructions
         for (var i = 0; i < vectorCount; i += Vector<uint>.Count)
         {
-            var v1 = new Vector<uint>(inputAsInt[i..]);
-            var v2 = new Vector<uint>(key);
-            var xor = v1 ^ v2;
-            (xor | alphaMask).CopyTo(outputAsInt[i..]);
+            var data = new Vector<uint>(inputAsInt[i..]);
+            (data ^ keyVector | alphaMask).CopyTo(outputAsInt[i..]);
         }
-        
+
         //anything after a multiple of Vector.Count (8 on my machine) is processed using a for loop.
         //this also covers the case where the span is less than Vector.Count
         for (var i = vectorCount; i < smallest; i++)

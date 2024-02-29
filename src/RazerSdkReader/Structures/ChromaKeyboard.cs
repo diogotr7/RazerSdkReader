@@ -16,7 +16,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
     private readonly int Padding;
     public readonly ChromaKeyboardData10 Data;
     public readonly ChromaDevice10 Device;
-    
+
     public int Width => WIDTH;
 
     public int Height => HEIGHT;
@@ -30,14 +30,14 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return ChromaEncryption.Decrypt(data.Effect.Custom2.Color[index], data.Timestamp);
+        return ChromaEncryption.Decrypt(data.Effect.Custom.Color[index], data.Timestamp);
     }
 
     public void GetColors(Span<ChromaColor> colors)
     {
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        ChromaEncryption.Decrypt(data.Effect.Custom2.Color, colors, data.Timestamp);
+        ChromaEncryption.Decrypt(data.Effect.Custom.Color, colors, data.Timestamp);
     }
 }
 
