@@ -2,9 +2,7 @@
 
 namespace RazerSdkReader.Avalonia.ViewModels;
 
-public class ViewModelBase : ReactiveObject
-{
-}
+public class ViewModelBase : ReactiveObject;
 
 public abstract class ActivatableViewModelBase : ViewModelBase, IActivatableViewModel
 {

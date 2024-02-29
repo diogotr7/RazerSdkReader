@@ -1,6 +1,5 @@
 using BenchmarkDotNet.Attributes;
 using RazerSdkReader.Structures;
-using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Benchmarks;
 
@@ -9,7 +8,7 @@ public class ColorReadingBenchmarks
 {
     private readonly ChromaKeyboard _keyboard = new();
     
-    [Params(5, ChromaKeyboard.COUNT)]
+    [Params(ChromaKeyboard.COUNT)]
     public int Count { get; set; }
 
     [Benchmark(Baseline = true)]

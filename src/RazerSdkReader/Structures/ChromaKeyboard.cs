@@ -22,7 +22,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
     public int Height => HEIGHT;
 
     public int Count => COUNT;
-
+    
     public ChromaColor GetColor(int index)
     {
         if (index is < 0 or >= COUNT)

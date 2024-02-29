@@ -1,8 +1,10 @@
-﻿using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
 using RazerSdkReader.Structures;
+
+namespace RazerSdkReader.NugetBenchmarks;
 
 [Config(typeof(MyConfig))]
 public class Benchmarks
@@ -15,6 +17,7 @@ public class Benchmarks
 
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.6.0").WithBaseline(true));
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.7.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.8.0"));
         }
     }
     
@@ -29,16 +32,10 @@ public class Benchmarks
     [Benchmark]
     public void GetAllColorsOnce()
     {
-        var width = _keyboard.Width;
-        var height = _keyboard.Height;
-        Span<ChromaColor> colors = stackalloc ChromaColor[width * height];
-        for (var i = 0; i < width; i++)
+        Span<ChromaColor> colors = stackalloc ChromaColor[_keyboard.Count];
+        for (var i = 0; i < colors.Length; i++)
         {
-            for (var j = 0; j < height; j++)
-            {
-                var index = i + (j * height);
-                colors[index] = _keyboard.GetColor(index);
-            }
+            colors[i] = _keyboard.GetColor(i);
         }
     }
 }
