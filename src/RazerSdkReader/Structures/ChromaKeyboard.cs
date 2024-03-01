@@ -22,7 +22,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
     public int Height => HEIGHT;
 
     public int Count => COUNT;
-    
+
     public ChromaColor GetColor(int index)
     {
         if (index is < 0 or >= COUNT)
@@ -30,14 +30,23 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return ChromaEncryption.Decrypt(data.Effect.Custom.Color[index], data.Timestamp);
+        return data.EffectType switch
+        {
+            EffectType.CustomKey => ChromaEncryption.Decrypt(data.Effect.Custom2.Color[index], data.Timestamp),
+            _ => ChromaEncryption.Decrypt(data.Effect.Custom.Color[index], data.Timestamp)
+        };
     }
 
     public void GetColors(Span<ChromaColor> colors)
     {
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        ChromaEncryption.Decrypt(data.Effect.Custom.Color, colors, data.Timestamp);
+        if (data.EffectType == EffectType.CustomKey)
+        {
+            ChromaEncryption.Decrypt(data.Effect.Custom2.Color, colors, data.Timestamp);
+        }
+        else
+            ChromaEncryption.Decrypt(data.Effect.Custom.Color, colors, data.Timestamp);
     }
 }
 

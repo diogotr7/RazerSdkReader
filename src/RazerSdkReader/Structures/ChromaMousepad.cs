@@ -8,7 +8,7 @@ namespace RazerSdkReader.Structures;
 [StructLayout(LayoutKind.Sequential, Pack = 1)]
 public readonly record struct ChromaMousepad : IColorProvider
 {
-    public const int WIDTH = 20;
+    public const int WIDTH = 15;
     public const int HEIGHT = 1;
     public const int COUNT = WIDTH * HEIGHT;
 
@@ -30,14 +30,14 @@ public readonly record struct ChromaMousepad : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return ChromaEncryption.Decrypt(data.Effect.Custom2[index], data.Timestamp);
+        return ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp);
     }
 
     public void GetColors(Span<ChromaColor> colors)
     {
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        ChromaEncryption.Decrypt(data.Effect.Custom2, colors, data.Timestamp);
+        ChromaEncryption.Decrypt(data.Effect.Custom, colors, data.Timestamp);
     }
 }
 
