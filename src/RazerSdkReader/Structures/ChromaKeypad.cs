@@ -30,7 +30,11 @@ public readonly record struct ChromaKeypad : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp);
+        return data.EffectType switch
+        {
+            EffectType.Static => ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp),
+            _ => ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp),
+        };
     }
 
     public void GetColors(Span<ChromaColor> colors)
@@ -39,6 +43,13 @@ public readonly record struct ChromaKeypad : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
+        if (data.EffectType == EffectType.Static)
+        {
+            var color = ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp);
+            colors.Fill(color);
+            return;
+        }
+        
         ChromaEncryption.Decrypt(data.Effect.Custom, colors, data.Timestamp);
     }
 }

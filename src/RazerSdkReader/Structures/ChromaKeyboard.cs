@@ -32,6 +32,7 @@ public readonly record struct ChromaKeyboard : IColorProvider
 
         return data.EffectType switch
         {
+            EffectType.Static => ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp),
             EffectType.CustomKey => ChromaEncryption.Decrypt(data.Effect.Custom2.Color[index], data.Timestamp),
             _ => ChromaEncryption.Decrypt(data.Effect.Custom.Color[index], data.Timestamp)
         };
@@ -41,12 +42,19 @@ public readonly record struct ChromaKeyboard : IColorProvider
     {
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        if (data.EffectType == EffectType.CustomKey)
+        if (data.EffectType == EffectType.Static)
+        {
+            var color = ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp);
+            colors.Fill(color);
+        }
+        else if (data.EffectType == EffectType.CustomKey)
         {
             ChromaEncryption.Decrypt(data.Effect.Custom2.Color, colors, data.Timestamp);
         }
         else
+        {
             ChromaEncryption.Decrypt(data.Effect.Custom.Color, colors, data.Timestamp);
+        }
     }
 }
 
