@@ -19,6 +19,7 @@ public class Benchmarks
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.09.0")); 
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.10.0"));
             AddJob(baseJob.WithNuGet("RazerSdkReader", "1.11.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "2.0.0"));
         }
     }
     
