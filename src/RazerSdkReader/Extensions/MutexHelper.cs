@@ -8,7 +8,7 @@ internal static class MutexHelper
 {
     public static Mutex CreateMutex(string name)
     {
-        return MutexAcl.Create(true, name, out var _, GetSecurity());
+        return MutexAcl.Create(true, name, out _, GetSecurity());
     }
 
     private static MutexSecurity GetSecurity()

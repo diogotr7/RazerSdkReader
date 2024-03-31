@@ -1,6 +1,7 @@
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
@@ -14,8 +15,8 @@ public readonly record struct ChromaMouse : IColorProvider
 
     public readonly uint WriteIndex;
     private readonly uint Padding;
-    public readonly ChromaMouseData10 Data;
-    public readonly ChromaDevice10 Device;
+    public readonly Array10<ChromaMouseData> Data;
+    public readonly Array10<ChromaDevice> Device;
 
     public int Width => WIDTH;
 
@@ -30,25 +31,28 @@ public readonly record struct ChromaMouse : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return data.EffectType switch
+        var x= data.EffectType switch
         {
             EffectType.Static => ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp),
             _ => ChromaEncryption.Decrypt(data.Effect.Custom2[index], data.Timestamp),
         };
+        
+        return Unsafe.As<uint, ChromaColor>(ref x);
     }
 
     public void GetColors(Span<ChromaColor> colors)
     {
+        var casted = MemoryMarshal.Cast<ChromaColor, uint>(colors);
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
         if (data.EffectType == EffectType.Static)
         {
             var color = ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp);
-            colors.Fill(color);
+            casted.Fill(color);
             return;
         }
         
-        ChromaEncryption.Decrypt(data.Effect.Custom2, colors, data.Timestamp);
+        ChromaEncryption.Decrypt(data.Effect.Custom2, casted, data.Timestamp);
     }
 }
 
@@ -67,8 +71,8 @@ public readonly record struct MouseEffect
 {
     public readonly Breathing Breathing;
     public readonly Blinking Blinking;
-    public readonly MouseCustom Custom;
-    public readonly MouseCustom2 Custom2;
+    public readonly Array30<uint> Custom;
+    public readonly Array63<uint> Custom2;
     public readonly Reactive Reactive;
     public readonly Static Static;
     public readonly Wave Wave;

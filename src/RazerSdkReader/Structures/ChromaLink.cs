@@ -1,6 +1,7 @@
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
@@ -14,8 +15,8 @@ public readonly record struct ChromaLink : IColorProvider
 
     public readonly uint WriteIndex;
     private readonly uint Padding;
-    public readonly ChromaLinkData10 Data;
-    public readonly ChromaDevice10 Device;
+    public readonly Array10<ChromaLinkData> Data;
+    public readonly Array10<ChromaDevice> Device;
 
     public int Width => WIDTH;
 
@@ -30,25 +31,29 @@ public readonly record struct ChromaLink : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return data.EffectType switch
+        var x = data.EffectType switch
         {
             EffectType.Static => ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp),
             _ => ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp),
         };
+        
+        return Unsafe.As<uint, ChromaColor>(ref x);
     }
 
     public void GetColors(Span<ChromaColor> colors)
     {
+        var casted = MemoryMarshal.Cast<ChromaColor, uint>(colors);
+
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
         if (data.EffectType == EffectType.Static)
         {
             var color = ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp);
-            colors.Fill(color);
+            casted.Fill(color);
             return;
         }
         
-        ChromaEncryption.Decrypt(data.Effect.Custom, colors, data.Timestamp);
+        ChromaEncryption.Decrypt(data.Effect.Custom, casted, data.Timestamp);
     }
 }
 
@@ -65,6 +70,6 @@ public readonly record struct ChromaLinkData
 public readonly record struct LinkEffect
 {
     public readonly Breathing Breathing;
-    public readonly LinkCustom Custom;
+    public readonly Array50<uint> Custom;
     public readonly Static Static;
 }

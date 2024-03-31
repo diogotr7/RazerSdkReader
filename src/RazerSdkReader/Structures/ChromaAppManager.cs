@@ -8,7 +8,7 @@ public readonly record struct ChromaAppManager
 {
     public readonly uint WriteIndex;
     private readonly uint Padding;
-    public readonly ChromaAppManager10 Data;
+    public readonly Array10<ChromaAppManagerData> Data;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

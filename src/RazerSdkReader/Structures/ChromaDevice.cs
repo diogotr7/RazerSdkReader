@@ -10,7 +10,7 @@ namespace RazerSdkReader.Structures;
 public readonly record struct ChromaDeviceData
 {
     public readonly int Count;
-    public readonly ChromaDeviceDataInfo50 Device;
+    public readonly Array50<ChromaDeviceDataInfo> Device;
 }
 
 [StructLayout(LayoutKind.Sequential, Pack = 1)]

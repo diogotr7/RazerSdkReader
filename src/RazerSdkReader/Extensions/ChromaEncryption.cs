@@ -88,47 +88,48 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static ChromaColor Decrypt(ChromaColor color, ChromaTimestamp timestamp)
+    public static uint Decrypt(uint color, ChromaTimestamp timestamp)
     {
         var key = Key[timestamp.TickCount64 % 128];
 
-        var colorAsInt = Unsafe.As<ChromaColor, uint>(ref color);
-
         //Set the alpha channel to 0xFF, it's not used in the decryption process
-        var xor = colorAsInt ^ key | 0xFF000000;
-
-        return Unsafe.As<uint, ChromaColor>(ref xor);
+        return color ^ key | 0xFF000000;
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Decrypt(ReadOnlySpan<ChromaColor> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
+    public static void Decrypt(ReadOnlySpan<uint> input, Span<uint> output, ChromaTimestamp timestamp)
     {
+        //https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/vectorization-guidelines.md
+        
         var smallest = Math.Min(input.Length, output.Length);
         var key = Key[timestamp.TickCount64 % 128];
-        var inputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(input);
-        var outputAsInt = MemoryMarshal.Cast<ChromaColor, uint>(output);
 
+        if (!Vector.IsHardwareAccelerated || smallest < Vector<uint>.Count)
+        {
+            for (var i = 0; i < smallest; i++)
+            {
+                output[i] = input[i] ^ key | 0xFF000000;
+            }
+            return;
+        }
+        
         var remaining = smallest % Vector<uint>.Count;
-        //vectorCount is the last index that can be processed using SIMD instructions
-        var vectorCount = smallest - remaining;
-
-        //Create a vector with the alpha channel set to 0xFF
-        //so we can write the result directly to the output span
+        var vectorCount = (nuint)(smallest - remaining);
         var alphaMask = new Vector<uint>(0xFF000000);
         var keyVector = new Vector<uint>(key);
 
-        //XOR the data using SIMD instructions
-        for (var i = 0; i < vectorCount; i += Vector<uint>.Count)
+        ref var searchSpace = ref MemoryMarshal.GetReference(input);
+
+        for (nuint offset = 0; offset < vectorCount; offset += (nuint)Vector<uint>.Count)
         {
-            var data = new Vector<uint>(inputAsInt[i..]);
-            (data ^ keyVector | alphaMask).CopyTo(outputAsInt[i..]);
+            var loaded = Vector.LoadUnsafe(ref searchSpace, offset);
+            var result = (loaded ^ keyVector) | alphaMask;
+            result.StoreUnsafe(ref MemoryMarshal.GetReference(output), offset);
         }
 
-        //anything after a multiple of Vector.Count (8 on my machine) is processed using a for loop.
-        //this also covers the case where the span is less than Vector.Count
-        for (var i = vectorCount; i < smallest; i++)
+        for (var i = (int)vectorCount; i < smallest; i++)
         {
-            outputAsInt[i] = inputAsInt[i] ^ key | 0xFF000000;
+            output[i] = input[i] ^ key | 0xFF000000;
         }
     }
 }

@@ -7,6 +7,7 @@ namespace RazerSdkReader.Benchmarks;
 public class ColorReadingBenchmarks
 {
     private readonly ChromaKeyboard _keyboard = new();
+    private readonly ChromaColor[] _colors = new ChromaColor[ChromaKeyboard.COUNT];
     
     [Params(ChromaKeyboard.COUNT)]
     public int Count { get; set; }
@@ -14,17 +15,15 @@ public class ColorReadingBenchmarks
     [Benchmark(Baseline = true)]
     public void GetAllColorsOnce()
     {
-        Span<ChromaColor> colors = stackalloc ChromaColor[Count];
-        for (var i = 0; i < colors.Length; i++)
+        for (var i = 0; i < _colors.Length; i++)
         {
-            colors[i] = _keyboard.GetColor(i);
+            _colors[i] = _keyboard.GetColor(i);
         }
     }
     
     [Benchmark]
     public void GetColorsSpan()
     {
-        Span<ChromaColor> output = stackalloc ChromaColor[Count];
-        _keyboard.GetColors(output);
+        _keyboard.GetColors(_colors);
     }
 }

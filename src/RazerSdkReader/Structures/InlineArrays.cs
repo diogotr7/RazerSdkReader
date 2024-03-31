@@ -3,18 +3,16 @@ using System.Text;
 
 namespace RazerSdkReader.Structures;
 
-#pragma warning disable IDE0044 // Add readonly modifier
-#pragma warning disable IDE0051 // Remove unused private members
-
-[InlineArray(260)]
-public struct ChromaString
+public readonly struct ChromaString
 {
-    private char _field;
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
+    private readonly Array260<char> _data;
+#pragma warning restore CS0649 // Field is never assigned to, and will always have its default value
 
-    public readonly override string ToString()
+    public override string ToString()
     {
         var sb = new StringBuilder();
-        foreach (ref readonly var c in this)
+        foreach (ref readonly var c in _data)
         {
             if (c == 0)
                 break;
@@ -31,118 +29,62 @@ public struct ChromaString
     }
 }
 
-[InlineArray(50)]
-public struct ChromaAppInfo50
-{
-    private ChromaAppInfo _field;
-}
-
-[InlineArray(10)]
-public struct ChromaAppManager10
-{
-    private ChromaAppManagerData _field;
-}
-
-[InlineArray(50)]
-public struct ChromaDeviceDataInfo50
-{
-    private ChromaDeviceDataInfo _field;
-}
-
 [InlineArray(5)]
-public struct HeadsetCustom
+public struct Array5<T> where T : unmanaged
 {
-    private ChromaColor _field;
+    private T _field;
 }
 
 [InlineArray(10)]
-public struct ChromaHeadsetData10
+public struct Array10<T> where T : unmanaged
 {
-    private ChromaHeadsetData _field;
-}
-
-[InlineArray(192)]
-public struct Color8X24
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(132)]
-public struct Color6X22
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaKeyboardData10
-{
-    private ChromaKeyboardData _field;
-}
-
-[InlineArray(20)]
-public struct KeypadCustom
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaKeypadData10
-{
-    private ChromaKeypadData _field;
-}
-
-[InlineArray(50)]
-public struct LinkCustom
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaLinkData10
-{
-    private ChromaLinkData _field;
-}
-
-[InlineArray(30)]
-public struct MouseCustom
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(63)]
-public struct MouseCustom2
-{
-    private ChromaColor _field;
-}
-
-[InlineArray(10)]
-public struct ChromaMouseData10
-{
-    private ChromaMouseData _field;
+    private T _field;
 }
 
 [InlineArray(15)]
-public struct MousepadCustom
+public struct Array15<T> where T : unmanaged
 {
-    private ChromaColor _field;
+    private T _field;
 }
 
 [InlineArray(20)]
-public struct MousepadCustom2
+public struct Array20<T> where T : unmanaged
 {
-    private ChromaColor _field;
+    private T _field;
 }
 
-[InlineArray(10)]
-public struct ChromaMousepadData10
+[InlineArray(30)]
+public struct Array30<T> where T : unmanaged
 {
-    private ChromaMousepadData _field;
+    private T _field;
 }
 
-[InlineArray(10)]
-public struct ChromaDevice10
+[InlineArray(50)]
+public struct Array50<T> where T : unmanaged
 {
-    private ChromaDevice _field;
+    private T _field;
 }
-#pragma warning restore IDE0044 // Add readonly modifier
-#pragma warning restore IDE0051 // Remove unused private members
+
+[InlineArray(63)]
+public struct Array63<T> where T : unmanaged
+{
+    private T _field;
+}
+
+[InlineArray(132)]
+public struct Array132<T> where T : unmanaged
+{
+    private T _field;
+}
+
+[InlineArray(192)]
+public struct Array192<T> where T : unmanaged
+{
+    private T _field;
+}
+
+[InlineArray(260)]
+public struct Array260<T> where T : unmanaged
+{
+    private T _field;
+}

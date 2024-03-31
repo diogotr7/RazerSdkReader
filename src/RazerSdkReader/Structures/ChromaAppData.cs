@@ -15,7 +15,7 @@ public readonly record struct ChromaAppData
     public readonly uint CurrentAppId;
     private readonly uint Padding;
 
-    public readonly ChromaAppInfo50 AppInfo;
+    public readonly Array50<ChromaAppInfo> AppInfo;
 
     public string CurrentAppName
     {

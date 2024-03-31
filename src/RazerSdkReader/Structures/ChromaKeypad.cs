@@ -1,6 +1,7 @@
 using RazerSdkReader.Enums;
 using RazerSdkReader.Extensions;
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace RazerSdkReader.Structures;
@@ -14,8 +15,8 @@ public readonly record struct ChromaKeypad : IColorProvider
 
     public readonly uint WriteIndex;
     private readonly uint Padding;
-    public readonly ChromaKeypadData10 Data;
-    public readonly ChromaDevice10 Device;
+    public readonly Array10<ChromaKeypadData> Data;
+    public readonly Array10<ChromaDevice> Device;
 
     public int Width => WIDTH;
 
@@ -30,15 +31,19 @@ public readonly record struct ChromaKeypad : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        return data.EffectType switch
+        var x = data.EffectType switch
         {
             EffectType.Static => ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp),
             _ => ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp),
         };
+        
+        return Unsafe.As<uint, ChromaColor>(ref x);
     }
 
     public void GetColors(Span<ChromaColor> colors)
     {
+        var casted = MemoryMarshal.Cast<ChromaColor, uint>(colors);
+
         ArgumentOutOfRangeException.ThrowIfLessThan(colors.Length, COUNT);
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
@@ -46,11 +51,11 @@ public readonly record struct ChromaKeypad : IColorProvider
         if (data.EffectType == EffectType.Static)
         {
             var color = ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp);
-            colors.Fill(color);
+            casted.Fill(color);
             return;
         }
         
-        ChromaEncryption.Decrypt(data.Effect.Custom, colors, data.Timestamp);
+        ChromaEncryption.Decrypt(data.Effect.Custom, casted, data.Timestamp);
     }
 }
 
@@ -67,7 +72,7 @@ public readonly record struct ChromaKeypadData
 public readonly record struct KeypadEffect
 {
     public readonly Breathing Breathing;
-    public readonly KeypadCustom Custom;
+    public readonly Array20<uint> Custom;
     public readonly Reactive Reactive;
     public readonly Static Static;
     public readonly Wave Wave;

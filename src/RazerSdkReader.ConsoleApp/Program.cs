@@ -1,4 +1,4 @@
-﻿using RazerSdkReader.Structures;
+using RazerSdkReader.Structures;
 using System;
 
 namespace RazerSdkReader.ConsoleApp;
@@ -23,16 +23,14 @@ public static class Program
         Console.WriteLine("Disposed reader successfully...");
     }
 
-    private static void Write<T>(object? _, in T e) where T : unmanaged, IColorProvider
+    private static void Write<T>(object? _, in T e) where T : IColorProvider
     {
-        var typeName = typeof(T).Name;
-        var clr = e.GetColor(0);
-        Console.WriteLine($"[{typeName}]Color: {clr}");
+        Console.WriteLine($"[{typeof(T).Name}] {e.GetColor(0)}");
     }
 
     private static void WriteAppData(object? _, in ChromaAppData appData)
     {
-        Console.WriteLine($"ChromaAppData active: {appData.CurrentAppName}");
+        Console.WriteLine($"[ChromaAppData] Active: {appData.CurrentAppName}");
     }
 
     private static void WriteException(object? _, Exception exception)

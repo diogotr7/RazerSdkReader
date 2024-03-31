@@ -7,29 +7,29 @@ namespace RazerSdkReader;
 
 internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
 {
-    private readonly EventWaitHandle _eventWaitHandle;
-    private readonly MemoryMappedStructReader<T> _reader;
+    private Action<object?, RazerSdkReaderException>? _exceptionHandler;
+    private EventWaitHandle? _eventWaitHandle;
+    private MemoryMappedStructReader<T>? _reader;
     private CancellationTokenSource? _cts;
     private Task? _task;
 
     public event InStructEventHandler<T>? Updated;
-    public event EventHandler<RazerSdkReaderException>? Exception;
-
-    public SignaledReader(string memoryMappedFileName, string eventWaitHandle)
+    
+    public void Start(ReaderDefinition definition, Action<object?, RazerSdkReaderException>? exceptionHandler)
     {
-        _reader = new MemoryMappedStructReader<T>(memoryMappedFileName);
-        _eventWaitHandle = EventWaitHandleHelper.Create(eventWaitHandle);
-    }
-
-    public void Start()
-    {
+        _exceptionHandler = exceptionHandler;
+        _reader = new MemoryMappedStructReader<T>(definition.MemoryMappedFileName);
+        _eventWaitHandle = EventWaitHandleHelper.Create(definition.EventWaitHandle);
         _cts = new CancellationTokenSource();
         _task = Task.Run(ReadLoop, _cts.Token);
     }
 
     private async Task ReadLoop()
     {
-        _eventWaitHandle.Reset();
+        var data = _reader!.Read();
+        Updated?.Invoke(this, in data);
+        
+        _eventWaitHandle!.Reset();
 
         try
         {
@@ -39,8 +39,8 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
                 // if it times out, then wait asynchronously.
                 // hopefully this is a good compromise between
                 // performance and responsiveness.
-                await _eventWaitHandle.WaitOneAsync(5000, _cts.Token);
-                var data = _reader.Read();
+                await _eventWaitHandle!.WaitOneAsync(5000, _cts.Token);
+                data = _reader!.Read();
                 Updated?.Invoke(this, in data);
             }
         }
@@ -50,13 +50,8 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
         }
         catch (Exception e)
         {
-            Exception?.Invoke(this, new RazerSdkReaderException("ReadLoop Error", e));
+            _exceptionHandler?.Invoke(this, new RazerSdkReaderException("ReadLoop Error", e));
         }
-    }
-
-    internal T Read()
-    {
-        return _reader.Read();
     }
 
     public void Dispose()
@@ -65,7 +60,9 @@ internal sealed class SignaledReader<T> : IDisposable where T : unmanaged
         _task?.Wait();
         _cts?.Dispose();
         _task?.Dispose();
-        _reader.Dispose();
-        _eventWaitHandle.Dispose();
+        _reader?.Dispose();
+        _eventWaitHandle?.Dispose();
+        Updated = null;
+        _exceptionHandler = null;
     }
 }

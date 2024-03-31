@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
@@ -15,27 +14,29 @@ public class Benchmarks
         {
             var baseJob = Job.ShortRun;
 
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.6.0").WithBaseline(true));
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.7.0"));
-            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.8.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.07.0").WithBaseline(true));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.08.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.09.0")); 
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.10.0"));
+            AddJob(baseJob.WithNuGet("RazerSdkReader", "1.11.0"));
         }
     }
     
-    private readonly ChromaKeyboard _keyboard;
-
-    public Benchmarks()
+    private readonly ChromaKeyboard _keyboard = new();
+    private readonly ChromaColor[] _colors = new ChromaColor[ChromaKeyboard.COUNT];
+    
+    [Benchmark]
+    public void GetColorsOneByOne()
     {
-        var bytes = File.ReadAllBytes("keyboard.bin");
-        _keyboard = MemoryMarshal.Read<ChromaKeyboard>(bytes);
+        for (var i = 0; i < ChromaKeyboard.COUNT; i++)
+        {
+            _colors[i] = _keyboard.GetColor(i);
+        }
     }
 
     [Benchmark]
-    public void GetAllColorsOnce()
+    public void GetColors()
     {
-        Span<ChromaColor> colors = stackalloc ChromaColor[_keyboard.Count];
-        for (var i = 0; i < colors.Length; i++)
-        {
-            colors[i] = _keyboard.GetColor(i);
-        }
+        _keyboard.GetColors(_colors);
     }
 }
