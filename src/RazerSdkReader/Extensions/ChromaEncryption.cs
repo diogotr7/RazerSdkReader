@@ -113,23 +113,29 @@ public static class ChromaEncryption
             return;
         }
         
-        var remaining = smallest % Vector<uint>.Count;
-        var vectorCount = (nuint)(smallest - remaining);
         var alphaMask = new Vector<uint>(0xFF000000);
         var keyVector = new Vector<uint>(key);
 
         ref var searchSpace = ref MemoryMarshal.GetReference(input);
-
-        for (nuint offset = 0; offset < vectorCount; offset += (nuint)Vector<uint>.Count)
+        var oneVectorAwayFromEnd = (nuint)(smallest - Vector<uint>.Count);
+        nuint offset = 0;
+        while (offset <= oneVectorAwayFromEnd)
         {
             var loaded = Vector.LoadUnsafe(ref searchSpace, offset);
             var result = (loaded ^ keyVector) | alphaMask;
             result.StoreUnsafe(ref MemoryMarshal.GetReference(output), offset);
+            offset += (nuint)Vector<uint>.Count;
         }
-
-        for (var i = (int)vectorCount; i < smallest; i++)
+        
+        //we processed what we could above. Anything after a multiple of 8 is processed here.
+        //we will process a few elements twice, but the operation is idempotent, and it's faster
+        //than reverting to a scalar loop.
+        if (offset != (uint)input.Length)
         {
-            output[i] = input[i] ^ key | 0xFF000000;
+            offset = (nuint)(smallest - Vector<uint>.Count);
+            var loaded = Vector.LoadUnsafe(ref searchSpace, offset);
+            var result = (loaded ^ keyVector) | alphaMask;
+            result.StoreUnsafe(ref MemoryMarshal.GetReference(output), offset);
         }
     }
 }

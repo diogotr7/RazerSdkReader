@@ -10,4 +10,8 @@
         <PackageReference Include="BenchmarkDotNet" Version="0.13.12" />
         <PackageReference Include="RazerSdkReader" Version="1.7.0" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <Content Include="*.bin" />
+    </ItemGroup>
 </Project>

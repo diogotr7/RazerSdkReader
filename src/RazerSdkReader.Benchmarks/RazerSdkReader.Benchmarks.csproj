@@ -15,4 +15,8 @@
     <ItemGroup>
         <ProjectReference Include="..\RazerSdkReader\RazerSdkReader.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="*.bin" />
+    </ItemGroup>
 </Project>
