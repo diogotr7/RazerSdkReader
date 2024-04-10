@@ -19,15 +19,6 @@ public class ColorReadingBenchmarks
     }
 
     private static string GetCallerFilePath([CallerFilePath] string callerFilePath = "") => callerFilePath;
-    
-    [Benchmark]
-    public void GetColorsOneByOne()
-    {
-        for (var i = 0; i < ChromaKeyboard.COUNT; i++)
-        {
-            _colors[i] = _keyboard.GetColor(i);
-        }
-    }
 
     [Benchmark]
     public void GetColors()

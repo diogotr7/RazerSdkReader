@@ -121,14 +121,24 @@ public static class ChromaEncryption
         nuint offset = 0;
         while (offset <= oneVectorAwayFromEnd)
         {
+            //the shuffle indices vector swaps the rgb channels for each color,
+            //since the sdk uses RGBA instead of BGRA. (0, 1, 2, 3) -> (2, 1, 0, 3)
+            
+            //the rest of the array is just the same shuffle,
+            //repeated for the rest of the colors in each vector.
             Vector256.Shuffle(
                 (Vector256.LoadUnsafe(ref searchSpace, offset) ^ Vector256.Create<uint>(key).As<uint, byte>())
                     | Vector256.Create<uint>(0xFF000000).As<uint, byte>(),
                 Vector256.Create(
-                    (byte)02, 01, 00, 03, 06, 05, 04, 07,
-                    10, 09, 08, 11, 14, 13, 12, 15,
-                    18, 17, 16, 19, 22, 21, 20, 23,
-                    26, 25, 24, 27, 30, 29, 28, 31
+                    (byte)
+                    02, 01, 00, 03,
+                    06, 05, 04, 07,
+                    10, 09, 08, 11,
+                    14, 13, 12, 15,
+                    18, 17, 16, 19,
+                    22, 21, 20, 23,
+                    26, 25, 24, 27,
+                    30, 29, 28, 31
                 )
             ).StoreUnsafe(ref MemoryMarshal.GetReference(outputAsBytes), offset);
             offset += (nuint)Vector256<byte>.Count;
@@ -143,12 +153,17 @@ public static class ChromaEncryption
             Vector256.Shuffle(
                 (Vector256.LoadUnsafe(ref searchSpace, offset) ^ Vector256.Create<uint>(key).As<uint, byte>())
                         | Vector256.Create<uint>(0xFF000000).As<uint, byte>(),
-                Vector256.Create(
-                    (byte)02, 01, 00, 03, 06, 05, 04, 07,
-                    10, 09, 08, 11, 14, 13, 12, 15,
-                    18, 17, 16, 19, 22, 21, 20, 23,
-                    26, 25, 24, 27, 30, 29, 28, 31
-                )
+                        Vector256.Create(
+                            (byte)
+                            02, 01, 00, 03,
+                            06, 05, 04, 07,
+                            10, 09, 08, 11,
+                            14, 13, 12, 15,
+                            18, 17, 16, 19,
+                            22, 21, 20, 23,
+                            26, 25, 24, 27,
+                            30, 29, 28, 31
+                        )
             ).StoreUnsafe(ref MemoryMarshal.GetReference(outputAsBytes), offset);
         }
     }
