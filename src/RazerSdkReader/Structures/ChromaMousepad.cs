@@ -24,6 +24,7 @@ public readonly record struct ChromaMousepad : IColorProvider
 
     public int Count => COUNT;
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public ChromaColor GetColor(int index)
     {
         if (index is < 0 or >= COUNT)
@@ -31,29 +32,26 @@ public readonly record struct ChromaMousepad : IColorProvider
 
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
 
-        var x = data.EffectType switch
+        return data.EffectType switch
         {
             EffectType.Static => ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp),
             _ => ChromaEncryption.Decrypt(data.Effect.Custom[index], data.Timestamp),
         };    
-        
-        return Unsafe.As<uint, ChromaColor>(ref x);
     }
 
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public void GetColors(Span<ChromaColor> colors)
     {
-        var casted = MemoryMarshal.Cast<ChromaColor, uint>(colors);
-        
         ref readonly var data = ref Data[WriteIndex.ToReadIndex()];
         
         if (data.EffectType == EffectType.Static)
         {
             var color = ChromaEncryption.Decrypt(data.Effect.Static.Color, data.Timestamp);
-            casted.Fill(color);
+            colors.Fill(color);
             return;
         }
         
-        ChromaEncryption.Decrypt(data.Effect.Custom, casted, data.Timestamp);
+        ChromaEncryption.Decrypt(data.Effect.Custom, colors, data.Timestamp);
     }
 }
 

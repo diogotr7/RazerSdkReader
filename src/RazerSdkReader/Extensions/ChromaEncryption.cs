@@ -1,8 +1,8 @@
 using RazerSdkReader.Structures;
 using System;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics;
 
 namespace RazerSdkReader.Extensions;
 
@@ -88,54 +88,68 @@ public static class ChromaEncryption
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static uint Decrypt(uint color, ChromaTimestamp timestamp)
+    public static ChromaColor Decrypt(uint color, ChromaTimestamp timestamp)
     {
         var key = Key[timestamp.TickCount64 % 128];
 
         //Set the alpha channel to 0xFF, it's not used in the decryption process
-        return color ^ key | 0xFF000000;
+        return ChromaColor.FromSdkColor(color ^ key | 0xFF000000);
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    public static void Decrypt(ReadOnlySpan<uint> input, Span<uint> output, ChromaTimestamp timestamp)
+    public static void Decrypt(ReadOnlySpan<uint> input, Span<ChromaColor> output, ChromaTimestamp timestamp)
     {
         //https://github.com/dotnet/runtime/blob/main/docs/coding-guidelines/vectorization-guidelines.md
-        
-        var smallest = Math.Min(input.Length, output.Length);
+        var length = Math.Min(input.Length, output.Length);
         var key = Key[timestamp.TickCount64 % 128];
+        var lengthAsBytes = length * sizeof(uint);
 
-        if (!Vector.IsHardwareAccelerated || smallest < Vector<uint>.Count)
+        if (!Vector256.IsHardwareAccelerated || lengthAsBytes < Vector256<byte>.Count)
         {
-            for (var i = 0; i < smallest; i++)
+            for (var i = 0; i < length; i++)
             {
-                output[i] = input[i] ^ key | 0xFF000000;
+                output[i] = ChromaColor.FromSdkColor(input[i] ^ key | 0xFF000000);
             }
+
             return;
         }
-        
-        var alphaMask = new Vector<uint>(0xFF000000);
-        var keyVector = new Vector<uint>(key);
+        var inputAsBytes = MemoryMarshal.Cast<uint, byte>(input);
+        var outputAsBytes = MemoryMarshal.Cast<ChromaColor, byte>(output);
 
-        ref var searchSpace = ref MemoryMarshal.GetReference(input);
-        var oneVectorAwayFromEnd = (nuint)(smallest - Vector<uint>.Count);
+        ref var searchSpace = ref MemoryMarshal.GetReference(inputAsBytes);
+        var oneVectorAwayFromEnd = (nuint)(lengthAsBytes - Vector256<byte>.Count);
         nuint offset = 0;
         while (offset <= oneVectorAwayFromEnd)
         {
-            var loaded = Vector.LoadUnsafe(ref searchSpace, offset);
-            var result = (loaded ^ keyVector) | alphaMask;
-            result.StoreUnsafe(ref MemoryMarshal.GetReference(output), offset);
-            offset += (nuint)Vector<uint>.Count;
+            Vector256.Shuffle(
+                (Vector256.LoadUnsafe(ref searchSpace, offset) ^ Vector256.Create<uint>(key).As<uint, byte>())
+                    | Vector256.Create<uint>(0xFF000000).As<uint, byte>(),
+                Vector256.Create(
+                    (byte)02, 01, 00, 03, 06, 05, 04, 07,
+                    10, 09, 08, 11, 14, 13, 12, 15,
+                    18, 17, 16, 19, 22, 21, 20, 23,
+                    26, 25, 24, 27, 30, 29, 28, 31
+                )
+            ).StoreUnsafe(ref MemoryMarshal.GetReference(outputAsBytes), offset);
+            offset += (nuint)Vector256<byte>.Count;
         }
-        
+
         //we processed what we could above. Anything after a multiple of 8 is processed here.
         //we will process a few elements twice, but the operation is idempotent, and it's faster
         //than reverting to a scalar loop.
-        if (offset != (uint)input.Length)
+        if (offset != (uint)lengthAsBytes)
         {
-            offset = (nuint)(smallest - Vector<uint>.Count);
-            var loaded = Vector.LoadUnsafe(ref searchSpace, offset);
-            var result = (loaded ^ keyVector) | alphaMask;
-            result.StoreUnsafe(ref MemoryMarshal.GetReference(output), offset);
+            offset = (nuint)(lengthAsBytes - Vector256<byte>.Count);
+            Vector256.Shuffle(
+                (Vector256.LoadUnsafe(ref searchSpace, offset) ^ Vector256.Create<uint>(key).As<uint, byte>())
+                        | Vector256.Create<uint>(0xFF000000).As<uint, byte>(),
+                Vector256.Create(
+                    (byte)02, 01, 00, 03, 06, 05, 04, 07,
+                    10, 09, 08, 11, 14, 13, 12, 15,
+                    18, 17, 16, 19, 22, 21, 20, 23,
+                    26, 25, 24, 27, 30, 29, 28, 31
+                )
+            ).StoreUnsafe(ref MemoryMarshal.GetReference(outputAsBytes), offset);
         }
     }
 }
